@@ -1,0 +1,469 @@
+﻿@model ElderlyCareHospital.Models.EncouragementMessage
+
+@{
+    ViewBag.Title = "Edit Encouragement Message";
+
+    var patient = ViewBag.Patient as ElderlyCareHospital.Models.Patient;
+    var familyMember = ViewBag.FamilyMember as ElderlyCareHospital.Models.FamilyMember;
+}
+
+<style>
+
+    .edit-page {
+        padding: 30px;
+        max-width: 950px;
+        margin: 0 auto;
+    }
+
+    .edit-header {
+        margin-bottom: 25px;
+    }
+
+        .edit-header h2 {
+            margin: 0;
+            color: #23352f;
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .edit-header p {
+            margin: 6px 0 0;
+            color: #687b74;
+            font-size: 13px;
+        }
+
+    .edit-card {
+        background: #ffffff;
+        border: 1px solid #dce7e1;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(35, 53, 47, .07);
+    }
+
+    .edit-card-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 22px 25px;
+        background: #f8fbf9;
+        border-bottom: 1px solid #e4ece8;
+    }
+
+    .edit-icon {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 13px;
+        background: linear-gradient(135deg, #3f806b, #6b9d8b);
+        color: #ffffff;
+        font-size: 18px;
+        font-weight: 800;
+        box-shadow: 0 8px 18px rgba(63, 128, 107, .18);
+    }
+
+    .edit-card-header h3 {
+        margin: 0;
+        color: #23352f;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .edit-card-header span {
+        display: block;
+        margin-top: 3px;
+        color: #687b74;
+        font-size: 11px;
+    }
+
+    .edit-content {
+        padding: 28px 25px;
+    }
+
+    .person-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 17px;
+        margin-bottom: 22px;
+    }
+
+    .person-card {
+        padding: 18px;
+        background: #f8fbf9;
+        border: 1px solid #e4ece8;
+        border-radius: 14px;
+    }
+
+    .detail-label {
+        margin-bottom: 7px;
+        color: #7a8c85;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .7px;
+    }
+
+    .detail-value {
+        color: #23352f;
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .form-section {
+        padding-top: 22px;
+        border-top: 1px solid #e4ece8;
+    }
+
+    .form-group-custom {
+        margin-bottom: 20px;
+    }
+
+    .form-label-custom {
+        display: block;
+        margin-bottom: 8px;
+        color: #23352f;
+        font-size: 12px;
+        font-weight: 800;
+    }
+
+    .message-input {
+        width: 100%;
+        min-height: 150px;
+        padding: 14px 16px;
+        box-sizing: border-box;
+        border: 1px solid #dce7e1;
+        border-radius: 13px;
+        background: #ffffff;
+        color: #33483f;
+        font-size: 13px;
+        line-height: 1.6;
+        resize: vertical;
+        outline: none;
+        transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+        .message-input:focus {
+            border-color: #6b9d8b;
+            box-shadow: 0 0 0 3px rgba(63, 128, 107, .09);
+        }
+
+    .date-input {
+        width: 100%;
+        padding: 12px 14px;
+        box-sizing: border-box;
+        border: 1px solid #dce7e1;
+        border-radius: 11px;
+        background: #ffffff;
+        color: #33483f;
+        font-size: 13px;
+        outline: none;
+    }
+
+        .date-input:focus {
+            border-color: #6b9d8b;
+            box-shadow: 0 0 0 3px rgba(63, 128, 107, .09);
+        }
+
+    .date-note {
+        margin-top: 6px;
+        color: #8b9b95;
+        font-size: 11px;
+    }
+
+    .validation {
+        margin-top: 6px;
+        color: #c75d68;
+        font-size: 11px;
+    }
+
+    .edit-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 25px;
+        padding-top: 22px;
+        border-top: 1px solid #e4ece8;
+    }
+
+    .save-btn {
+        border: 0;
+        padding: 11px 20px;
+        border-radius: 11px;
+        background: #3f806b;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s ease;
+    }
+
+        .save-btn:hover {
+            background: #2f6654;
+            transform: translateY(-1px);
+        }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 11px;
+        background: #ffffff;
+        border: 1px solid #dce7e1;
+        color: #687b74;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        transition: .2s ease;
+    }
+
+        .back-btn:hover {
+            background: #f8fbf9;
+            color: #3f806b;
+            border-color: #c8dcd2;
+            text-decoration: none;
+        }
+
+    @@media (max-width: 700px) {
+
+        .edit-page {
+            padding: 20px 15px;
+        }
+
+        .person-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .edit-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .save-btn,
+        .back-btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="edit-page">
+
+    <!-- HEADER -->
+
+    <div class="edit-header">
+
+        <h2>
+            Edit Encouragement Message
+        </h2>
+
+        <p>
+            Update the encouragement message sent to the family member.
+        </p>
+
+    </div>
+
+
+    <!-- CARD -->
+
+    <div class="edit-card">
+
+
+        <!-- CARD HEADER -->
+
+        <div class="edit-card-header">
+
+            <div class="edit-icon">
+                ✎
+            </div>
+
+            <div>
+
+                <h3>
+                    Message Information
+                </h3>
+
+                <span>
+                    Patient and family member details
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="edit-content">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(model => model.MessageID)
+
+                @Html.HiddenFor(model => model.PatientID)
+
+                @Html.HiddenFor(model => model.FamilyID)
+
+
+                @Html.ValidationSummary(
+                    true,
+                    "",
+                    new { @class = "validation" }
+                )
+
+
+                <!-- PATIENT + FAMILY -->
+
+                <div class="person-grid">
+
+
+                    <!-- PATIENT -->
+
+                    <div class="person-card">
+
+                        <div class="detail-label">
+                            Patient
+                        </div>
+
+                        <div class="detail-value">
+
+                            @if (patient != null)
+                            {
+                                @patient.FirstName @patient.LastName
+                            }
+                            else
+                            {
+                                <span>
+                                    Patient not found
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- FAMILY MEMBER -->
+
+                    <div class="person-card">
+
+                        <div class="detail-label">
+                            Family Member
+                        </div>
+
+                        <div class="detail-value">
+
+                            @if (familyMember != null)
+                            {
+                                @familyMember.FullName
+                            }
+                            else
+                            {
+                                <span>
+                                    Family member not found
+                                </span>
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- EDIT SECTION -->
+
+                <div class="form-section">
+
+
+                    <!-- MESSAGE -->
+
+                    <div class="form-group-custom">
+
+                        <label class="form-label-custom">
+                            Encouragement Message
+                        </label>
+
+                        @Html.TextAreaFor(
+                            model => model.MessageText,
+                            new
+                            {
+                                @class = "message-input",
+                                placeholder = "Enter encouragement message..."
+                            }
+                        )
+
+                        @Html.ValidationMessageFor(
+                            model => model.MessageText,
+                            "",
+                            new { @class = "validation" }
+                        )
+
+                    </div>
+
+
+                    <!-- DATE -->
+
+                    <div class="form-group-custom">
+
+                        <label class="form-label-custom">
+                            Date Sent
+                        </label>
+
+                        @Html.TextBoxFor(
+                            model => model.DateSent,
+                            "{0:yyyy-MM-ddTHH:mm}",
+                            new
+                            {
+                                @class = "date-input",
+                                type = "datetime-local"
+                            }
+                        )
+
+                        <div class="date-note">
+                            Update the date and time if required.
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            model => model.DateSent,
+                            "",
+                            new { @class = "validation" }
+                        )
+
+                    </div>
+
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="edit-actions">
+
+                    <button type="submit"
+                            class="save-btn">
+
+                        Save Changes
+
+                    </button>
+
+                    @Html.ActionLink(
+                        "← Back to Messages",
+                        "Index",
+                        null,
+                        new { @class = "back-btn" }
+                    )
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+</div>

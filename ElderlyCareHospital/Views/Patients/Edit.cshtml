@@ -1,0 +1,1125 @@
+﻿@model ElderlyCareHospital.Models.Patient
+
+@{
+    ViewBag.Title = "Edit Patient";
+}
+
+<style>
+
+    /* =========================================================
+       ROOT / DASHBOARD THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --secondary: #0ea5e9;
+        --border-color: #e2e8f0;
+        --doctor-accent: #0f766e;
+    }
+
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+
+    /* =========================================================
+       MAIN CONTAINER
+       ========================================================= */
+
+    .edit-container {
+        width: 100%;
+        max-width: 1050px;
+        margin: 0 auto;
+        padding: 55px 30px 40px 30px;
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .edit-header {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 30px 36px;
+        border-radius: 18px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .edit-header::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            right: -70px;
+            top: -80px;
+            border-radius: 50%;
+            background: rgba(20, 184, 166, 0.045);
+            pointer-events: none;
+        }
+
+        .edit-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+        }
+
+        .edit-header p {
+            margin: 12px 0 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 850px;
+            position: relative;
+            z-index: 1;
+        }
+
+
+    /* =========================================================
+       LIVE BADGE
+       ========================================================= */
+
+    .live-badge {
+        float: right;
+        font-size: 12px;
+        background: #f1f5f9;
+        color: #0f766e;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        border: 1px solid #e2e8f0;
+    }
+
+
+    /* =========================================================
+       FORM CARD
+       ========================================================= */
+
+    .form-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        padding: 34px 40px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+
+        /* =========================================================
+       FORM TITLE
+       ========================================================= */
+
+        .form-card h4 {
+            margin: 0;
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 19px;
+            text-align: center;
+        }
+
+        .form-card hr {
+            border: 0;
+            border-top: 1px solid var(--border-color);
+            margin: 18px 0 30px;
+        }
+
+
+    /* =========================================================
+       VALIDATION
+       ========================================================= */
+
+    .validation-summary {
+        margin-bottom: 22px;
+    }
+
+    .text-danger {
+        display: block;
+        margin-top: 6px;
+        color: #dc2626;
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+       FORM GROUP
+       ========================================================= */
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+        .form-group.row {
+            display: flex;
+            align-items: center;
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+
+    /* =========================================================
+       LABELS
+       ========================================================= */
+
+    .control-label {
+        font-weight: 600;
+        color: var(--text-main);
+        font-size: 14px;
+        margin-bottom: 0;
+        padding-top: 0;
+        text-align: right;
+    }
+
+
+    /* =========================================================
+       INPUT AREA
+       ========================================================= */
+
+    .form-control {
+        width: 100%;
+        min-height: 44px;
+        box-sizing: border-box;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 10px 14px;
+        font-family: inherit;
+        font-size: 14px;
+        color: var(--text-main);
+        background: #ffffff;
+        box-shadow: none;
+        transition: all 0.2s ease;
+    }
+
+        .form-control:hover {
+            border-color: #cbd5e1;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.10);
+            outline: none;
+            background: #ffffff;
+        }
+
+    textarea.form-control {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+    select.form-control {
+        cursor: pointer;
+    }
+
+
+    /* =========================================================
+       CENTERED ROOM SECTION
+       ========================================================= */
+
+    .room-section {
+        width: 100%;
+        text-align: center;
+        padding: 8px 0 12px 0;
+    }
+
+        .room-section .control-label {
+            display: block;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+    .room-select {
+        display: block;
+        width: 100%;
+        max-width: 420px;
+        margin: 0 auto;
+        text-align: center;
+    }
+
+    .room-help {
+        display: block;
+        margin-top: 9px;
+        color: var(--text-muted);
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .room-section .text-danger {
+        text-align: center;
+    }
+
+
+    /* =========================================================
+       CHECKBOX
+       ========================================================= */
+
+    .checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        min-height: 44px;
+    }
+
+        .checkbox-wrapper input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+
+    /* =========================================================
+       SAVE AREA
+       ========================================================= */
+
+    .save-section {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .btn-save {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 170px;
+        padding: 12px 24px;
+        border: none;
+        border-radius: 11px;
+        background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+        color: white !important;
+        font-family: inherit;
+        font-size: 14px;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.18);
+        transition: all 0.2s ease;
+    }
+
+        .btn-save:hover {
+            background: linear-gradient(135deg, #4338ca, #0284c7);
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(79, 70, 229, 0.22);
+        }
+
+        .btn-save:focus {
+            outline: none;
+            color: white !important;
+        }
+
+
+    /* =========================================================
+       BACK LINK
+       ========================================================= */
+
+    .back-wrapper {
+        margin-top: 22px;
+        text-align: left;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 10px;
+        background: #475569;
+        color: white !important;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 13px;
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #334155;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+
+    /* =========================================================
+       RESPONSIVE - TABLET
+       ========================================================= */
+
+    @@media (max-width: 900px) {
+
+        .edit-container {
+            padding: 40px 25px 35px 25px;
+        }
+
+        .form-card {
+            padding: 30px;
+        }
+
+        .edit-header {
+            padding: 28px;
+        }
+    }
+
+
+    /* =========================================================
+       RESPONSIVE - MOBILE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .edit-container {
+            padding: 30px 18px 30px 18px;
+        }
+
+        .edit-header {
+            padding: 24px 22px;
+            border-radius: 15px;
+        }
+
+            .edit-header h2 {
+                font-size: 21px;
+            }
+
+            .edit-header p {
+                font-size: 13px;
+            }
+
+        .live-badge {
+            float: none;
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        .form-card {
+            padding: 24px 20px;
+            border-radius: 15px;
+        }
+
+        .form-group.row {
+            display: block;
+        }
+
+        .control-label {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 8px;
+            padding: 0;
+        }
+
+        .form-group.row > div {
+            width: 100%;
+            padding-left: 0;
+            padding-right: 0;
+        }
+
+        .room-section .control-label {
+            text-align: center;
+        }
+
+        .save-section {
+            margin-top: 25px;
+        }
+
+        .btn-save {
+            width: 100%;
+        }
+
+        .back-wrapper {
+            text-align: center;
+        }
+
+        .back-link {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+
+
+    /* =========================================================
+       SMALL PHONE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .edit-container {
+            padding: 22px 14px 25px 14px;
+        }
+
+        .edit-header {
+            padding: 21px 18px;
+        }
+
+            .edit-header h2 {
+                font-size: 19px;
+            }
+
+            .edit-header p {
+                font-size: 12.5px;
+            }
+
+        .form-card {
+            padding: 22px 16px;
+        }
+
+            .form-card h4 {
+                font-size: 17px;
+            }
+
+        .form-control {
+            font-size: 13px;
+            min-height: 42px;
+        }
+    }
+</style>
+
+
+<div class="edit-container">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+         ====================================================== -->
+
+    <div class="edit-header">
+
+        <h2>
+            Edit Patient
+
+            <span class="live-badge">
+                🟢 Live Sync Active
+            </span>
+        </h2>
+
+        <p>
+            Update the patient's information and keep their medical
+            record accurate and up to date.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM CARD
+         ====================================================== -->
+
+    <div class="form-card">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+
+                <h4>
+                    Patient Information
+                </h4>
+
+                <hr />
+
+                @Html.ValidationSummary(
+                    true,
+                    "",
+                    new { @class = "text-danger" })
+
+                @Html.HiddenFor(
+                    model => model.PatientID)
+
+
+                <!-- =================================================
+                     FIRST NAME
+                     ================================================== -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.FirstName,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.FirstName,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.FirstName,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     LAST NAME
+                     ================================================== -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.LastName,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.LastName,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.LastName,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DATE OF BIRTH
+                     ================================================== -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.DateOfBirth,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.DateOfBirth,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.DateOfBirth,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     GENDER
+                     ================================================== -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Gender,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.DropDownListFor(
+                            model => model.Gender,
+
+                            new List<SelectListItem>
+                            {
+                                new SelectListItem
+                                {
+                                    Text = "-- Select Gender --",
+                                    Value = ""
+                                },
+
+                                new SelectListItem
+                                {
+                                    Text = "Male",
+                                    Value = "Male"
+                                },
+
+                                new SelectListItem
+                                {
+                                    Text = "Female",
+                                    Value = "Female"
+                                }
+                            },
+
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.Gender,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ROOM SELECTION
+                     ================================================== -->
+
+                @{
+
+                    var occupied =
+                        ViewBag.OccupiedRooms as List<string>
+                        ?? new List<string>();
+
+                    var rooms =
+                        new List<SelectListItem>
+                        {
+                            new SelectListItem
+                            {
+                                Text = "-- Select Floor & Room --",
+                                Value = ""
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 1 - Room 101",
+                                Value = "101",
+                                Disabled = occupied.Contains("101")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 1 - Room 102",
+                                Value = "102",
+                                Disabled = occupied.Contains("102")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 1 - Room 103",
+                                Value = "103",
+                                Disabled = occupied.Contains("103")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 1 - Room 104",
+                                Value = "104",
+                                Disabled = occupied.Contains("104")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 2 - Room 201",
+                                Value = "201",
+                                Disabled = occupied.Contains("201")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 2 - Room 202",
+                                Value = "202",
+                                Disabled = occupied.Contains("202")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 2 - Room 203",
+                                Value = "203",
+                                Disabled = occupied.Contains("203")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 2 - Room 204",
+                                Value = "204",
+                                Disabled = occupied.Contains("204")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 3 - Room 301",
+                                Value = "301",
+                                Disabled = occupied.Contains("301")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 3 - Room 302",
+                                Value = "302",
+                                Disabled = occupied.Contains("302")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 3 - Room 303",
+                                Value = "303",
+                                Disabled = occupied.Contains("303")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 3 - Room 304",
+                                Value = "304",
+                                Disabled = occupied.Contains("304")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 4 - Room 401",
+                                Value = "401",
+                                Disabled = occupied.Contains("401")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 4 - Room 402",
+                                Value = "402",
+                                Disabled = occupied.Contains("402")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 4 - Room 403",
+                                Value = "403",
+                                Disabled = occupied.Contains("403")
+                            },
+
+                            new SelectListItem
+                            {
+                                Text = "Floor 4 - Room 404",
+                                Value = "404",
+                                Disabled = occupied.Contains("404")
+                            }
+                    };
+                }
+
+
+                <div class="form-group">
+
+                    <div class="room-section">
+
+                        @Html.LabelFor(
+                            model => model.RoomNumber,
+                            htmlAttributes: new
+                            {
+                                @class = "control-label"
+                            })
+
+                        @Html.DropDownListFor(
+                            model => model.RoomNumber,
+                            rooms,
+                            new
+                            {
+                                @class = "form-control room-select"
+                            })
+
+                        <small class="room-help">
+
+                            Occupied rooms are automatically disabled
+                            based on the current patient list.
+
+                        </small>
+
+                        @Html.ValidationMessageFor(
+                            model => model.RoomNumber,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ADMISSION DATE
+                     ================================================== -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.AdmissionDate,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.AdmissionDate,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.AdmissionDate,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     EMERGENCY CONTACT
+                     ================================================== -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.EmergencyContact,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.EmergencyContact,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.EmergencyContact,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ALLERGIES
+                     ================================================== -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Allergies,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.Allergies,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.Allergies,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     MEDICAL HISTORY
+                     ================================================== -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.MedicalHistory,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.MedicalHistory,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.MedicalHistory,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     FALL RISK
+                     ================================================== -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.FallRisk,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        <div class="checkbox-wrapper">
+
+                            @Html.EditorFor(
+                                model => model.FallRisk)
+
+                            @Html.ValidationMessageFor(
+                                model => model.FallRisk,
+                                "",
+                                new
+                                {
+                                    @class = "text-danger"
+                                })
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SAVE BUTTON
+                     ================================================== -->
+
+                <div class="save-section">
+
+                    <input type="submit"
+                           value="Save Changes"
+                           class="btn-save" />
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK TO LIST
+         ====================================================== -->
+
+    <div class="back-wrapper">
+
+        @Html.ActionLink(
+            "← Back to Patient List",
+            "Index",
+            null,
+            new
+            {
+                @class = "back-link"
+            })
+
+    </div>
+
+</div>

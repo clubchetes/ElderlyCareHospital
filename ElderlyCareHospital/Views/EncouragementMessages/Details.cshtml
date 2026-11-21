@@ -1,0 +1,369 @@
+﻿@model ElderlyCareHospital.Models.EncouragementMessage
+
+@{
+    ViewBag.Title = "Message Details";
+
+    var patient = ViewBag.Patient as ElderlyCareHospital.Models.Patient;
+    var familyMember = ViewBag.FamilyMember as ElderlyCareHospital.Models.FamilyMember;
+}
+
+<style>
+
+    .details-page {
+        padding: 30px;
+        max-width: 950px;
+        margin: 0 auto;
+    }
+
+    .details-header {
+        margin-bottom: 25px;
+    }
+
+        .details-header h2 {
+            margin: 0;
+            color: #23352f;
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .details-header p {
+            margin: 6px 0 0;
+            color: #687b74;
+            font-size: 13px;
+        }
+
+    .details-card {
+        background: #ffffff;
+        border: 1px solid #dce7e1;
+        border-radius: 20px;
+        box-shadow: 0 12px 35px rgba(35, 53, 47, .07);
+        overflow: hidden;
+    }
+
+    .details-card-header {
+        padding: 22px 25px;
+        background: #f8fbf9;
+        border-bottom: 1px solid #e4ece8;
+        display: flex;
+        align-items: center;
+        gap: 13px;
+    }
+
+    .details-icon {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 13px;
+        background: linear-gradient(135deg, #3f806b, #6b9d8b);
+        color: #ffffff;
+        font-size: 19px;
+        font-weight: 800;
+        box-shadow: 0 8px 18px rgba(63, 128, 107, .18);
+    }
+
+    .details-card-header h3 {
+        margin: 0;
+        color: #23352f;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .details-card-header span {
+        display: block;
+        margin-top: 3px;
+        color: #687b74;
+        font-size: 11px;
+    }
+
+    .details-content {
+        padding: 28px 25px;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .detail-item {
+        padding: 18px;
+        background: #f8fbf9;
+        border: 1px solid #e4ece8;
+        border-radius: 14px;
+    }
+
+    .detail-label {
+        margin-bottom: 7px;
+        color: #7a8c85;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .7px;
+    }
+
+    .detail-value {
+        color: #23352f;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    .message-box {
+        grid-column: 1 / -1;
+        padding: 20px;
+        background: #eef7f3;
+        border: 1px solid #d6e9e0;
+        border-radius: 15px;
+    }
+
+        .message-box .detail-label {
+            color: #3f806b;
+        }
+
+    .message-content {
+        color: #33483f;
+        font-size: 14px;
+        line-height: 1.7;
+        white-space: pre-wrap;
+    }
+
+    .details-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 25px;
+    }
+
+    .btn-edit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 11px;
+        background: #3f806b;
+        color: #ffffff;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        transition: .2s ease;
+    }
+
+        .btn-edit:hover {
+            background: #2f6654;
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 11px;
+        background: #ffffff;
+        color: #687b74;
+        border: 1px solid #dce7e1;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        transition: .2s ease;
+    }
+
+        .btn-back:hover {
+            background: #f8fbf9;
+            color: #3f806b;
+            border-color: #c8dcd2;
+            text-decoration: none;
+        }
+
+    @@media (max-width: 700px) {
+
+        .details-page {
+            padding: 20px 15px;
+        }
+
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .message-box {
+            grid-column: auto;
+        }
+
+        .details-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-edit,
+        .btn-back {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="details-page">
+
+    <!-- HEADER -->
+
+    <div class="details-header">
+
+        <h2>
+            Encouragement Message
+        </h2>
+
+        <p>
+            View the details of this encouragement message.
+        </p>
+
+    </div>
+
+
+    <!-- CARD -->
+
+    <div class="details-card">
+
+
+        <!-- CARD HEADER -->
+
+        <div class="details-card-header">
+
+            <div class="details-icon">
+                ♥
+            </div>
+
+            <div>
+
+                <h3>
+                    Message Details
+                </h3>
+
+                <span>
+                    Patient and family communication
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="details-content">
+
+            <div class="detail-grid">
+
+
+                <!-- PATIENT -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Patient
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (patient != null)
+                        {
+                            @patient.FirstName @patient.LastName
+                        }
+                        else
+                        {
+                            <span>
+                                Patient not found
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- FAMILY MEMBER -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Family Member
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (familyMember != null)
+                        {
+                            @familyMember.FullName
+                        }
+                        else
+                        {
+                            <span>
+                                Family member not found
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Date Sent
+                    </div>
+
+                    <div class="detail-value">
+
+                        @Model.DateSent.ToString("dd MMM yyyy HH:mm")
+
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div class="message-box">
+
+                    <div class="detail-label">
+                        Encouragement Message
+                    </div>
+
+                    <div class="message-content">
+
+                        @Model.MessageText
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            <div class="details-actions">
+
+               
+
+                @Html.ActionLink(
+                    "← Back to Messages",
+                    "Index",
+                    null,
+                    new { @class = "btn-back" }
+                )
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

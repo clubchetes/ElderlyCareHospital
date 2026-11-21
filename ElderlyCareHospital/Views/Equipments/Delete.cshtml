@@ -1,0 +1,396 @@
+﻿@model ElderlyCareHospital.Models.Equipment
+
+@{
+    ViewBag.Title = "Delete Equipment";
+}
+
+<style>
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .delete-page {
+        max-width: 850px;
+        margin: 45px auto;
+        padding: 0 20px;
+    }
+
+    .delete-card {
+        background: #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Header */
+    .delete-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 30px 35px;
+    }
+
+        .delete-header h2 {
+            margin: 0;
+            font-size: 29px;
+            font-weight: 700;
+        }
+
+        .delete-header p {
+            margin: 9px 0 0;
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+    /* Warning */
+    .delete-warning {
+        margin: 25px 30px 20px;
+        padding: 17px 20px;
+        background: #fff8e8;
+        border-left: 5px solid #e0a11b;
+        border-radius: 12px;
+        color: #725b22;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+        .delete-warning strong {
+            color: #9a6b00;
+        }
+
+    /* Equipment information */
+    .equipment-details {
+        padding: 10px 30px 25px;
+    }
+
+    .section-title {
+        color: #2f6f73;
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0 0 20px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #e5eeee;
+    }
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 15px;
+    }
+
+    .detail-item {
+        background: #f8fbfb;
+        border: 1px solid #e6eeee;
+        border-radius: 11px;
+        padding: 14px 16px;
+    }
+
+    .detail-label {
+        display: block;
+        color: #718083;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 5px;
+    }
+
+    .detail-value {
+        display: block;
+        color: #263f41;
+        font-size: 14px;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+    .quantity-value {
+        color: #2f6f73;
+        font-weight: 700;
+    }
+
+    .condition-value {
+        display: inline-block;
+        background: #fff4d6;
+        color: #946c00;
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* Actions */
+    .delete-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        padding: 25px 30px 30px;
+        border-top: 1px solid #e5eeee;
+        margin-top: 5px;
+    }
+
+    .btn-delete {
+        border: none;
+        background: #c0392b;
+        color: white !important;
+        padding: 11px 24px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        text-decoration: none !important;
+        transition: all 0.2s ease;
+        box-shadow: 0 6px 15px rgba(192, 57, 43, 0.18);
+    }
+
+        .btn-delete:hover {
+            background: #a93226;
+            transform: translateY(-2px);
+            box-shadow: 0 9px 20px rgba(192, 57, 43, 0.25);
+        }
+
+    .btn-cancel {
+        display: inline-block;
+        padding: 11px 22px;
+        background: #eef5f6;
+        color: #2f6f73 !important;
+        border: 1px solid #d7e5e6;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none !important;
+        transition: all 0.2s ease;
+    }
+
+        .btn-cancel:hover {
+            background: #e1eeee;
+            transform: translateY(-2px);
+        }
+
+    .back-section {
+        text-align: center;
+        margin-top: 22px;
+    }
+
+    .back-dashboard {
+        display: inline-block;
+        color: #2f6f73 !important;
+        font-weight: 600;
+        text-decoration: none !important;
+        padding: 10px 15px;
+        transition: all 0.2s ease;
+    }
+
+        .back-dashboard:hover {
+            color: #1f5053 !important;
+            text-decoration: underline !important;
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+
+        .delete-page {
+            margin: 25px auto;
+            padding: 0 12px;
+        }
+
+        .delete-header {
+            padding: 25px;
+        }
+
+            .delete-header h2 {
+                font-size: 23px;
+            }
+
+        .delete-warning {
+            margin: 20px 20px 15px;
+        }
+
+        .equipment-details {
+            padding: 10px 20px 20px;
+        }
+
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .delete-actions {
+            flex-direction: column;
+            padding: 22px 20px 25px;
+        }
+
+        .btn-delete,
+        .btn-cancel {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="delete-page">
+
+    <div class="delete-card">
+
+        <!-- Header -->
+        <div class="delete-header">
+
+            <h2>Delete Equipment</h2>
+
+            <p>
+                Review the equipment information below before permanently
+                removing this item from the hospital inventory.
+            </p>
+
+        </div>
+
+
+        <!-- Warning -->
+        <div class="delete-warning">
+
+            <strong>⚠ Delete Confirmation:</strong>
+            Are you sure you want to delete this equipment record?
+            This action cannot be undone.
+
+        </div>
+
+
+        <!-- Equipment Details -->
+        <div class="equipment-details">
+
+            <h4 class="section-title">
+                Equipment Information
+            </h4>
+
+            <div class="details-grid">
+
+                <div class="detail-item">
+                    <span class="detail-label">
+                        Equipment Name
+                    </span>
+
+                    <span class="detail-value">
+                        @Html.DisplayFor(model => model.EquipmentName)
+                    </span>
+                </div>
+
+
+                <div class="detail-item">
+                    <span class="detail-label">
+                        Category
+                    </span>
+
+                    <span class="detail-value">
+                        @Html.DisplayFor(model => model.Category)
+                    </span>
+                </div>
+
+
+                <div class="detail-item">
+                    <span class="detail-label">
+                        Quantity
+                    </span>
+
+                    <span class="detail-value quantity-value">
+                        @Html.DisplayFor(model => model.Quantity)
+                    </span>
+                </div>
+
+
+                <div class="detail-item">
+                    <span class="detail-label">
+                        Minimum Quantity
+                    </span>
+
+                    <span class="detail-value">
+                        @Html.DisplayFor(model => model.MinimumQuantity)
+                    </span>
+                </div>
+
+
+                <div class="detail-item">
+                    <span class="detail-label">
+                        Condition
+                    </span>
+
+                    <span class="detail-value">
+                        <span class="condition-value">
+                            @Html.DisplayFor(model => model.Condition)
+                        </span>
+                    </span>
+                </div>
+
+
+                <div class="detail-item">
+                    <span class="detail-label">
+                        Location
+                    </span>
+
+                    <span class="detail-value">
+                        @Html.DisplayFor(model => model.Location)
+                    </span>
+                </div>
+
+
+                <div class="detail-item">
+                    <span class="detail-label">
+                        Purchase Date
+                    </span>
+
+                    <span class="detail-value">
+                        @Html.DisplayFor(model => model.PurchaseDate)
+                    </span>
+                </div>
+
+
+                <div class="detail-item">
+                    <span class="detail-label">
+                        Last Maintenance
+                    </span>
+
+                    <span class="detail-value">
+                        @Html.DisplayFor(model => model.LastMaintenanceDate)
+                    </span>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Actions -->
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="delete-actions">
+
+                <input type="submit"
+                       value="Delete Equipment"
+                       class="btn-delete" />
+
+                @Html.ActionLink(
+                    "Cancel",
+                    "Index",
+                    null,
+                    new { @class = "btn-cancel" })
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- Dashboard -->
+    <div class="back-section">
+
+        @Html.ActionLink(
+            "Back to Equipment Inventory",
+            "Index",
+            null,
+            new { @class = "back-dashboard" })
+
+    </div>
+
+</div>

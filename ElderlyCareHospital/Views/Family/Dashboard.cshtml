@@ -1,0 +1,1218 @@
+﻿@model ElderlyCareHospital.Models.Patient
+
+@{
+    ViewBag.Title = "Family Dashboard";
+}
+
+<style>
+
+    :root {
+        --app-bg: #f5f7fb;
+        --surface: #ffffff;
+        --surface-soft: #f8fafc;
+        --surface-blue: #f4f7ff;
+        --text-main: #172033;
+        --text-muted: #64748b;
+        --text-light: #94a3b8;
+        --primary: #4f46e5;
+        --primary-dark: #4338ca;
+        --secondary: #0ea5e9;
+        --success: #0d9488;
+        --danger: #e11d48;
+        --warning: #d97706;
+        --border: #e5e9f0;
+        --shadow-sm: 0 2px 8px rgba(15, 23, 42, .04);
+        --shadow-md: 0 12px 30px rgba(15, 23, 42, .07);
+        --shadow-lg: 0 20px 45px rgba(15, 23, 42, .09);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        color: var(--text-main);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
+    }
+
+
+    /* =====================================================
+       BACKGROUND
+       ===================================================== */
+
+    .bg-shape {
+        position: fixed;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        filter: blur(10px);
+        transition: transform .18s ease-out;
+    }
+
+    .shape1 {
+        width: 330px;
+        height: 330px;
+        top: 2%;
+        left: 3%;
+        background: rgba(79, 70, 229, .035);
+    }
+
+    .shape2 {
+        width: 270px;
+        height: 270px;
+        right: 2%;
+        bottom: 7%;
+        background: rgba(14, 165, 233, .035);
+    }
+
+    .shape3 {
+        width: 200px;
+        height: 200px;
+        top: 48%;
+        left: 44%;
+        background: rgba(13, 148, 136, .025);
+    }
+
+
+    /* =====================================================
+       SIDEBAR
+       ===================================================== */
+
+    .sidebar-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, .28);
+        backdrop-filter: blur(2px);
+        opacity: 0;
+        visibility: hidden;
+        z-index: 1190;
+        transition: all .25s ease;
+    }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+    .dashboard-sidebar {
+        position: fixed;
+        top: 0;
+        left: -310px;
+        bottom: 0;
+        width: 280px;
+        background: rgba(255,255,255,.98);
+        border-right: 1px solid var(--border);
+        padding: 24px 18px;
+        display: flex;
+        flex-direction: column;
+        z-index: 1200;
+        box-shadow: 12px 0 35px rgba(15,23,42,.10);
+        transition: left .32s cubic-bezier(.4,0,.2,1);
+        overflow-y: auto;
+    }
+
+        .dashboard-sidebar.open {
+            left: 0;
+        }
+
+    .sidebar-brand {
+        min-height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 32px;
+        padding: 0 5px;
+    }
+
+    .sidebar-brand-left {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        font-size: 17px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .sidebar-logo {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        background: linear-gradient(135deg,var(--primary),var(--secondary));
+        color: white;
+        font-size: 12px;
+        font-weight: 800;
+        box-shadow: 0 7px 18px rgba(79,70,229,.22);
+    }
+
+    .sidebar-close-btn {
+        width: 35px;
+        height: 35px;
+        border: none;
+        border-radius: 9px;
+        background: transparent;
+        color: var(--text-muted);
+        font-size: 22px;
+        cursor: pointer;
+        transition: all .2s ease;
+    }
+
+        .sidebar-close-btn:hover {
+            background: #f1f5f9;
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+    .sidebar-menu {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+        .sidebar-menu li a {
+            min-height: 46px;
+            display: flex;
+            align-items: center;
+            padding: 11px 14px;
+            border-radius: 11px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all .2s ease;
+        }
+
+            .sidebar-menu li a:hover {
+                background: #f7f8fc;
+                color: var(--primary);
+                transform: translateX(3px);
+            }
+
+            .sidebar-menu li a.active {
+                color: var(--primary);
+                background: linear-gradient(135deg,rgba(79,70,229,.11),rgba(14,165,233,.07));
+                font-weight: 700;
+                box-shadow: inset 3px 0 0 var(--primary);
+            }
+
+
+    /* =====================================================
+       MENU BUTTON
+       ===================================================== */
+
+    .sidebar-toggle-btn {
+        position: fixed;
+        top: 28px;
+        left: 28px;
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        background: rgba(255,255,255,.96);
+        color: var(--text-main);
+        cursor: pointer;
+        z-index: 1100;
+        box-shadow: var(--shadow-sm);
+        transition: all .2s ease;
+    }
+
+        .sidebar-toggle-btn:hover {
+            color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+
+    /* =====================================================
+       MAIN
+       ===================================================== */
+
+    .dashboard-main {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 1450px;
+        margin: 0 auto;
+        padding: 28px 42px 55px 100px;
+    }
+
+
+    /* =====================================================
+       HEADER
+       ===================================================== */
+
+    .family-header {
+        position: relative;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 32px 38px;
+        margin-bottom: 28px;
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+    }
+
+        .family-header::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: linear-gradient(180deg,var(--primary),var(--secondary));
+        }
+
+        .family-header::after {
+            content: "";
+            position: absolute;
+            width: 210px;
+            height: 210px;
+            right: -90px;
+            top: -110px;
+            border-radius: 50%;
+            background: rgba(79,70,229,.035);
+        }
+
+    .family-header-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .family-header h2 {
+        margin: 0;
+        font-size: 26px;
+        font-weight: 750;
+        letter-spacing: -.5px;
+    }
+
+    .family-header p {
+        max-width: 900px;
+        margin: 9px 0 0;
+        color: var(--text-muted);
+        font-size: 14px;
+        line-height: 1.65;
+    }
+
+
+    /* =====================================================
+       QUICK ACTIONS
+       ===================================================== */
+
+    .quick-actions {
+        display: grid;
+        grid-template-columns: repeat(4,1fr);
+        gap: 18px;
+        margin-bottom: 30px;
+    }
+
+    .feature-card {
+        min-height: 145px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 17px;
+        box-shadow: var(--shadow-sm);
+        transition: all .22s ease;
+        overflow: hidden;
+    }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            border-color: #d7ddea;
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-card a {
+            min-height: 145px;
+            padding: 22px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 650;
+        }
+
+    .action-icon {
+        width: 47px;
+        height: 47px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 13px;
+        color: white;
+        box-shadow: 0 7px 16px rgba(15,23,42,.10);
+    }
+
+    .icon-visits {
+        background: linear-gradient(135deg,#0284c7,#0ea5e9);
+    }
+
+    .icon-book {
+        background: linear-gradient(135deg,#4f46e5,#6366f1);
+    }
+
+    .icon-message {
+        background: linear-gradient(135deg,#0d9488,#14b8a6);
+    }
+
+    .icon-heart {
+        background: linear-gradient(135deg,#e11d48,#f43f5e);
+    }
+
+
+    /* =====================================================
+       LIVE REPORT AREA
+       ===================================================== */
+
+    #familyContentContainer {
+        width: 100%;
+        margin: 0 0 30px;
+    }
+
+        #familyContentContainer > * {
+            width: 100%;
+        }
+
+
+        /* =====================================================
+       FALLBACK / PARTIAL CARD STYLING
+       ===================================================== */
+
+        #familyContentContainer .row {
+            display: grid;
+            grid-template-columns: repeat(2,minmax(0,1fr));
+            gap: 18px;
+            margin: 0;
+        }
+
+            #familyContentContainer .row > [class*="col-"] {
+                width: 100%;
+                max-width: none;
+                padding: 0;
+            }
+
+        #familyContentContainer .card,
+        #familyContentContainer .panel,
+        #familyContentContainer .stat-card,
+        #familyContentContainer .dashboard-card {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            background: white;
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+
+    /* =====================================================
+       CARE CENTER
+       ===================================================== */
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 5px 0 15px;
+    }
+
+    .section-title {
+        margin: 0;
+        font-size: 20px;
+        font-weight: 750;
+        letter-spacing: -.3px;
+    }
+
+    .section-subtitle {
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    .care-center {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 8px 26px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .care-center-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+        .care-center-list li {
+            border-bottom: 1px solid var(--border);
+        }
+
+            .care-center-list li:last-child {
+                border-bottom: none;
+            }
+
+        .care-center-list a {
+            min-height: 62px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 9px 4px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 550;
+            transition: all .2s ease;
+        }
+
+            .care-center-list a::before {
+                content: "→";
+                width: 34px;
+                height: 34px;
+                flex-shrink: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                border-radius: 9px;
+                background: rgba(79,70,229,.08);
+                color: var(--primary);
+                font-weight: 700;
+                transition: all .2s ease;
+            }
+
+            .care-center-list a:hover {
+                color: var(--primary);
+                padding-left: 8px;
+            }
+
+                .care-center-list a:hover::before {
+                    background: var(--primary);
+                    color: white;
+                    transform: translateX(2px);
+                }
+
+
+    /* =====================================================
+       LOGOUT
+       ===================================================== */
+
+    .logout-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 24px;
+    }
+
+    .logout-btn {
+        min-width: 115px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 20px;
+        border-radius: 11px;
+        background: white;
+        border: 1px solid #e2e8f0;
+        color: #64748b;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 650;
+        transition: all .2s ease;
+    }
+
+        .logout-btn:hover {
+            background: #fff;
+            color: #dc2626;
+            border-color: #fecaca;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+
+    /* =====================================================
+       CURSOR
+       ===================================================== */
+
+    #cursorCanvas {
+        position: fixed;
+        inset: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 999;
+        opacity: .8;
+    }
+
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+
+    @@media(max-width:1100px) {
+
+        .dashboard-main {
+            padding-left: 90px;
+            padding-right: 30px;
+        }
+
+        .quick-actions {
+            grid-template-columns: repeat(2,1fr);
+        }
+    }
+
+    @@media(max-width:768px) {
+
+        .sidebar-toggle-btn {
+            top: 18px;
+            left: 18px;
+            width: 44px;
+            height: 44px;
+        }
+
+        .dashboard-main {
+            padding: 82px 18px 35px;
+        }
+
+        .family-header {
+            padding: 26px 24px;
+        }
+
+            .family-header h2 {
+                font-size: 22px;
+            }
+
+        .quick-actions {
+            grid-template-columns: repeat(2,1fr);
+            gap: 14px;
+        }
+
+        #familyContentContainer .row {
+            grid-template-columns: 1fr;
+        }
+
+        .logout-container {
+            justify-content: stretch;
+        }
+
+        .logout-btn {
+            width: 100%;
+        }
+    }
+
+    @@media(max-width:520px) {
+
+        .dashboard-main {
+            padding: 76px 14px 28px;
+        }
+
+        .quick-actions {
+            gap: 10px;
+        }
+
+        .feature-card,
+        .feature-card a {
+            min-height: 120px;
+        }
+
+            .feature-card a {
+                padding: 16px 8px;
+                font-size: 12.5px;
+            }
+
+        .action-icon {
+            width: 40px;
+            height: 40px;
+        }
+
+        .family-header {
+            padding: 22px 20px;
+        }
+
+            .family-header h2 {
+                font-size: 20px;
+            }
+
+            .family-header p {
+                font-size: 12.5px;
+            }
+
+        .care-center {
+            padding: 5px 17px;
+        }
+
+        .care-center-list a {
+            font-size: 13px;
+            min-height: 55px;
+        }
+    }
+</style>
+
+
+<div class="bg-shape shape1"></div>
+<div class="bg-shape shape2"></div>
+<div class="bg-shape shape3"></div>
+
+
+<div id="sidebarOverlay"
+     class="sidebar-overlay"
+     onclick="toggleSidebar()">
+</div>
+
+
+<button type="button"
+        class="sidebar-toggle-btn"
+        onclick="toggleSidebar()"
+        aria-label="Open navigation">
+
+    <svg width="20"
+         height="20"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         viewBox="0 0 24 24">
+
+        <path stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16">
+        </path>
+
+    </svg>
+
+</button>
+
+
+<div class="dashboard-wrapper">
+
+    <aside id="dashboardSidebar"
+           class="dashboard-sidebar">
+
+        <div class="sidebar-brand">
+
+            <div class="sidebar-brand-left">
+
+                <span class="sidebar-logo">
+                    EC
+                </span>
+
+                <span>
+                    ElderlyCare
+                </span>
+
+            </div>
+
+            <button type="button"
+                    class="sidebar-close-btn"
+                    onclick="toggleSidebar()">
+
+                &times;
+
+            </button>
+
+        </div>
+
+
+        <ul class="sidebar-menu">
+
+            <li>
+                <a href="@Url.Action("Dashboard", "Family")"
+                   class="active">
+                    Dashboard
+                </a>
+            </li>
+
+            <li>
+                <a href="@Url.Action("VisitList", "Visits")">
+                    My Visits
+                </a>
+            </li>
+
+            <li>
+                <a href="@Url.Action("Create", "Visits")">
+                    Book Visit
+                </a>
+            </li>
+
+            <li>
+                <a href="@Url.Action("Inbox", "Messages")">
+                    Messages
+                </a>
+            </li>
+
+            <li>
+                <a href="@Url.Action("Index", "EncouragementMessages")">
+                    Encouragement
+                </a>
+            </li>
+
+            
+
+        </ul>
+
+    </aside>
+
+
+    <main class="dashboard-main">
+
+
+        <section class="family-header">
+
+            <div class="family-header-content">
+
+                <h2>
+                    Family Dashboard
+                </h2>
+
+                <p>
+                    Welcome to the ElderlyCare Family Portal.
+                    Stay connected with your loved one, manage visits,
+                    communicate with the care team and monitor important
+                    patient information from one secure place.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <section class="quick-actions">
+
+            <div class="feature-card">
+
+                <a href="@Url.Action("VisitList", "Visits")">
+
+                    <div class="action-icon icon-visits">
+
+                        <svg width="19"
+                             height="19"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+                    View Visits
+
+                </a>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <a href="@Url.Action("Create", "Visits")">
+
+                    <div class="action-icon icon-book">
+
+                        <svg width="19"
+                             height="19"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M12 4v16m8-8H4">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+                    Book Visit
+
+                </a>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <a href="@Url.Action("Inbox", "Messages")">
+
+                    <div class="action-icon icon-message">
+
+                        <svg width="19"
+                             height="19"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+                    Messages
+
+                </a>
+
+            </div>
+
+
+            <div class="feature-card">
+
+                <a href="@Url.Action("Index", "EncouragementMessages")">
+
+                    <div class="action-icon icon-heart">
+
+                        <svg width="19"
+                             height="19"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+                    Encouragement
+
+                </a>
+
+            </div>
+
+        </section>
+
+
+        <!-- LIVE REPORTS -->
+
+        <section id="familyContentContainer">
+
+            @Html.Partial("_FamilyDetails", Model)
+
+        </section>
+
+
+        <!-- CARE CENTER -->
+
+        <div class="section-heading">
+
+            <div>
+
+                <h3 class="section-title">
+                    Family Care Center
+                </h3>
+
+                <span class="section-subtitle">
+                    Everything you need to stay connected with your loved one
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <section class="care-center">
+
+            <ul class="care-center-list">
+
+                <li>
+                    <a href="@Url.Action("VisitList", "Visits")">
+                        Review upcoming and past visit bookings
+                    </a>
+                </li>
+
+                <li>
+                    <a href="@Url.Action("Create", "Visits")">
+                        Schedule a new visit with your loved one
+                    </a>
+                </li>
+
+                <li>
+                    <a href="@Url.Action("Inbox", "Messages")">
+                        Read and respond to care team messages
+                    </a>
+                </li>
+
+                <li>
+                    <a href="@Url.Action("Create", "EncouragementMessages")">
+                        Send a supportive encouragement message
+                    </a>
+                </li>
+
+
+
+            </ul>
+
+        </section>
+
+
+        <div class="logout-container">
+
+            <a href="@Url.Action("Login", "Account")"
+               class="logout-btn">
+
+                <svg width="16"
+                     height="16"
+                     fill="none"
+                     stroke="currentColor"
+                     stroke-width="2"
+                     viewBox="0 0 24 24">
+
+                    <path stroke-linecap="round"
+                          stroke-linejoin="round"
+                          d="M10 17l5-5-5-5m5 5H3m13-9h3a2 2 0 012 2v10a2 2 0 01-2 2h-3">
+                    </path>
+
+                </svg>
+
+                Log Out
+
+            </a>
+
+        </div>
+
+    </main>
+
+</div>
+
+
+<canvas id="cursorCanvas"></canvas>
+
+
+@section Scripts {
+
+    <script>
+
+    function toggleSidebar() {
+
+        const sidebar =
+            document.getElementById('dashboardSidebar');
+
+        const overlay =
+            document.getElementById('sidebarOverlay');
+
+        if (!sidebar) return;
+
+        sidebar.classList.toggle('open');
+
+        if (overlay) {
+
+            overlay.classList.toggle(
+                'active',
+                sidebar.classList.contains('open')
+            );
+
+        }
+
+    }
+
+
+    document.addEventListener('keydown', function (event) {
+
+        if (event.key === 'Escape') {
+
+            const sidebar =
+                document.getElementById('dashboardSidebar');
+
+            const overlay =
+                document.getElementById('sidebarOverlay');
+
+            if (sidebar)
+                sidebar.classList.remove('open');
+
+            if (overlay)
+                overlay.classList.remove('active');
+
+        }
+
+    });
+
+
+    /* Background movement */
+
+    const shapes =
+        document.querySelectorAll('.bg-shape');
+
+    document.addEventListener('mousemove', function (e) {
+
+        const x =
+            (window.innerWidth / 2 - e.clientX) / 35;
+
+        const y =
+            (window.innerHeight / 2 - e.clientY) / 35;
+
+        shapes.forEach(function (shape, index) {
+
+            const speed = (index + 1) * .65;
+
+            shape.style.transform =
+                `translate(${x * speed}px,${y * speed}px)`;
+
+        });
+
+    });
+
+
+    /* Cursor glow */
+
+    const canvas =
+        document.getElementById('cursorCanvas');
+
+    if (canvas) {
+
+        const ctx =
+            canvas.getContext('2d');
+
+        let w = canvas.width =
+            window.innerWidth;
+
+        let h = canvas.height =
+            window.innerHeight;
+
+        let mouse = {
+            x: w / 2,
+            y: h / 2
+        };
+
+        window.addEventListener('resize', function () {
+
+            w = canvas.width =
+                window.innerWidth;
+
+            h = canvas.height =
+                window.innerHeight;
+
+        });
+
+        document.addEventListener('mousemove', function (e) {
+
+            mouse.x = e.clientX;
+            mouse.y = e.clientY;
+
+        });
+
+        function drawGlow(x, y, radius) {
+
+            const gradient =
+                ctx.createRadialGradient(
+                    x, y, 0,
+                    x, y, radius
+                );
+
+            gradient.addColorStop(
+                0,
+                'rgba(79,70,229,.10)'
+            );
+
+            gradient.addColorStop(
+                1,
+                'rgba(79,70,229,0)'
+            );
+
+            ctx.fillStyle = gradient;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                radius,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fill();
+
+        }
+
+        function animate() {
+
+            ctx.clearRect(0,0,w,h);
+
+            drawGlow(
+                mouse.x,
+                mouse.y,
+                50
+            );
+
+            requestAnimationFrame(animate);
+
+        }
+
+        animate();
+
+    }
+
+
+    /* =====================================================
+       LIVE REPORT POLLING
+       ===================================================== */
+
+    $(document).ready(function () {
+
+        setInterval(function () {
+
+            $.ajax({
+
+                url:
+                    '@Url.Action(
+                        "GetFamilyDashboardJson",
+                        "Family"
+                    )',
+
+                type: 'GET',
+
+                cache: false,
+
+                success: function (result) {
+
+                    $('#familyContentContainer')
+                        .html(result);
+
+                },
+
+                error: function (err) {
+
+                    console.log(
+                        "Error polling family dashboard stats:",
+                        err
+                    );
+                    
+                }
+
+            });
+
+        }, 3000);
+
+    });
+
+    </script>
+
+}

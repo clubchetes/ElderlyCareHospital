@@ -1,0 +1,477 @@
+﻿@model ElderlyCareHospital.Models.Visit
+
+@{
+    ViewBag.Title = "Schedule Visit";
+}
+
+<style>
+    body {
+        background: linear-gradient(135deg, #eef5f7, #dfeff1);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .visit-wrapper {
+        min-height: 85vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 15px;
+    }
+
+    .visit-card {
+        width: 100%;
+        max-width: 760px;
+        background: rgba(255,255,255,0.96);
+        border-radius: 22px;
+        padding: 34px;
+        box-shadow: 0 12px 30px rgba(0,0,0,0.10);
+        backdrop-filter: blur(6px);
+    }
+
+    .visit-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 26px 30px;
+        border-radius: 16px;
+        margin: -34px -34px 32px -34px;
+        text-align: center;
+        box-shadow: 0 6px 18px rgba(47,111,115,0.18);
+    }
+
+        .visit-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 30px;
+        }
+
+        .visit-header p {
+            margin-top: 10px;
+            opacity: 0.95;
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+    .form-horizontal {
+        width: 100%;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .control-label {
+        display: block;
+        font-weight: 700;
+        color: #2f6f73;
+        margin-bottom: 8px;
+        font-size: 14px;
+    }
+
+    .form-control {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid #d4e2e5;
+        padding: 12px 14px;
+        font-size: 14px;
+        min-height: 48px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+        box-sizing: border-box;
+    }
+
+        .form-control:focus {
+            border-color: #4c8c91;
+            box-shadow: 0 0 0 0.2rem rgba(76,140,145,0.14);
+            outline: none;
+        }
+
+    .family-display {
+        width: 100%;
+        background: #eef5f6;
+        border: 1px solid #d7e3e5;
+        border-radius: 12px;
+        padding: 12px 14px;
+        color: #2f6f73;
+        font-weight: 600;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .submit-row {
+        display: flex;
+        justify-content: center;
+        margin-top: 32px;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #2f6f73, #3f858a);
+        border: none;
+        border-radius: 12px;
+        padding: 12px 28px;
+        font-weight: 700;
+        color: white;
+        min-width: 240px;
+        box-shadow: 0 6px 16px rgba(47,111,115,0.22);
+        transition: all 0.25s ease;
+    }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #25575a, #336f73);
+            transform: translateY(-2px);
+            color: white;
+        }
+
+    .back-row {
+        text-align: center;
+        margin-top: 22px;
+    }
+
+    .back-link {
+        display: inline-block;
+        color: #2f6f73;
+        font-weight: 600;
+        text-decoration: none;
+        padding: 10px 18px;
+        border-radius: 10px;
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: rgba(47,111,115,0.08);
+            text-decoration: none;
+            color: #25575a;
+        }
+
+    .validation-summary-errors {
+        background: #fff4f4;
+        border: 1px solid #f3c7c7;
+        color: #b71c1c;
+        border-radius: 10px;
+        padding: 12px 14px;
+        margin-bottom: 24px;
+    }
+
+    .text-danger {
+        font-size: 13px;
+        margin-top: 6px;
+        display: block;
+    }
+
+    .validation-error {
+        background: #fff4f4;
+        border: 1px solid #f3c7c7;
+        color: #b71c1c;
+        border-radius: 8px;
+        padding: 8px 10px;
+        margin-top: 7px;
+        font-size: 13px;
+        display: block;
+    }
+
+    @@media (max-width: 768px) {
+        .visit-card {
+            padding: 24px;
+        }
+
+        .visit-header {
+            margin: -24px -24px 24px -24px;
+            padding: 22px 20px;
+        }
+
+            .visit-header h2 {
+                font-size: 26px;
+            }
+
+        .btn-primary {
+            width: 100%;
+        }
+    }
+
+    .visiting-hours-notice {
+        background: #eef8f8;
+        border: 1px solid #b8dfe1;
+        border-left: 5px solid #2f6f73;
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 24px;
+        color: #2f4858;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+        .visiting-hours-notice strong {
+            color: #2f6f73;
+        }
+
+        .visiting-hours-notice .notice-title {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+</style>
+
+<div class="visit-wrapper">
+
+
+    <div class="visit-card">
+
+        <div class="visit-header">
+            <h2>Schedule a Visit</h2>
+            <p>
+                Submit a visit request for your assigned patient. Please ensure the requested date and time are accurate before submitting the visit request for hospital approval.
+            </p>
+        </div>
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+    <div class="form-horizontal">
+
+        <div class="form-group">
+            <label class="control-label">Family Member</label>
+            <div class="family-display">
+                @ViewBag.FamilyName
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label">Patient</label>
+            <div class="family-display">
+                @ViewBag.PatientName
+            </div>
+        </div>
+
+        <div class="visiting-hours-notice">
+            <div class="notice-title">🕐 Visiting Hours</div>
+            <strong>Visits are available Wednesday to Sunday, from 09:00 to 16:30.</strong>
+            Please select a visit date and time within these visiting hours.
+            Visits are not available on Mondays or Tuesdays.
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.VisitDate, htmlAttributes: new { @class = "control-label" })
+
+            @Html.TextBoxFor(
+                model => model.VisitDate,
+                "{0:yyyy-MM-ddTHH:mm}",
+                new
+                {
+                    @class = "form-control",
+                    type = "datetime-local",
+                    id = "VisitDate"
+                })
+
+            @Html.ValidationMessageFor(model => model.VisitDate, "", new { @class = "text-danger" })
+
+            <span id="visitDateError" class="validation-error" style="display:none;"></span>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ParkingSlot, htmlAttributes: new { @class = "control-label" })
+
+            @Html.DropDownListFor(
+                model => model.ParkingSlot,
+                new SelectList(new[]
+                {
+                    new { Value = "", Text = "Select Yes or No" },
+                    new { Value = "Yes", Text = "Yes" },
+                    new { Value = "No", Text = "No" }
+                }, "Value", "Text"),
+                new { @class = "form-control", id = "ParkingSlot" }
+            )
+
+            @Html.ValidationMessageFor(model => model.ParkingSlot, "", new { @class = "text-danger" })
+
+            <span id="parkingError" class="validation-error" style="display:none;"></span>
+        </div>
+
+        <div class="submit-row">
+            <button type="submit" class="btn btn-primary">
+                Submit Visit Request
+            </button>
+        </div>
+
+    </div>
+        }
+
+        <div class="back-row">
+            @Html.ActionLink(
+                "Back to Visit List",
+                "VisitList",
+                null,
+                new { @class = "back-link" })
+        </div>
+
+    </div>
+
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+
+            var form = $("form");
+
+            function showVisitError(message) {
+                $("#visitDateError")
+                    .text(message)
+                    .show();
+
+                $("#VisitDate").css({
+                    "border-color": "#b71c1c",
+                    "box-shadow": "0 0 0 0.2rem rgba(183,28,28,0.10)"
+                });
+            }
+
+            function clearVisitError() {
+                $("#visitDateError").hide().text("");
+
+                $("#VisitDate").css({
+                    "border-color": "",
+                    "box-shadow": ""
+                });
+            }
+
+            function showParkingError(message) {
+                $("#parkingError")
+                    .text(message)
+                    .show();
+
+                $("#ParkingSlot").css({
+                    "border-color": "#b71c1c",
+                    "box-shadow": "0 0 0 0.2rem rgba(183,28,28,0.10)"
+                });
+            }
+
+            function clearParkingError() {
+                $("#parkingError").hide().text("");
+
+                $("#ParkingSlot").css({
+                    "border-color": "",
+                    "box-shadow": ""
+                });
+            }
+
+            function validateVisitDate() {
+
+                clearVisitError();
+
+                var dateValue = $("#VisitDate").val();
+
+                if (!dateValue) {
+                    showVisitError("Please select a visit date and time.");
+                    return false;
+                }
+
+                var visitDate = new Date(dateValue);
+
+                if (isNaN(visitDate.getTime())) {
+                    showVisitError("Please enter a valid visit date and time.");
+                    return false;
+                }
+
+                var day = visitDate.getDay();
+
+                /*
+                    JavaScript:
+                    Sunday = 0
+                    Monday = 1
+                    Tuesday = 2
+                    Wednesday = 3
+                    Thursday = 4
+                    Friday = 5
+                    Saturday = 6
+                */
+
+                if (day === 0 || day === 1 || day === 2) {
+                    showVisitError(
+                        "Visits are only allowed from Wednesday to Sunday."
+                    );
+                    return false;
+                }
+
+                var hours = visitDate.getHours();
+                var minutes = visitDate.getMinutes();
+
+                var totalMinutes = (hours * 60) + minutes;
+
+                var openingTime = 9 * 60;       // 09:00
+                var closingTime = (16 * 60) + 30; // 16:30
+
+                if (totalMinutes < openingTime || totalMinutes > closingTime) {
+                    showVisitError(
+                        "Visit time must be between 09:00 and 16:30."
+                    );
+                    return false;
+                }
+
+                var now = new Date();
+
+                if (visitDate < now) {
+                    showVisitError(
+                        "You cannot schedule a visit for a date or time that has already passed."
+                    );
+                    return false;
+                }
+
+                clearVisitError();
+                return true;
+            }
+
+            function validateParking() {
+
+                clearParkingError();
+
+                var parkingValue = $("#ParkingSlot").val();
+
+                if (!parkingValue) {
+                    showParkingError(
+                        "Please select Yes or No for the parking slot."
+                    );
+                    return false;
+                }
+
+                clearParkingError();
+                return true;
+            }
+
+            $("#VisitDate").on("change input", function () {
+                validateVisitDate();
+            });
+
+            $("#ParkingSlot").on("change", function () {
+                validateParking();
+            });
+
+            form.on("submit", function (e) {
+
+                var validVisitDate = validateVisitDate();
+                var validParking = validateParking();
+
+                if (!validVisitDate || !validParking) {
+                    e.preventDefault();
+
+                    if (!validVisitDate) {
+                        $("#VisitDate").focus();
+                    }
+                    else if (!validParking) {
+                        $("#ParkingSlot").focus();
+                    }
+
+                    return false;
+                }
+
+                return true;
+            });
+
+        });
+    </script>
+}
+

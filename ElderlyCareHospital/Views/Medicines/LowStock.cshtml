@@ -1,0 +1,537 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Medicine>
+
+@{
+    ViewBag.Title = "Low Stock Medicines";
+}
+
+<style>
+    /* =========================================================
+       ELDERLYCARE PHARMACY THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f8fafc;
+        --surface: #ffffff;
+        --surface-soft: #f8fbfb;
+        --text-main: #172033;
+        --text-muted: #718096;
+        --border: #e6ebef;
+        --teal: #2f6f73;
+        --teal-dark: #25575a;
+        --teal-soft: #eef6f6;
+        --warning: #c47b00;
+        --warning-soft: #fff6df;
+        --danger: #b54747;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+    }
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    .stock-page {
+        max-width: 1200px;
+        margin: 35px auto;
+        padding: 0 20px;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .stock-header {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 28px 32px;
+        margin-bottom: 22px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .stock-header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .stock-header h2 {
+        margin: 0;
+        color: var(--text-main);
+        font-size: 27px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+    }
+
+    .stock-header p {
+        margin: 8px 0 0;
+        color: var(--text-muted);
+        font-size: 14px;
+        line-height: 1.6;
+        max-width: 780px;
+    }
+
+    .stock-status {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 13px;
+        border-radius: 20px;
+        background: var(--warning-soft);
+        color: var(--warning);
+        border: 1px solid #f2dfae;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        background: var(--warning);
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    /* =========================================================
+       INFORMATION BANNER
+       ========================================================= */
+
+    .stock-message {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--warning);
+        border-radius: 12px;
+        padding: 16px 18px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+        color: var(--text-muted);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+        .stock-message strong {
+            color: var(--text-main);
+        }
+
+    /* =========================================================
+       TABLE CARD
+       ========================================================= */
+
+    .stock-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+        overflow: hidden;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .stock-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 0;
+    }
+
+        /* =========================================================
+       TABLE HEADER
+       ========================================================= */
+
+        .stock-table thead th {
+            background: #f5f8f9;
+            color: #526568;
+            padding: 14px 16px;
+            text-align: left;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.45px;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+            .stock-table thead th:first-child {
+                border-top-left-radius: 10px;
+            }
+
+            .stock-table thead th:last-child {
+                border-top-right-radius: 10px;
+            }
+
+        /* =========================================================
+       TABLE BODY
+       ========================================================= */
+
+        .stock-table tbody td {
+            padding: 16px;
+            text-align: left;
+            vertical-align: middle;
+            border-bottom: 1px solid #edf1f3;
+            color: #4a5860;
+            font-size: 14px;
+            background: #ffffff;
+        }
+
+        .stock-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .stock-table tbody tr:hover td {
+                background: #f9fbfb;
+            }
+
+            .stock-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+    /* =========================================================
+       MEDICINE NAME
+       ========================================================= */
+
+    .medicine-name {
+        color: var(--text-main);
+        font-weight: 700;
+    }
+
+    /* =========================================================
+       QUANTITY
+       ========================================================= */
+
+    .quantity-cell {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .quantity-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 48px;
+        padding: 6px 11px;
+        border-radius: 8px;
+        background: var(--warning-soft);
+        color: var(--warning);
+        border: 1px solid #f2dfae;
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    .warning-label {
+        display: inline-flex;
+        align-items: center;
+        padding: 5px 9px;
+        border-radius: 7px;
+        background: #fff8e8;
+        color: var(--warning);
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    /* =========================================================
+       MINIMUM STOCK
+       ========================================================= */
+
+    .minimum-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 48px;
+        padding: 6px 11px;
+        border-radius: 8px;
+        background: var(--teal-soft);
+        color: var(--teal);
+        border: 1px solid #dbeaea;
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .empty-message {
+        text-align: center;
+        padding: 45px 20px;
+        color: var(--text-muted);
+    }
+
+    .empty-icon {
+        width: 42px;
+        height: 42px;
+        margin: 0 auto 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: var(--teal-soft);
+        color: var(--teal);
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .empty-message h4 {
+        margin: 0 0 7px;
+        color: var(--text-main);
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .empty-message p {
+        margin: 0;
+        font-size: 13px;
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .page-footer {
+        margin-top: 20px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 16px;
+        background: var(--surface);
+        color: var(--teal) !important;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        text-decoration: none !important;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: var(--teal-soft);
+            border-color: #cddfe0;
+            color: var(--teal-dark) !important;
+            transform: translateY(-1px);
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .stock-page {
+            margin: 25px auto;
+            padding: 0 12px;
+        }
+
+        .stock-header {
+            padding: 22px;
+        }
+
+        .stock-header-content {
+            display: block;
+        }
+
+        .stock-header h2 {
+            font-size: 23px;
+        }
+
+        .stock-status {
+            margin-top: 15px;
+        }
+
+        .stock-message {
+            padding: 14px 15px;
+        }
+
+        .stock-card {
+            padding: 12px;
+        }
+
+        .stock-table {
+            min-width: 650px;
+        }
+
+            .stock-table thead th,
+            .stock-table tbody td {
+                padding: 13px 12px;
+            }
+    }
+</style>
+
+
+<div class="stock-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="stock-header">
+
+        <div class="stock-header-content">
+
+            <div>
+
+                <h2>Low Stock Medicines</h2>
+
+                <p>
+                    Monitor medicines that have reached or fallen below their
+                    minimum stock levels and ensure essential medication
+                    remains available for patient care.
+                </p>
+
+            </div>
+
+            <div class="stock-status">
+                <span class="status-dot"></span>
+                Stock Attention Required
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMATION
+         ===================================================== -->
+
+    <div class="stock-message">
+
+        <div>
+            <strong>Stock Monitoring:</strong>
+            The medicines listed below require attention because their current
+            quantity is at or below the minimum stock level. Keeping the
+            pharmacy stocked helps ensure patient treatment is not delayed.
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TABLE
+         ===================================================== -->
+
+    <div class="stock-card">
+
+        <div class="table-responsive">
+
+            <table class="stock-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Medicine Name</th>
+                        <th>Current Quantity</th>
+                        <th>Minimum Stock</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span class="medicine-name">
+                                        @item.MedicineName
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    <div class="quantity-cell">
+
+                                        <span class="quantity-badge">
+                                            @item.Quantity
+                                        </span>
+
+                                        <span class="warning-label">
+                                            Low Stock
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+                                <td>
+
+                                    <span class="minimum-badge">
+                                        @item.MinimumStock
+                                    </span>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="3">
+
+                                <div class="empty-message">
+
+                                    <div class="empty-icon">
+                                        ✓
+                                    </div>
+
+                                    <h4>
+                                        Stock Levels Look Good
+                                    </h4>
+
+                                    <p>
+                                        There are currently no medicines
+                                        requiring low-stock attention.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <div class="page-footer">
+
+        @Html.ActionLink(
+            "← Back to Dashboard",
+            "Dashboard",
+            "Pharmacist",
+            null,
+            new { @class = "back-link" })
+
+    </div>
+
+</div>

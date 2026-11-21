@@ -1,0 +1,476 @@
+﻿@{
+    ViewBag.Title = "PatientStatistics";
+}
+
+<style>
+
+    /* =========================================================
+       ROOT / ELDERLYCARE HOSPITAL THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f8fafc;
+        --surface: #ffffff;
+        --surface-soft: #f8fbfd;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --secondary: #0ea5e9;
+        --border-color: #e2e8f0;
+    }
+
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+
+    /* =========================================================
+       MAIN PAGE WRAPPER
+       ========================================================= */
+
+    .statistics-page {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 36px 40px 45px;
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .stats-header {
+        background: var(--surface);
+        color: var(--text-main);
+        padding: 28px 34px;
+        border-radius: 18px;
+        margin-bottom: 26px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+    }
+
+        .stats-header h2 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+
+        .stats-header p {
+            margin: 8px 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 900px;
+        }
+
+
+    /* =========================================================
+       LIVE SYNC BADGE
+       ========================================================= */
+
+    .live-sync-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 12px;
+        border-radius: 20px;
+        background: rgba(16, 185, 129, 0.08);
+        border: 1px solid rgba(16, 185, 129, 0.15);
+        color: #059669;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+        letter-spacing: 0.2px;
+    }
+
+    .live-sync-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.10);
+    }
+
+
+    /* =========================================================
+       STATISTICS PANEL
+       ========================================================= */
+
+    .stats-panel {
+        background: var(--surface);
+        border-radius: 18px;
+        padding: 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.025);
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+       STATISTICS GRID
+       ========================================================= */
+
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+
+    /* =========================================================
+       STATISTICS CARDS
+       ========================================================= */
+
+    .stats-card {
+        background: #ffffff;
+        border-radius: 16px;
+        padding: 28px 22px;
+        text-align: center;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.025);
+        min-height: 170px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        transition: all 0.2s ease;
+    }
+
+        .stats-card:hover {
+            transform: translateY(-3px);
+            border-color: #cbd5e1;
+            box-shadow: 0 9px 20px rgba(15, 23, 42, 0.07);
+        }
+
+        .stats-card h4 {
+            margin: 0 0 12px;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.7px;
+        }
+
+        .stats-card h1 {
+            margin: 0;
+            font-size: 42px;
+            line-height: 1;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+
+    /* =========================================================
+       BACK LINK
+       ========================================================= */
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        margin-top: 22px;
+        padding: 10px 18px;
+        box-sizing: border-box;
+        background: #475569;
+        color: white !important;
+        border-radius: 10px;
+        text-decoration: none !important;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #334155;
+            color: white !important;
+            text-decoration: none !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+        }
+
+
+    /* =========================================================
+       LARGE TABLET
+       ========================================================= */
+
+    @@media (max-width: 1200px) {
+
+        .statistics-page {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+    }
+
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @@media (max-width: 900px) {
+
+        .statistics-page {
+            padding: 30px 24px 40px;
+        }
+
+        .stats-header {
+            padding: 25px;
+        }
+
+        .stats-panel {
+            padding: 20px;
+        }
+
+        .stats-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .statistics-page {
+            padding: 95px 18px 30px;
+        }
+
+        .stats-header {
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 22px;
+        }
+
+            .stats-header h2 {
+                font-size: 20px;
+                align-items: flex-start;
+            }
+
+            .stats-header p {
+                font-size: 13px;
+            }
+
+        .live-sync-badge {
+            font-size: 10px;
+            padding: 6px 9px;
+        }
+
+        .stats-panel {
+            padding: 16px;
+            border-radius: 15px;
+        }
+
+        .stats-grid {
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .stats-card {
+            min-height: 145px;
+            padding: 24px 18px;
+        }
+
+            .stats-card h1 {
+                font-size: 36px;
+            }
+
+        .back-link {
+            width: 100%;
+        }
+    }
+
+
+    /* =========================================================
+       SMALL PHONE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .statistics-page {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .stats-header {
+            padding: 19px;
+        }
+
+            .stats-header h2 {
+                font-size: 18px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .stats-header p {
+                font-size: 12.5px;
+            }
+
+        .stats-panel {
+            padding: 13px;
+        }
+
+        .stats-card {
+            min-height: 130px;
+            padding: 20px 15px;
+        }
+
+            .stats-card h1 {
+                font-size: 32px;
+            }
+
+            .stats-card h4 {
+                font-size: 10px;
+            }
+    }
+</style>
+
+
+<!-- =========================================================
+     PATIENT STATISTICS PAGE
+     ========================================================= -->
+
+<div class="statistics-page">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="stats-header">
+
+        <h2>
+
+            <span>
+                Patient Statistics
+            </span>
+
+            <span class="live-sync-badge">
+
+                <span class="live-sync-dot"></span>
+
+                Live Sync Active
+
+            </span>
+
+        </h2>
+
+        <p>
+            Review key patient care metrics and monitor high-risk
+            patient indicators within the Elderly Care Hospital system.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         STATISTICS PANEL
+         ===================================================== -->
+
+    <div class="stats-panel">
+
+        <div id="statsGridContainer">
+
+            @Html.Partial(
+                "_PatientStatisticsCards"
+            )
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK TO DASHBOARD
+         ===================================================== -->
+
+    <p>
+
+        @Html.ActionLink(
+            "Back to Dashboard",
+            "Dashboard",
+            "Admin",
+            null,
+            new { @class = "back-link" })
+
+    </p>
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+        function refreshStatistics() {
+
+            $.ajax({
+
+                url:
+                    '@Url.Action(
+                        "GetLivePatientStatistics",
+                        "Reports"
+                    )',
+
+                type: 'GET',
+
+                success:
+                    function (response) {
+
+                        // Update the text values of the
+                        // metrics dynamically
+
+                        $('#statsGridContainer h1:eq(0)')
+                            .text(response.totalPatients);
+
+                        $('#statsGridContainer h1:eq(1)')
+                            .text(response.highRiskPatients);
+
+                    }
+
+            });
+
+        }
+
+
+        // Polls the server every 5 seconds to update
+        // metrics live
+
+        setInterval(
+            refreshStatistics,
+            5000
+        );
+
+    </script>
+
+}

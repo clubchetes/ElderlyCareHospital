@@ -1,0 +1,41 @@
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.csproj.user
+
+# Build files
+**/bin/
+**/obj/
+Debug/
+Release/
+
+# Sensitive configuration
+**/Web.config
+**/Web.*.config
+.env
+
+# NuGet packages (restored when building)
+packages/
+
+# Database files
+*.mdf
+*.ldf
+*.bak
+
+# Temporary files
+*.log
+*.tmp
+
+# Deployment configuration
+**/Properties/PublishProfiles/
+**/Properties/serviceDependencies.local.json
+
+# Deployment and publishing settings
+**/Properties/PublishProfiles/
+**/Properties/serviceDependencies.local.json
+
+# Local configuration
+**/Web.config
+**/Web.*.config

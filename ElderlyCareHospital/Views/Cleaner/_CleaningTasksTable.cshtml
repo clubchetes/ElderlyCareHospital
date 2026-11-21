@@ -1,0 +1,523 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.CleaningTask>
+
+@if (Model != null && Model.Any())
+{
+    <div class="table-responsive">
+        <table class="table-clean">
+
+            <thead>
+                <tr>
+                    <th>Area</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+
+                        <!-- AREA -->
+                        <td>
+                            <div class="area-cell">
+
+                                <div class="area-icon">
+
+                                    <svg width="17"
+                                         height="17"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h4m10-11v10a1 1 0 01-1 1h-4m-6 0h6">
+                                        </path>
+
+                                    </svg>
+
+                                </div>
+
+                                <div class="area-details">
+
+                                    <strong>
+                                        @item.Area
+                                    </strong>
+
+                                    <span>
+                                        Cleaning Area
+                                    </span>
+
+                                </div>
+
+                            </div>
+                        </td>
+
+
+                        <!-- STATUS -->
+                        <td>
+
+                            @{
+                                var statusClass = "status-default";
+
+                                if (!string.IsNullOrEmpty(item.Status))
+                                {
+                                    if (item.Status.Equals("Completed",
+                                        StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        statusClass = "status-completed";
+                                    }
+                                    else if (item.Status.Equals("Pending",
+                                        StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        statusClass = "status-pending";
+                                    }
+                                    else if (item.Status.Equals("In Progress",
+                                        StringComparison.OrdinalIgnoreCase))
+                                    {
+                                        statusClass = "status-progress";
+                                    }
+                                }
+                            }
+
+                            <span class="status-chip @statusClass">
+
+                                <span class="status-dot"></span>
+
+                                @item.Status
+
+                            </span>
+
+                        </td>
+
+
+                        <!-- DATE -->
+                        <td>
+
+                            <div class="date-cell">
+
+                                <div class="date-icon">
+
+                                    <svg width="16"
+                                         height="16"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         viewBox="0 0 24 24">
+
+                                        <rect x="3"
+                                              y="4"
+                                              width="18"
+                                              height="18"
+                                              rx="2"
+                                              ry="2">
+                                        </rect>
+
+                                        <line x1="16"
+                                              y1="2"
+                                              x2="16"
+                                              y2="6">
+                                        </line>
+
+                                        <line x1="8"
+                                              y1="2"
+                                              x2="8"
+                                              y2="6">
+                                        </line>
+
+                                        <line x1="3"
+                                              y1="10"
+                                              x2="21"
+                                              y2="10">
+                                        </line>
+
+                                    </svg>
+
+                                </div>
+
+                                <span>
+                                    @item.TaskDate
+                                </span>
+
+                            </div>
+
+                        </td>
+
+
+                        <!-- ACTION -->
+                        <td>
+
+                            @Html.ActionLink(
+                                "Resolve",
+                                "Resolve",
+                                new { id = item.TaskID },
+                                new { @class = "resolve-link" }
+                            )
+
+                        </td>
+
+                    </tr>
+                }
+
+            </tbody>
+
+        </table>
+    </div>
+}
+else
+{
+    <div class="empty-state">
+
+        <div class="empty-icon">
+
+            <svg width="30"
+                 height="30"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.7"
+                 viewBox="0 0 24 24">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h4m10-11v10a1 1 0 01-1 1h-4m-6 0h6">
+                </path>
+
+            </svg>
+
+        </div>
+
+        <h4>
+            No cleaning tasks assigned
+        </h4>
+
+        <p>
+            Your cleaning schedule is currently clear.
+            Check back later for newly assigned hospital
+            maintenance tasks.
+        </p>
+
+    </div>
+}
+
+
+<style>
+
+    /* =========================================================
+       AREA CELL
+       ========================================================= */
+
+    .area-cell {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+
+    .area-icon {
+        width: 38px;
+        height: 38px;
+        min-width: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 10px;
+        background: linear-gradient( 135deg, rgba(79, 70, 229, 0.10), rgba(14, 165, 233, 0.08) );
+        color: #4f46e5;
+        transition: all 0.2s ease;
+    }
+
+
+    .table-clean tbody tr:hover .area-icon {
+        transform: scale(1.08);
+        box-shadow: 0 5px 12px rgba(79, 70, 229, 0.12);
+    }
+
+
+    .area-details {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+
+        .area-details strong {
+            color: #0f172a;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+
+        .area-details span {
+            color: #94a3b8;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+
+    /* =========================================================
+       STATUS
+       ========================================================= */
+
+    .status-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+        border: 1px solid transparent;
+        transition: all 0.2s ease;
+    }
+
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: currentColor;
+    }
+
+
+    /* DEFAULT */
+
+    .status-default {
+        background: #f1f5f9;
+        color: #64748b;
+        border-color: #e2e8f0;
+    }
+
+
+    /* PENDING */
+
+    .status-pending {
+        background: rgba(245, 158, 11, 0.10);
+        color: #b45309;
+        border-color: rgba(245, 158, 11, 0.15);
+    }
+
+
+    /* IN PROGRESS */
+
+    .status-progress {
+        background: rgba(79, 70, 229, 0.10);
+        color: #4f46e5;
+        border-color: rgba(79, 70, 229, 0.15);
+    }
+
+
+    /* COMPLETED */
+
+    .status-completed {
+        background: rgba(16, 185, 129, 0.10);
+        color: #047857;
+        border-color: rgba(16, 185, 129, 0.15);
+    }
+
+
+    .table-clean tbody tr:hover .status-chip {
+        transform: translateY(-1px);
+    }
+
+
+    /* =========================================================
+       DATE
+       ========================================================= */
+
+    .date-cell {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        color: #475569;
+        font-size: 13px;
+        font-weight: 500;
+        white-space: nowrap;
+    }
+
+
+    .date-icon {
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 9px;
+        background: #f8fafc;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
+        transition: all 0.2s ease;
+    }
+
+
+    .table-clean tbody tr:hover .date-icon {
+        color: #4f46e5;
+        border-color: rgba(79, 70, 229, 0.15);
+        background: rgba(79, 70, 229, 0.05);
+    }
+
+
+    /* =========================================================
+       RESOLVE BUTTON
+       ========================================================= */
+
+    .resolve-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 9px 16px;
+        border-radius: 10px;
+        background: linear-gradient( 135deg, #4f46e5, #6366f1 );
+        color: #ffffff !important;
+        text-decoration: none !important;
+        font-size: 12.5px;
+        font-weight: 600;
+        border: 1px solid rgba(79, 70, 229, 0.15);
+        box-shadow: 0 4px 10px rgba(79, 70, 229, 0.16);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+
+        .resolve-link::after {
+            content: "→";
+            font-size: 15px;
+            transition: transform 0.2s ease;
+        }
+
+
+        .resolve-link:hover {
+            background: linear-gradient( 135deg, #4338ca, #4f46e5 );
+            color: #ffffff !important;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 16px rgba(79, 70, 229, 0.22);
+        }
+
+
+            .resolve-link:hover::after {
+                transform: translateX(3px);
+            }
+
+
+        .resolve-link:active {
+            transform: translateY(0);
+        }
+
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .empty-state {
+        min-height: 240px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 35px 25px;
+        border: 1px dashed #cbd5e1;
+        border-radius: 14px;
+        background: linear-gradient( 135deg, rgba(248, 250, 252, 0.8), rgba(255, 255, 255, 0.9) );
+    }
+
+
+    .empty-icon {
+        width: 58px;
+        height: 58px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 15px;
+        border-radius: 16px;
+        color: #4f46e5;
+        background: linear-gradient( 135deg, rgba(79, 70, 229, 0.10), rgba(14, 165, 233, 0.08) );
+        box-shadow: 0 8px 20px rgba(79, 70, 229, 0.07);
+    }
+
+
+    .empty-state h4 {
+        margin: 0 0 8px 0;
+        color: #0f172a;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+
+    .empty-state p {
+        max-width: 500px;
+        margin: 0;
+        color: #64748b;
+        font-size: 13px;
+        line-height: 1.7;
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .table-clean {
+            min-width: 680px;
+        }
+
+
+        .area-icon {
+            width: 34px;
+            height: 34px;
+            min-width: 34px;
+        }
+
+
+        .resolve-link {
+            padding: 8px 13px;
+        }
+
+
+        .empty-state {
+            min-height: 210px;
+            padding: 28px 20px;
+        }
+    }
+
+
+    @@media (max-width: 480px) {
+
+        .table-clean {
+            min-width: 650px;
+        }
+
+
+        .area-details strong {
+            font-size: 13px;
+        }
+
+
+        .area-details span {
+            font-size: 10px;
+        }
+
+
+        .status-chip {
+            padding: 6px 10px;
+            font-size: 11px;
+        }
+
+
+        .date-cell {
+            font-size: 12px;
+        }
+
+
+        .resolve-link {
+            padding: 8px 12px;
+            font-size: 12px;
+        }
+    }
+</style>

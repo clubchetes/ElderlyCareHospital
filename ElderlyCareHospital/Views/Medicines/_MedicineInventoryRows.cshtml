@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Medicine>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td class="medicine-name">
+                @item.MedicineName
+            </td>
+
+            <td class="stock-value">
+                @item.Quantity
+            </td>
+
+            <td class="minimum-stock">
+                @item.MinimumStock
+            </td>
+
+            <td class="expiry-date">
+                @(item.ExpiryDate.HasValue
+                    ? item.ExpiryDate.Value.ToString("dd MMM yyyy HH:mm")
+                    : "N/A")
+            </td>
+
+            <td class="supplier-name">
+                @(String.IsNullOrEmpty(item.Supplier)
+                    ? "Not specified"
+                    : item.Supplier)
+            </td>
+
+            <td class="actions">
+                @Html.ActionLink("Update Stock", "Edit", new { id = item.MedicineID }, new { @class = "edit-link" })
+                @Html.ActionLink("Details", "Details", new { id = item.MedicineID }, new { @class = "details-link" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.MedicineID }, new { @class = "delete-link" })
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="6">
+            <div class="empty-state">
+                <h4>No Medicines Found</h4>
+                <p>There are currently no medicines recorded in the inventory.</p>
+            </div>
+        </td>
+    </tr>
+}

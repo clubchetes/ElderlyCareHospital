@@ -1,0 +1,709 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.CarePlan>
+
+@{
+    ViewBag.Title = "Patient Care Plans";
+}
+
+<style>
+
+    :root {
+        --app-bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --doctor-accent: #0f766e;
+        --doctor-accent-light: #14b8a6;
+        --danger: #dc2626;
+        --danger-hover: #b91c1c;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+    .careplan-container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        box-sizing: border-box;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .careplan-header {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 30px 36px;
+        border-radius: 18px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .careplan-header::after {
+            content: "";
+            position: absolute;
+            width: 190px;
+            height: 190px;
+            right: -70px;
+            top: -85px;
+            border-radius: 50%;
+            background: rgba(20, 184, 166, 0.045);
+            pointer-events: none;
+        }
+
+        .careplan-header h2 {
+            margin: 0;
+            color: var(--text-main);
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+        }
+
+        .careplan-header p {
+            margin: 12px 0 0 0;
+            max-width: 950px;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+    /* =========================================================
+       LIVE INDICATOR
+       ========================================================= */
+
+    .live-indicator {
+        display: inline-flex;
+        align-items: center;
+        margin-left: 12px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        background: rgba(20, 184, 166, 0.08);
+        color: var(--doctor-accent);
+        font-size: 12px;
+        font-weight: 600;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    /* =========================================================
+       TABLE CARD
+       ========================================================= */
+
+    .table-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    /* =========================================================
+       TOOLBAR
+       ========================================================= */
+
+    .careplan-toolbar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 22px;
+    }
+
+    /* =========================================================
+       CREATE BUTTON
+       ========================================================= */
+
+    .btn-create {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 20px;
+        border-radius: 10px;
+        background: linear-gradient( 135deg, var(--doctor-accent), var(--doctor-accent-light) );
+        color: white !important;
+        border: none;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        box-shadow: 0 5px 14px rgba(15, 118, 110, 0.16);
+        transition: all 0.2s ease;
+    }
+
+        .btn-create:hover {
+            background: linear-gradient( 135deg, #0d625c, #0f9f93 );
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(15, 118, 110, 0.22);
+        }
+
+    /* =========================================================
+       TABLE RESPONSIVE
+       ========================================================= */
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+        border-radius: 14px;
+        border: 1px solid var(--border-color);
+    }
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .careplan-table {
+        width: 100%;
+        min-width: 1050px;
+        margin: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: white;
+    }
+
+        .careplan-table thead {
+            background: #f8fafc;
+        }
+
+        .careplan-table th {
+            padding: 15px 14px;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            color: #475569;
+            font-size: 12px;
+            font-weight: 700;
+            text-align: center;
+            vertical-align: middle;
+            text-transform: uppercase;
+            letter-spacing: 0.35px;
+            white-space: nowrap;
+        }
+
+            .careplan-table th:first-child {
+                border-top-left-radius: 14px;
+            }
+
+            .careplan-table th:last-child {
+                border-top-right-radius: 14px;
+            }
+
+        .careplan-table td {
+            padding: 16px 14px;
+            border: none;
+            border-bottom: 1px solid var(--border-color);
+            color: #475569;
+            font-size: 14px;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 1.55;
+        }
+
+        .careplan-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .careplan-table tbody tr:hover {
+                background: #fafbfc;
+            }
+
+            .careplan-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+    /* =========================================================
+       PATIENT
+       ========================================================= */
+
+    .patient-cell {
+        color: var(--doctor-accent) !important;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    /* =========================================================
+       TEXT CELLS
+       ========================================================= */
+
+    .careplan-text {
+        max-width: 230px;
+        min-width: 150px;
+        margin: 0 auto;
+        color: #475569;
+        line-height: 1.6;
+        word-break: break-word;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .actions-cell {
+        min-width: 160px;
+        white-space: nowrap;
+    }
+
+    .actions {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+
+        .actions a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 7px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+    /* EDIT */
+
+    .edit-link {
+        background: rgba(20, 184, 166, 0.10);
+        color: #0f766e !important;
+    }
+
+        .edit-link:hover {
+            background: #0f766e;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    /* DETAILS */
+
+    .details-link {
+        background: rgba(79, 70, 229, 0.09);
+        color: #4f46e5 !important;
+    }
+
+        .details-link:hover {
+            background: #4f46e5;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    /* DELETE */
+
+    .delete-link {
+        background: rgba(220, 38, 38, 0.08);
+        color: #dc2626 !important;
+    }
+
+        .delete-link:hover {
+            background: #dc2626;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    /* =========================================================
+       NURSE VIEW ONLY
+       ========================================================= */
+
+    .view-only {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 12px;
+        border-radius: 8px;
+        background: #f1f5f9;
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .empty-state {
+        padding: 45px 20px !important;
+        text-align: center !important;
+        color: var(--text-muted) !important;
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .footer-row {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        margin-top: 25px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 20px;
+        border-radius: 10px;
+        background: #475569;
+        color: white !important;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #334155;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @@media (max-width: 992px) {
+
+        .careplan-container {
+            padding: 30px 18px;
+        }
+
+        .careplan-header {
+            padding: 26px;
+        }
+
+            .careplan-header h2 {
+                font-size: 22px;
+            }
+
+        .table-card {
+            padding: 22px;
+        }
+
+        .careplan-toolbar {
+            justify-content: center;
+        }
+
+        .footer-row {
+            justify-content: center;
+        }
+    }
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .careplan-container {
+            padding: 22px 14px;
+        }
+
+        .careplan-header {
+            padding: 22px;
+            border-radius: 16px;
+            margin-bottom: 22px;
+        }
+
+            .careplan-header h2 {
+                font-size: 20px;
+            }
+
+            .careplan-header p {
+                font-size: 13px;
+            }
+
+        .live-indicator {
+            display: table;
+            margin: 10px 0 0 0;
+        }
+
+        .table-card {
+            padding: 18px;
+            border-radius: 16px;
+        }
+
+        .btn-create {
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .footer-row {
+            justify-content: center;
+        }
+    }
+
+    /* =========================================================
+       SMALL PHONE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .careplan-container {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .careplan-header {
+            padding: 20px;
+        }
+
+            .careplan-header h2 {
+                font-size: 18px;
+            }
+
+            .careplan-header p {
+                font-size: 12.5px;
+            }
+
+        .table-card {
+            padding: 14px;
+        }
+
+        .back-link {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+</style>
+
+<div class="careplan-container">
+
+    
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="careplan-header">
+
+        <h2>
+
+            Patient Care Plans
+
+            <span class="live-indicator">
+                🟢 Live Syncing
+            </span>
+
+        </h2>
+
+        <p>
+            Manage individualized patient care plans, including
+            medication routines, dietary guidance, mobility support,
+            therapy schedules, and memory care notes.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         TABLE CARD
+         ===================================================== -->
+
+    <div class="table-card">
+
+        <!-- =================================================
+             DOCTOR ONLY - CREATE BUTTON
+             ================================================= -->
+
+        @if (User.IsInRole("Doctor"))
+        {
+            <div class="careplan-toolbar">
+
+                @Html.ActionLink(
+                    "Create New Care Plan",
+                    "Create",
+                    null,
+                    new
+                    {
+                        @class = "btn-create"
+                    })
+
+            </div>
+        }
+
+
+        <!-- =================================================
+             TABLE
+             ================================================= -->
+
+        <div class="table-responsive">
+
+            <table class="careplan-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Patient
+                        </th>
+
+                        <th>
+                            Medication Routine
+                        </th>
+
+                        <th>
+                            Diet Instructions
+                        </th>
+
+                        <th>
+                            Mobility Support
+                        </th>
+
+                        <th>
+                            Therapy Schedule
+                        </th>
+
+                        <th>
+                            Memory Care Notes
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="liveTableBody">
+
+                    @Html.Partial(
+                        "_CarePlanTableRows",
+                        Model
+                    )
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+
+        <!-- =================================================
+             DOCTOR DASHBOARD
+             ================================================= -->
+
+        @if (User.IsInRole("Doctor"))
+        {
+            <div class="footer-row">
+
+                @Html.ActionLink(
+                    "← Back to Dashboard",
+                    "Dashboard",
+                    "Doctor",
+                    null,
+                    new
+                    {
+                        @class = "back-link"
+                    })
+
+            </div>
+        }
+
+
+        <!-- =================================================
+             NURSE DASHBOARD
+             ================================================= -->
+
+        @if (User.IsInRole("Nurse"))
+        {
+            <div class="footer-row">
+
+                @Html.ActionLink(
+                    "← Back to Dashboard",
+                    "Dashboard",
+                    "Nurse",
+                    null,
+                    new
+                    {
+                        @class = "back-link"
+                    })
+
+            </div>
+        }
+
+    </div>
+    
+
+</div>
+
+@section Scripts {
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+    /* =====================================================
+       LIVE CARE PLAN REFRESH
+       ===================================================== */
+
+    function refreshTable() {
+
+        $.ajax({
+
+            url: '@Url.Action("GetLiveTable", "CarePlans")',
+
+            type: 'GET',
+
+            success: function (data) {
+
+                $('#liveTableBody').html(data);
+
+            },
+
+            error: function (error) {
+
+                console.log(
+                    "Error refreshing care plans:",
+                    error
+                );
+
+            }
+
+        });
+
+    }
+
+
+    /* =====================================================
+       REFRESH EVERY 5 SECONDS
+       ===================================================== */
+
+    setInterval(
+        refreshTable,
+        5000
+    );
+
+    </script>
+   
+
+}

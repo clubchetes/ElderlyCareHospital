@@ -1,0 +1,330 @@
+﻿@model ElderlyCareHospital.Models.Message
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<style>
+
+    /* =====================================================
+       PAGE
+       ===================================================== */
+
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .delete-container {
+        margin-top: 30px;
+        margin-bottom: 45px;
+    }
+
+    /* =====================================================
+       HEADER
+       ===================================================== */
+
+    .delete-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 30px 34px;
+        border-radius: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 22px rgba(47, 111, 115, 0.16);
+    }
+
+        .delete-header h2 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .delete-header p {
+            margin: 9px 0 0;
+            opacity: 0.95;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+    /* =====================================================
+       PANEL
+       ===================================================== */
+
+    .delete-panel {
+        background: white;
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 7px 22px rgba(0,0,0,0.07);
+        margin-bottom: 25px;
+    }
+
+    /* =====================================================
+       WARNING
+       ===================================================== */
+
+    .delete-warning {
+        background: #fff8e1;
+        border: 1px solid #ffe0b2;
+        color: #8a5a00;
+        border-radius: 12px;
+        padding: 15px 18px;
+        margin-bottom: 25px;
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    .delete-warning-icon {
+        margin-right: 6px;
+    }
+
+    /* =====================================================
+       DETAILS TITLE
+       ===================================================== */
+
+    .details-title {
+        color: #2f3e46;
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0 0 18px;
+    }
+
+    /* =====================================================
+       DETAILS
+       ===================================================== */
+
+    .message-details {
+        border: 1px solid #e4edef;
+        border-radius: 15px;
+        overflow: hidden;
+        margin: 0 0 25px;
+    }
+
+        .message-details dt {
+            width: 30%;
+            float: left;
+            clear: left;
+            padding: 15px 18px;
+            background: #f8fbfc;
+            color: #2f6f73;
+            font-size: 13px;
+            font-weight: 700;
+            border-bottom: 1px solid #edf2f4;
+        }
+
+        .message-details dd {
+            margin-left: 30%;
+            padding: 15px 18px;
+            color: #455a64;
+            font-size: 14px;
+            line-height: 1.5;
+            border-bottom: 1px solid #edf2f4;
+            min-height: 50px;
+        }
+
+            .message-details dt:last-of-type,
+            .message-details dd:last-of-type {
+                border-bottom: none;
+            }
+
+    /* =====================================================
+       FORM ACTIONS
+       ===================================================== */
+
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+
+    .btn-delete {
+        background: #c62828;
+        color: white !important;
+        border: none;
+        padding: 11px 20px;
+        border-radius: 10px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(198, 40, 40, 0.18);
+        transition: 0.2s ease;
+        cursor: pointer;
+    }
+
+        .btn-delete:hover {
+            background: #a51f1f;
+            color: white !important;
+            transform: translateY(-1px);
+        }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 18px;
+        background: #455a64;
+        color: white !important;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #263238;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+
+    @@media (max-width: 768px) {
+
+        .delete-container {
+            margin-top: 20px;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .delete-header {
+            padding: 24px;
+        }
+
+            .delete-header h2 {
+                font-size: 25px;
+            }
+
+        .delete-panel {
+            padding: 18px;
+        }
+
+        .message-details dt {
+            width: 100%;
+            float: none;
+            border-bottom: none;
+            padding-bottom: 7px;
+        }
+
+        .message-details dd {
+            margin-left: 0;
+            padding-top: 7px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-delete,
+        .back-link {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="container delete-container">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="delete-header">
+
+        <h2>
+            Delete Message
+        </h2>
+
+        <p>
+            Review the message details below before permanently deleting it
+            from the Elderly Care Hospital communication system.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         DELETE PANEL
+         ===================================================== -->
+
+    <div class="delete-panel">
+
+        <div class="delete-warning">
+            <span class="delete-warning-icon">⚠️</span>
+            Are you sure you want to delete this message? This action cannot
+            be undone.
+        </div>
+
+
+        <h4 class="details-title">
+            Message Details
+        </h4>
+
+
+        <dl class="message-details">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SenderID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SenderID)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.ReceiverID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.ReceiverID)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.MessageText)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.MessageText)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.SentDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.SentDate)
+            </dd>
+
+        </dl>
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+
+                <input type="submit"
+                       value="Delete"
+                       class="btn-delete" />
+
+                @Html.ActionLink(
+                    "Back to List",
+                    "Inbox",
+                    null,
+                    new { @class = "back-link" }
+                )
+
+            </div>
+        }
+
+    </div>
+
+</div>
+

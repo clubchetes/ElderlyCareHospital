@@ -1,0 +1,634 @@
+﻿@model ElderlyCareHospital.Models.CarePlan
+
+@{
+    ViewBag.Title = "Edit Care Plan";
+}
+
+<style>
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .edit-container {
+        max-width: 950px;
+        margin: 35px auto 50px;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .edit-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 30px 34px;
+        border-radius: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 22px rgba(47, 111, 115, 0.16);
+    }
+
+        .edit-header h2 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .edit-header p {
+            margin: 10px 0 0;
+            opacity: 0.95;
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+    .header-badge {
+        float: right;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        background: rgba(255,255,255,0.18);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 500;
+    }
+
+    /* =========================================================
+       FORM CARD
+       ========================================================= */
+
+    .form-card {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.07);
+    }
+
+    .form-title {
+        color: #2f6f73;
+        font-size: 21px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .form-subtitle {
+        color: #78909c;
+        font-size: 14px;
+        margin-top: 5px;
+        line-height: 1.5;
+    }
+
+    .form-divider {
+        border: 0;
+        border-top: 1px solid #e5ecef;
+        margin: 20px 0 30px;
+    }
+
+    /* =========================================================
+       FORM GROUPS
+       ========================================================= */
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .control-label {
+        font-weight: 600;
+        color: #2f3e46;
+        padding-top: 10px;
+    }
+
+    .field-help {
+        display: block;
+        margin-top: 7px;
+        color: #78909c;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    /* =========================================================
+       INPUTS
+       ========================================================= */
+
+    .form-control {
+        width: 100%;
+        border-radius: 11px;
+        border: 1px solid #cfd8dc;
+        padding: 11px 14px;
+        min-height: 44px;
+        box-shadow: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: #4c8c91;
+            box-shadow: 0 0 0 3px rgba(76, 140, 145, 0.13);
+            outline: none;
+            background: #fcfefe;
+        }
+
+    select.form-control {
+        cursor: pointer;
+    }
+
+    textarea.form-control {
+        min-height: 125px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    /* =========================================================
+       PATIENT SECTION
+       ========================================================= */
+
+    .patient-section {
+        background: #f7fbfb;
+        border: 1px solid #dfebed;
+        border-radius: 14px;
+        padding: 20px;
+        margin-bottom: 30px;
+    }
+
+        .patient-section .control-label {
+            color: #2f6f73;
+        }
+
+    /* =========================================================
+       CARE SECTIONS
+       ========================================================= */
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin: 28px 0 20px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #e5ecef;
+        color: #2f6f73;
+        font-weight: 700;
+        font-size: 17px;
+    }
+
+        .section-heading:first-of-type {
+            margin-top: 0;
+        }
+
+    .section-number {
+        width: 30px;
+        height: 30px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: #e8f2f3;
+        color: #2f6f73;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .care-field {
+        background: #ffffff;
+        border: 1px solid #edf1f3;
+        border-radius: 13px;
+        padding: 16px;
+        margin-bottom: 18px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .care-field:focus-within {
+            border-color: #c5dfe1;
+            box-shadow: 0 3px 12px rgba(47,111,115,0.06);
+        }
+
+        .care-field label {
+            display: block;
+            color: #2f3e46;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .button-row {
+        margin-top: 30px;
+        padding-top: 22px;
+        border-top: 1px solid #e5ecef;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .btn-save {
+        background: #2f6f73;
+        border: none;
+        color: white !important;
+        padding: 11px 25px;
+        border-radius: 11px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 10px rgba(47,111,115,0.16);
+    }
+
+        .btn-save:hover {
+            background: #25575a;
+            color: white !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(47,111,115,0.20);
+        }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        margin-top: 20px;
+        color: #2f6f73;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .back-link:hover {
+            color: #25575a;
+            text-decoration: none;
+        }
+
+    .text-danger {
+        font-size: 0.88rem;
+        margin-top: 5px;
+        display: block;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .edit-container {
+            margin: 20px 15px 40px;
+        }
+
+        .edit-header {
+            padding: 24px;
+        }
+
+            .edit-header h2 {
+                font-size: 25px;
+            }
+
+        .header-badge {
+            float: none;
+            margin-top: 15px;
+        }
+
+        .form-card {
+            padding: 22px 18px;
+        }
+
+        .form-group.row {
+            display: block;
+        }
+
+        .control-label {
+            display: block;
+            width: 100%;
+            margin-bottom: 7px;
+        }
+
+        .col-md-9,
+        .col-md-3 {
+            width: 100%;
+        }
+
+        .button-row {
+            justify-content: center;
+        }
+
+        .btn-save {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="edit-container">
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="edit-header">
+
+        <span class="header-badge">
+            ✏️ Care Plan Update
+        </span>
+
+        <h2>Edit Care Plan</h2>
+
+        <p>
+            Update the patient's care plan to keep medication,
+            nutrition, mobility, therapy, and memory-care information
+            accurate and up to date.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM CARD
+         ====================================================== -->
+
+    <div class="form-card">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <h4 class="form-title">
+                Care Plan Information
+            </h4>
+
+            <p class="form-subtitle">
+                Review the current information and make any necessary
+                changes to the patient's individualized care plan.
+            </p>
+
+            <hr class="form-divider" />
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.HiddenFor(model => model.CarePlanID)
+
+
+            <!-- =================================================
+                 PATIENT
+                 ================================================== -->
+
+            <div class="patient-section">
+
+                <div class="form-group row" style="margin-bottom:0;">
+
+                    @Html.LabelFor(
+                        model => model.PatientID,
+                        "Patient",
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.DropDownList(
+                            "PatientID",
+                            null,
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                        <small class="field-help">
+                            Select the patient associated with this care plan.
+                        </small>
+
+                        @Html.ValidationMessageFor(
+                            model => model.PatientID,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 MEDICATION
+                 ================================================== -->
+
+            <div class="section-heading">
+
+                <span class="section-number">1</span>
+
+                <span>Medical & Medication Care</span>
+
+            </div>
+
+            <div class="care-field">
+
+                @Html.LabelFor(
+                    model => model.MedicationRoutine,
+                    "Medication Routine")
+
+                @Html.TextAreaFor(
+                    model => model.MedicationRoutine,
+                    new
+                    {
+                        @class = "form-control",
+                        rows = "4",
+                        placeholder = "Enter medication names, dosages, administration times, and special instructions..."
+                    })
+
+                <small class="field-help">
+                    Update medication schedules, dosage instructions,
+                    and administration requirements.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.MedicationRoutine,
+                    "",
+                    new { @class = "text-danger" })
+
+            </div>
+
+
+            <!-- =================================================
+                 DIET
+                 ================================================== -->
+
+            <div class="section-heading">
+
+                <span class="section-number">2</span>
+
+                <span>Diet & Nutrition</span>
+
+            </div>
+
+            <div class="care-field">
+
+                @Html.LabelFor(
+                    model => model.DietInstructions,
+                    "Diet Instructions")
+
+                @Html.TextAreaFor(
+                    model => model.DietInstructions,
+                    new
+                    {
+                        @class = "form-control",
+                        rows = "4",
+                        placeholder = "Enter dietary recommendations, restrictions, allergies, meal guidance, and nutritional requirements..."
+                    })
+
+                <small class="field-help">
+                    Update dietary restrictions, nutritional requirements,
+                    and meal-related guidance.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.DietInstructions,
+                    "",
+                    new { @class = "text-danger" })
+
+            </div>
+
+
+            <!-- =================================================
+                 MOBILITY
+                 ================================================== -->
+
+            <div class="section-heading">
+
+                <span class="section-number">3</span>
+
+                <span>Mobility & Safety</span>
+
+            </div>
+
+            <div class="care-field">
+
+                @Html.LabelFor(
+                    model => model.MobilitySupport,
+                    "Mobility Support")
+
+                @Html.TextAreaFor(
+                    model => model.MobilitySupport,
+                    new
+                    {
+                        @class = "form-control",
+                        rows = "4",
+                        placeholder = "Describe mobility assistance, walking aids, transfer support, fall prevention, and safety requirements..."
+                    })
+
+                <small class="field-help">
+                    Update mobility assistance, walking aids,
+                    transfer support, and safety measures.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.MobilitySupport,
+                    "",
+                    new { @class = "text-danger" })
+
+            </div>
+
+
+            <!-- =================================================
+                 THERAPY
+                 ================================================== -->
+
+            <div class="section-heading">
+
+                <span class="section-number">4</span>
+
+                <span>Therapy & Rehabilitation</span>
+
+            </div>
+
+            <div class="care-field">
+
+                @Html.LabelFor(
+                    model => model.TherapySchedule,
+                    "Therapy Schedule")
+
+                @Html.TextAreaFor(
+                    model => model.TherapySchedule,
+                    new
+                    {
+                        @class = "form-control",
+                        rows = "4",
+                        placeholder = "Enter therapy sessions, rehabilitation activities, schedules, and treatment goals..."
+                    })
+
+                <small class="field-help">
+                    Update therapy sessions, rehabilitation activities,
+                    schedules, and treatment requirements.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.TherapySchedule,
+                    "",
+                    new { @class = "text-danger" })
+
+            </div>
+
+
+            <!-- =================================================
+                 MEMORY CARE
+                 ================================================== -->
+
+            <div class="section-heading">
+
+                <span class="section-number">5</span>
+
+                <span>Memory & Cognitive Care</span>
+
+            </div>
+
+            <div class="care-field">
+
+                @Html.LabelFor(
+                    model => model.MemoryCareNotes,
+                    "Memory Care Notes")
+
+                @Html.TextAreaFor(
+                    model => model.MemoryCareNotes,
+                    new
+                    {
+                        @class = "form-control",
+                        rows = "4",
+                        placeholder = "Add memory care observations, cognitive support strategies, routines, and behavioral notes..."
+                    })
+
+                <small class="field-help">
+                    Update cognitive support strategies, routines,
+                    observations, and memory-care considerations.
+                </small>
+
+                @Html.ValidationMessageFor(
+                    model => model.MemoryCareNotes,
+                    "",
+                    new { @class = "text-danger" })
+
+            </div>
+
+
+            <!-- =================================================
+                 SAVE
+                 ================================================== -->
+
+            <div class="button-row">
+
+                <input type="submit"
+                       value="Save Changes"
+                       class="btn btn-save" />
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK
+         ====================================================== -->
+
+    @Html.ActionLink(
+        "← Back to Care Plans",
+        "Index",
+        null,
+        new { @class = "back-link" })
+
+</div>

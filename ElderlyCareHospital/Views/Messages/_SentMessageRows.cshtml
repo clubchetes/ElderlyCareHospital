@@ -1,0 +1,117 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Message>
+
+@{
+    var personNames =
+        ViewBag.PersonNames as IDictionary<int, string>
+        ?? new Dictionary<int, string>();
+}
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        string receiverName = "Unknown User";
+
+        if (item.ReceiverID.HasValue &&
+            personNames.ContainsKey(item.ReceiverID.Value))
+        {
+            receiverName =
+                personNames[item.ReceiverID.Value];
+        }
+
+        <tr>
+
+            <!-- TO -->
+
+            <td>
+
+                <span class="person-name">
+                    @receiverName
+                </span>
+
+            </td>
+
+
+            <!-- MESSAGE -->
+
+            <td>
+
+                <div class="message-preview">
+
+                    @item.MessageText
+
+                </div>
+
+            </td>
+
+
+            <!-- DATE -->
+
+            <td>
+
+                <span class="date-sent">
+
+                    @(item.SentDate.HasValue
+                        ? item.SentDate.Value.ToString("dd MMM yyyy HH:mm")
+                        : "-")
+
+                </span>
+
+            </td>
+
+
+            <!-- ACTIONS -->
+
+            <td>
+
+                <div class="action-links">
+
+                    @Html.ActionLink(
+                        "View",
+                        "Details",
+                        "Messages",
+                        new { id = item.MessageID },
+                        null
+                    )
+
+                    @Html.ActionLink(
+                        "Delete",
+                        "Delete",
+                        "Messages",
+                        new { id = item.MessageID },
+                        null
+                    )
+
+                </div>
+
+            </td>
+
+        </tr>
+    }
+}
+else
+{
+    <tr>
+
+        <td colspan="4">
+
+            <div class="empty-inbox">
+
+                <div class="empty-inbox-icon">
+                   
+                </div>
+
+                <h4>
+                    No Sent Messages
+                </h4>
+
+                <p>
+                    You have not sent any messages yet.
+                </p>
+
+            </div>
+
+        </td>
+
+    </tr>
+}

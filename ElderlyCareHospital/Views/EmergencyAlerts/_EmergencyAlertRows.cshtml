@@ -1,0 +1,148 @@
+﻿
+@model IEnumerable<ElderlyCareHospital.Models.EmergencyAlert>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+
+            <!-- PATIENT -->
+            <td class="patient-name">
+                <strong>
+                    @item.Patient.FirstName
+                    @item.Patient.LastName
+                </strong>
+            </td>
+
+            <!-- ALERT TYPE -->
+            <td class="alert-type">
+                @item.AlertType
+            </td>
+
+            <!-- DESCRIPTION -->
+            <td class="description-text">
+                @item.Description
+            </td>
+
+            <!-- SEVERITY -->
+            <td class="col-severity">
+
+                @if (item.Severity == "Critical")
+                {
+                    <span class="severity-badge severity-critical">
+                        Critical
+                    </span>
+                }
+                else if (item.Severity == "High")
+                {
+                    <span class="severity-badge severity-high">
+                        High
+                    </span>
+                }
+                else if (item.Severity == "Medium")
+                {
+                    <span class="severity-badge severity-medium">
+                        Medium
+                    </span>
+                }
+                else
+                {
+                    <span class="severity-badge severity-low">
+                        Low
+                    </span>
+                }
+
+            </td>
+
+            <!-- ALERT DATE -->
+            <td class="date-text">
+                @item.AlertDate
+            </td>
+
+            <!-- STATUS -->
+            <td class="col-status">
+
+                @if (item.Status == "Active")
+                {
+                    <span class="status-badge status-active">
+                        Active
+                    </span>
+                }
+                else
+                {
+                    <span class="status-badge status-resolved">
+                        @item.Status
+                    </span>
+                }
+
+            </td>
+
+            <!-- RESOLVED BY -->
+            <td class="resolved-by">
+
+                @if (!string.IsNullOrEmpty(item.ResolvedBy))
+                {
+                    @item.ResolvedBy
+                }
+                else
+                {
+                    <span class="empty-value">—</span>
+                }
+
+            </td>
+
+            <!-- RESOLVED DATE -->
+            <td class="date-text">
+
+                @if (item.ResolvedDate != null)
+                {
+                    @item.ResolvedDate
+                }
+                else
+                {
+                    <span class="empty-value">—</span>
+                }
+
+            </td>
+
+            <!-- ACTION -->
+            <td class="action-links">
+
+                @if (User.IsInRole("Admin"))
+                {
+                    if (item.Status != "Resolved")
+                    {
+                        @Html.ActionLink(
+                            "Resolve",
+                            "Resolve",
+                            new { id = item.AlertID },
+                            new { @class = "resolve-link" }
+                        )
+                    }
+                    else
+                    {
+                        <span class="resolved-label">
+                            Resolved
+                        </span>
+                    }
+                }
+                else
+                {
+                    <span class="empty-value">—</span>
+                }
+
+            </td>
+
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="9" class="empty-alerts">
+            No active emergency alerts at the moment.
+        </td>
+    </tr>
+}
+

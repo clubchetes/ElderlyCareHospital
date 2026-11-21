@@ -1,0 +1,36 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.NurseNote>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td class="patient-name">
+                @if (item.Patient != null)
+                {
+                    @item.Patient.FirstName @item.Patient.LastName
+                }
+                else
+                {
+                    @:Unknown Patient
+                }
+            </td>
+
+            <td class="note-text">
+                @Html.DisplayFor(modelItem => item.NoteText)
+            </td>
+
+            <td class="date-text">
+                @item.DateCreated.ToString("dd MMM yyyy HH:mm")
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="3" class="text-center text-muted" style="padding: 30px;">
+            No nurse notes found.
+        </td>
+    </tr>
+}

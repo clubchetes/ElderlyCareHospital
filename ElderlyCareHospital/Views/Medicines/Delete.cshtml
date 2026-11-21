@@ -1,0 +1,491 @@
+﻿@model ElderlyCareHospital.Models.Medicine
+
+@{
+    ViewBag.Title = "Delete Medicine";
+}
+
+<style>
+    /* =========================================================
+       ELDERLYCARE PHARMACY - DELETE MEDICINE
+       ========================================================= */
+
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #34495e;
+    }
+
+    .delete-page {
+        max-width: 850px;
+        margin: 45px auto;
+        padding: 0 20px;
+    }
+
+    /* =========================================================
+       MAIN CARD
+       ========================================================= */
+
+    .delete-card {
+        background: #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .delete-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 30px 38px;
+    }
+
+        .delete-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .delete-header p {
+            margin: 9px 0 0;
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+    /* =========================================================
+       CONTENT
+       ========================================================= */
+
+    .delete-content {
+        padding: 35px 40px;
+    }
+
+    .warning-box {
+        background: #fff8ed;
+        border-left: 4px solid #e0a13a;
+        border-radius: 10px;
+        padding: 15px 18px;
+        margin-bottom: 28px;
+        color: #6f5a36;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+        .warning-box strong {
+            color: #a66a00;
+        }
+
+    .section-title {
+        color: #2f6f73;
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0 0 22px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #e5eeee;
+    }
+
+    /* =========================================================
+       MEDICINE DETAILS
+       ========================================================= */
+
+    .medicine-details {
+        margin: 0;
+        border: 1px solid #e1eaec;
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+    }
+
+    .detail-row {
+        display: grid;
+        grid-template-columns: 200px 1fr;
+        border-bottom: 1px solid #e8eef0;
+    }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+    .detail-label {
+        padding: 15px 18px;
+        background: #f4f9f9;
+        color: #2f6f73;
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    .detail-value {
+        padding: 15px 18px;
+        color: #46585a;
+        font-size: 14px;
+        word-break: break-word;
+    }
+
+    .medicine-name {
+        font-weight: 700;
+        color: #263f41;
+    }
+
+    .quantity-value {
+        display: inline-block;
+        background: #eef7f7;
+        color: #2f6f73;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    .minimum-value {
+        display: inline-block;
+        background: #f3f5f6;
+        color: #596a6c;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 13px;
+    }
+
+    .expiry-value {
+        color: #9b690d;
+        font-weight: 600;
+    }
+
+    .supplier-value {
+        color: #526568;
+    }
+
+    .description-value {
+        line-height: 1.6;
+        color: #59696b;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .delete-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 12px;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #e5eeee;
+    }
+
+    .btn-delete {
+        border: none;
+        border-radius: 10px;
+        padding: 12px 30px;
+        background: #b52b2b;
+        color: white !important;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 6px 15px rgba(181, 43, 43, 0.18);
+        transition: all 0.2s ease;
+    }
+
+        .btn-delete:hover {
+            background: #972323;
+            transform: translateY(-2px);
+            box-shadow: 0 9px 20px rgba(181, 43, 43, 0.25);
+        }
+
+    .btn-cancel {
+        display: inline-block;
+        padding: 11px 24px;
+        border-radius: 10px;
+        background: #f1f5f6;
+        border: 1px solid #d6e1e3;
+        color: #526568 !important;
+        text-decoration: none !important;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+        .btn-cancel:hover {
+            background: #e6edef;
+            color: #2f6f73 !important;
+            text-decoration: none !important;
+            transform: translateY(-2px);
+        }
+
+    /* =========================================================
+       DASHBOARD LINK
+       ========================================================= */
+
+    .back-container {
+        text-align: center;
+        margin-top: 22px;
+    }
+
+    .dashboard-link {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: #2f6f73 !important;
+        background: #ffffff;
+        border: 1px solid #d6e3e5;
+        text-decoration: none !important;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+        .dashboard-link:hover {
+            background: #eef6f6;
+            transform: translateY(-2px);
+            text-decoration: none !important;
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .delete-page {
+            margin: 25px auto;
+            padding: 0 12px;
+        }
+
+        .delete-header {
+            padding: 25px;
+        }
+
+            .delete-header h2 {
+                font-size: 23px;
+            }
+
+        .delete-content {
+            padding: 25px 20px;
+        }
+
+        .detail-row {
+            grid-template-columns: 1fr;
+        }
+
+        .detail-label {
+            padding: 11px 15px;
+        }
+
+        .detail-value {
+            padding: 13px 15px;
+        }
+
+        .delete-actions {
+            flex-direction: column;
+        }
+
+        .btn-delete,
+        .btn-cancel {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="delete-page">
+
+    <div class="delete-card">
+
+        <!-- =====================================================
+             HEADER
+             ===================================================== -->
+
+        <div class="delete-header">
+
+            <h2>Delete Medicine</h2>
+
+            <p>
+                Review the medicine information below before permanently
+                removing this record from the pharmacy inventory.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             CONTENT
+             ===================================================== -->
+
+        <div class="delete-content">
+
+            <div class="warning-box">
+
+                <strong>Important:</strong>
+                Are you sure you want to delete this medicine?
+                This action will permanently remove the medicine record
+                from the pharmacy inventory.
+
+            </div>
+
+
+            <h4 class="section-title">
+                Medicine Information
+            </h4>
+
+
+            <!-- =================================================
+                 MEDICINE DETAILS
+                 ================================================= -->
+
+            <div class="medicine-details">
+
+                <div class="detail-row">
+
+                    <div class="detail-label">
+                        Medicine Name
+                    </div>
+
+                    <div class="detail-value medicine-name">
+                        @Html.DisplayFor(model => model.MedicineName)
+                    </div>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <div class="detail-label">
+                        Description
+                    </div>
+
+                    <div class="detail-value description-value">
+                        @Html.DisplayFor(model => model.Description)
+                    </div>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <div class="detail-label">
+                        Current Quantity
+                    </div>
+
+                    <div class="detail-value">
+
+                        <span class="quantity-value">
+                            @Html.DisplayFor(model => model.Quantity)
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <div class="detail-label">
+                        Expiry Date
+                    </div>
+
+                    <div class="detail-value expiry-value">
+
+                        @if (Model.ExpiryDate.HasValue)
+                        {
+                            @Model.ExpiryDate.Value.ToString("dd MMM yyyy HH:mm")
+                        }
+                        else
+                        {
+                            <span>Not specified</span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <div class="detail-label">
+                        Minimum Stock
+                    </div>
+
+                    <div class="detail-value">
+
+                        <span class="minimum-value">
+                            @Html.DisplayFor(model => model.MinimumStock)
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail-row">
+
+                    <div class="detail-label">
+                        Supplier
+                    </div>
+
+                    <div class="detail-value supplier-value">
+
+                        @Html.DisplayFor(model => model.Supplier)
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 DELETE / CANCEL
+                 ================================================= -->
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="delete-actions">
+
+                    <input type="submit"
+                           value="Delete Medicine"
+                           class="btn-delete" />
+
+                    @Html.ActionLink(
+                        "Cancel",
+                        "Index",
+                        null,
+                        new
+                        {
+                            @class = "btn-cancel"
+                        }
+                    )
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         BACK TO DASHBOARD
+         ========================================================= -->
+
+    <div class="back-container">
+
+        @Html.ActionLink(
+            "Back to Dashboard",
+            "Dashboard",
+            "Pharmacist",
+            null,
+            new
+            {
+                @class = "dashboard-link"
+            }
+        )
+
+    </div>
+
+</div>

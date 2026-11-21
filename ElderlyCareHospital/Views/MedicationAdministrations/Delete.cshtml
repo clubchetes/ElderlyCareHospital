@@ -1,0 +1,479 @@
+﻿@model ElderlyCareHospital.Models.MedicationAdministration
+
+@{
+    ViewBag.Title = "Delete Medication Administration";
+}
+
+<style>
+    /* =========================================================
+       NURSE DASHBOARD THEME
+       Clean clinical UI - teal accents, neutral surfaces
+       ========================================================= */
+
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #263238;
+    }
+
+    .delete-page {
+        max-width: 1050px;
+        margin: 35px auto;
+        padding: 0 20px;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .delete-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 30px 34px;
+        border-radius: 20px;
+        margin-bottom: 26px;
+        box-shadow: 0 10px 24px rgba(47, 111, 115, 0.16);
+    }
+
+        .delete-header h2 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .delete-header p {
+            margin: 9px 0 0;
+            font-size: 15px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+    .warning-badge {
+        float: right;
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: rgba(255,255,255,0.16);
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* =========================================================
+       MAIN PANEL
+       ========================================================= */
+
+    .delete-panel {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 7px 22px rgba(0,0,0,0.07);
+    }
+
+    .confirmation-box {
+        background: #fff8f7;
+        border: 1px solid #f1d6d2;
+        border-left: 5px solid #c62828;
+        border-radius: 12px;
+        padding: 17px 20px;
+        margin-bottom: 28px;
+    }
+
+        .confirmation-box strong {
+            display: block;
+            color: #b71c1c;
+            font-size: 16px;
+            margin-bottom: 5px;
+        }
+
+        .confirmation-box span {
+            color: #6d4c41;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+    /* =========================================================
+       SECTION TITLE
+       ========================================================= */
+
+    .section-title {
+        color: #2f6f73;
+        font-size: 20px;
+        font-weight: 700;
+        margin: 0 0 22px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #e7eff1;
+    }
+
+    /* =========================================================
+       DETAILS GRID
+       ========================================================= */
+
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .detail-card {
+        background: #f8fbfc;
+        border: 1px solid #e5edf0;
+        border-radius: 12px;
+        padding: 17px 18px;
+        min-height: 78px;
+    }
+
+    .detail-label {
+        display: block;
+        color: #78909c;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 7px;
+    }
+
+    .detail-value {
+        display: block;
+        color: #263238;
+        font-size: 15px;
+        font-weight: 600;
+        line-height: 1.5;
+        word-break: break-word;
+    }
+
+    .patient-value {
+        color: #2f6f73;
+    }
+
+    .medicine-value {
+        color: #3567a3;
+    }
+
+    .status-value {
+        display: inline-block;
+        background: #eef5f6;
+        color: #2f6f73;
+        padding: 5px 11px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .date-value {
+        color: #546e7a;
+    }
+
+    /* =========================================================
+       ACTION AREA
+       ========================================================= */
+
+    .action-area {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-top: 30px;
+        padding-top: 24px;
+        border-top: 1px solid #e8eef2;
+    }
+
+    .action-left {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .btn-delete {
+        border: none;
+        background: #c62828;
+        color: white;
+        padding: 11px 24px;
+        border-radius: 10px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 4px 12px rgba(198, 40, 40, 0.16);
+    }
+
+        .btn-delete:hover {
+            background: #a91f1f;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 15px rgba(198, 40, 40, 0.23);
+        }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 20px;
+        background: #455a64;
+        color: white !important;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 14px;
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #263238;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    .dashboard-link {
+        color: #2f6f73;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s ease;
+    }
+
+        .dashboard-link:hover {
+            color: #25575a;
+            text-decoration: underline;
+        }
+
+    /* =========================================================
+       FOOTER NOTE
+       ========================================================= */
+
+    .delete-note {
+        margin-top: 22px;
+        padding: 15px 18px;
+        background: #f5f8fa;
+        border-radius: 10px;
+        color: #607d8b;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .delete-page {
+            margin-top: 22px;
+            padding: 0 15px;
+        }
+
+        .delete-header {
+            padding: 24px;
+        }
+
+            .delete-header h2 {
+                font-size: 26px;
+            }
+
+        .warning-badge {
+            float: none;
+            margin-top: 12px;
+        }
+
+        .delete-panel {
+            padding: 22px;
+        }
+
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .action-area {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .action-left {
+            flex-direction: column;
+            width: 100%;
+        }
+
+        .btn-delete,
+        .back-link {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="delete-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <div class="delete-header">
+
+        <span class="warning-badge">
+            ⚠ Confirmation Required
+        </span>
+
+        <h2>
+            Delete Medication Record
+        </h2>
+
+        <p>
+            Review the medication administration record below before permanently removing it from the system.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <div class="delete-panel">
+
+        <div class="confirmation-box">
+
+            <strong>
+                Are you sure you want to delete this record?
+            </strong>
+
+            <span>
+                This action will permanently remove the medication administration entry.
+                Please verify the information below before continuing.
+            </span>
+
+        </div>
+
+
+        <h4 class="section-title">
+            Medication Administration Details
+        </h4>
+
+
+        <div class="details-grid">
+
+            <!-- Medication -->
+
+            <div class="detail-card">
+
+                <span class="detail-label">
+                    Medication
+                </span>
+
+                <span class="detail-value medicine-value">
+                    @Html.DisplayFor(model => model.Medicine.MedicineName)
+                </span>
+
+            </div>
+
+
+            <!-- Patient -->
+
+            <div class="detail-card">
+
+                <span class="detail-label">
+                    Patient
+                </span>
+
+                <span class="detail-value patient-value">
+                    @Html.DisplayFor(model => model.Patient.FirstName)
+                </span>
+
+            </div>
+
+
+            <!-- Nurse -->
+
+            <div class="detail-card">
+
+                <span class="detail-label">
+                    Nurse
+                </span>
+
+                <span class="detail-value">
+                    @Html.DisplayFor(model => model.NurseID)
+                </span>
+
+            </div>
+
+
+            <!-- Status -->
+
+            <div class="detail-card">
+
+                <span class="detail-label">
+                    Administration Status
+                </span>
+
+                <span class="detail-value">
+
+                    <span class="status-value">
+                        @Html.DisplayFor(model => model.Status)
+                    </span>
+
+                </span>
+
+            </div>
+
+
+            <!-- Date -->
+
+            <div class="detail-card">
+
+                <span class="detail-label">
+                    Date Administered
+                </span>
+
+                <span class="detail-value date-value">
+                    @Html.DisplayFor(model => model.DateAdministered)
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTIONS
+             ================================================= -->
+
+        <div class="action-area">
+
+            <div class="action-left">
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <input type="submit"
+                           value="Delete Medication Record"
+                           class="btn-delete" />
+                }
+
+                @Html.ActionLink(
+                    "Cancel",
+                    "Index",
+                    null,
+                    new { @class = "back-link" })
+
+            </div>
+
+            @Html.ActionLink(
+                "Back to Dashboard",
+                "Dashboard",
+                "Nurse",
+                null,
+                new { @class = "dashboard-link" })
+
+        </div>
+
+
+        <div class="delete-note">
+            <strong>Important:</strong>
+            Deleting this record removes it from the medication administration list.
+            Confirm that you are deleting the correct patient record before proceeding.
+        </div>
+
+    </div>
+
+</div>

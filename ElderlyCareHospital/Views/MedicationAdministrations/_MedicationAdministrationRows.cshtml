@@ -1,0 +1,50 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.MedicationAdministration>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <strong>@(item.Medicine != null ? item.Medicine.MedicineName : "N/A")</strong>
+            </td>
+
+            <td>
+                @(item.Patient != null ? item.Patient.FirstName : "N/A")
+            </td>
+
+            <td>
+                <span class="nurse-badge">
+                    @item.NurseID
+                </span>
+            </td>
+
+            <td>
+                <span class="status-badge">
+                    @item.Status
+                </span>
+            </td>
+
+            <td>
+                <span class="date-text">
+                    @item.DateAdministered
+                </span>
+            </td>
+
+            <td class="action-links">
+                @Html.ActionLink("Edit", "Edit", new { id = item.AdministrationID }, new { @class = "action-link edit-link" })
+                @Html.ActionLink("Details", "Details", new { id = item.AdministrationID }, new { @class = "action-link details-link" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.AdministrationID }, new { @class = "action-link delete-link" })
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="6" class="empty-state">
+            <h4>No Medication Records Found</h4>
+            <p>There are currently no medication routine entries logged in the system.</p>
+        </td>
+    </tr>
+}

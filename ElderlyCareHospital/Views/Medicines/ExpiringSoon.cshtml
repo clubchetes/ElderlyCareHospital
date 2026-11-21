@@ -1,0 +1,500 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Medicine>
+
+@{
+    ViewBag.Title = "Expiring Medicines";
+}
+
+<style>
+    /* =========================================================
+       ELDERLYCARE PHARMACY THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f8fafc;
+        --surface: #ffffff;
+        --surface-soft: #f8fbfb;
+        --text-main: #172033;
+        --text-muted: #718096;
+        --border: #e6ebef;
+        --teal: #2f6f73;
+        --teal-dark: #25575a;
+        --teal-soft: #eef6f6;
+        --warning: #c47b00;
+        --warning-soft: #fff6df;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+    }
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    .expiry-container {
+        max-width: 1200px;
+        margin: 35px auto;
+        padding: 0 20px;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .expiry-header {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 28px 32px;
+        margin-bottom: 22px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .expiry-header-content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .expiry-header h2 {
+        margin: 0;
+        color: var(--text-main);
+        font-size: 27px;
+        font-weight: 700;
+        letter-spacing: -0.3px;
+    }
+
+    .expiry-header p {
+        margin: 8px 0 0;
+        color: var(--text-muted);
+        font-size: 14px;
+        line-height: 1.6;
+        max-width: 780px;
+    }
+
+    /* =========================================================
+       STATUS
+       ========================================================= */
+
+    .expiry-status {
+        flex-shrink: 0;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 8px 13px;
+        border-radius: 20px;
+        background: var(--warning-soft);
+        color: var(--warning);
+        border: 1px solid #f2dfae;
+        font-size: 12px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        background: var(--warning);
+        border-radius: 50%;
+        display: inline-block;
+    }
+
+    /* =========================================================
+       INFORMATION BANNER
+       ========================================================= */
+
+    .expiry-message {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-left: 4px solid var(--warning);
+        border-radius: 12px;
+        padding: 16px 18px;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
+        color: var(--text-muted);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+        .expiry-message strong {
+            color: var(--text-main);
+        }
+
+    /* =========================================================
+       TABLE CARD
+       ========================================================= */
+
+    .expiry-panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 18px;
+        box-shadow: 0 6px 20px rgba(15, 23, 42, 0.05);
+        overflow: hidden;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .expiry-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .expiry-table thead th {
+            background: #f5f8f9;
+            color: #526568;
+            border: none;
+            border-bottom: 1px solid var(--border);
+            padding: 14px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.45px;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+            .expiry-table thead th:first-child {
+                border-top-left-radius: 10px;
+            }
+
+            .expiry-table thead th:last-child {
+                border-top-right-radius: 10px;
+            }
+
+        .expiry-table tbody td {
+            padding: 16px;
+            vertical-align: middle;
+            border-bottom: 1px solid #edf1f3;
+            color: #4a5860;
+            font-size: 14px;
+            background: #ffffff;
+        }
+
+        .expiry-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .expiry-table tbody tr:hover td {
+                background: #f9fbfb;
+            }
+
+            .expiry-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+    /* =========================================================
+       MEDICINE NAME
+       ========================================================= */
+
+    .medicine-name {
+        color: var(--text-main);
+        font-weight: 700;
+    }
+
+    /* =========================================================
+       EXPIRY DATE
+       ========================================================= */
+
+    .expiry-date {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 11px;
+        border-radius: 8px;
+        background: var(--warning-soft);
+        color: var(--warning);
+        border: 1px solid #f2dfae;
+        font-weight: 700;
+        font-size: 13px;
+    }
+
+    .no-date {
+        display: inline-flex;
+        padding: 6px 11px;
+        border-radius: 8px;
+        background: #f3f5f6;
+        color: #7b8794;
+        font-size: 13px;
+        font-style: italic;
+    }
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .empty-message {
+        text-align: center;
+        padding: 45px 20px;
+        color: var(--text-muted);
+    }
+
+    .empty-icon {
+        width: 42px;
+        height: 42px;
+        margin: 0 auto 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: var(--teal-soft);
+        color: var(--teal);
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .empty-message h4 {
+        margin: 0 0 7px;
+        color: var(--text-main);
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .empty-message p {
+        margin: 0;
+        font-size: 13px;
+    }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .back-section {
+        margin-top: 20px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 10px 16px;
+        background: var(--surface);
+        color: var(--teal) !important;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        text-decoration: none !important;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: var(--teal-soft);
+            border-color: #cddfe0;
+            color: var(--teal-dark) !important;
+            transform: translateY(-1px);
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .expiry-container {
+            margin: 25px auto;
+            padding: 0 12px;
+        }
+
+        .expiry-header {
+            padding: 22px;
+        }
+
+        .expiry-header-content {
+            display: block;
+        }
+
+        .expiry-header h2 {
+            font-size: 23px;
+        }
+
+        .expiry-status {
+            margin-top: 15px;
+        }
+
+        .expiry-message {
+            padding: 14px 15px;
+        }
+
+        .expiry-panel {
+            padding: 12px;
+        }
+
+        .expiry-table {
+            min-width: 600px;
+        }
+
+            .expiry-table thead th,
+            .expiry-table tbody td {
+                padding: 13px 12px;
+            }
+    }
+</style>
+
+
+<div class="expiry-container">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="expiry-header">
+
+        <div class="expiry-header-content">
+
+            <div>
+
+                <h2>Expiring Medicines</h2>
+
+                <p>
+                    Review medicines approaching their expiry date to support
+                    safe stock management and continuous patient care.
+                </p>
+
+            </div>
+
+            <div class="expiry-status">
+                <span class="status-dot"></span>
+                Expiry Monitoring
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         INFORMATION
+         ===================================================== -->
+
+    <div class="expiry-message">
+
+        <div>
+            <strong>Expiry Monitoring:</strong>
+            Review the medicines below and take appropriate action before
+            their expiry dates. Keeping expired medication out of active
+            inventory supports safe pharmaceutical management.
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TABLE
+         ===================================================== -->
+
+    <div class="expiry-panel">
+
+        <div class="table-responsive">
+
+            <table class="expiry-table">
+
+                <thead>
+
+                    <tr>
+                        <th>Medicine Name</th>
+                        <th>Expiry Date</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    <span class="medicine-name">
+                                        @item.MedicineName
+                                    </span>
+                                </td>
+
+                                <td>
+
+                                    @if (item.ExpiryDate.HasValue)
+                                    {
+                                        <span class="expiry-date">
+                                            @item.ExpiryDate.Value.ToShortDateString()
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="no-date">
+                                            N/A
+                                        </span>
+                                    }
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="2">
+
+                                <div class="empty-message">
+
+                                    <div class="empty-icon">
+                                        ✓
+                                    </div>
+
+                                    <h4>
+                                        No Expiring Medicines
+                                    </h4>
+
+                                    <p>
+                                        There are currently no medicines
+                                        requiring expiry-date attention.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <div class="back-section">
+
+        @Html.ActionLink(
+            "← Back to Dashboard",
+            "Dashboard",
+            "Pharmacist",
+            null,
+            new { @class = "back-link" })
+
+    </div>
+
+</div>

@@ -1,0 +1,237 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.CarePlan>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {<tr>
+
+            
+            <!-- =================================================
+                 PATIENT
+                 ================================================= -->
+
+            <td class="patient-cell">
+
+                @if (item.Patient != null)
+                {
+                    @item.Patient.FirstName @item.Patient.LastName
+                }
+                else
+                {
+                    <span>Unknown Patient</span>
+                }
+
+            </td>
+
+
+            <!-- =================================================
+                 MEDICATION ROUTINE
+                 ================================================= -->
+
+            <td>
+
+                <div class="careplan-text">
+
+                    @if (!string.IsNullOrWhiteSpace(item.MedicationRoutine))
+                    {
+                        @item.MedicationRoutine
+                    }
+                    else
+                    {
+                        <span>Not specified</span>
+                    }
+
+                </div>
+
+            </td>
+
+
+            <!-- =================================================
+                 DIET INSTRUCTIONS
+                 ================================================= -->
+
+            <td>
+
+                <div class="careplan-text">
+
+                    @if (!string.IsNullOrWhiteSpace(item.DietInstructions))
+                    {
+                        @item.DietInstructions
+                    }
+                    else
+                    {
+                        <span>Not specified</span>
+                    }
+
+                </div>
+
+            </td>
+
+
+            <!-- =================================================
+                 MOBILITY SUPPORT
+                 ================================================= -->
+
+            <td>
+
+                <div class="careplan-text">
+
+                    @if (!string.IsNullOrWhiteSpace(item.MobilitySupport))
+                    {
+                        @item.MobilitySupport
+                    }
+                    else
+                    {
+                        <span>Not specified</span>
+                    }
+
+                </div>
+
+            </td>
+
+
+            <!-- =================================================
+                 THERAPY SCHEDULE
+                 ================================================= -->
+
+            <td>
+
+                <div class="careplan-text">
+
+                    @if (!string.IsNullOrWhiteSpace(item.TherapySchedule))
+                    {
+                        @item.TherapySchedule
+                    }
+                    else
+                    {
+                        <span>Not specified</span>
+                    }
+
+                </div>
+
+            </td>
+
+
+            <!-- =================================================
+                 MEMORY CARE NOTES
+                 ================================================= -->
+
+            <td>
+
+                <div class="careplan-text">
+
+                    @if (!string.IsNullOrWhiteSpace(item.MemoryCareNotes))
+                    {
+                        @item.MemoryCareNotes
+                    }
+                    else
+                    {
+                        <span>Not specified</span>
+                    }
+
+                </div>
+
+            </td>
+
+
+            <!-- =================================================
+                 ACTIONS
+                 ================================================= -->
+
+            <td class="actions-cell">
+
+                @* =================================================
+                    DOCTOR ONLY
+                    ================================================= *@
+
+                @if (User.IsInRole("Doctor"))
+                {
+                    <div class="actions">
+
+                        @Html.ActionLink(
+                            "Edit",
+                            "Edit",
+                            new
+                            {
+                                id = item.CarePlanID
+                            },
+                            new
+                            {
+                                @class = "edit-link"
+                            }
+                        )
+
+
+                        @Html.ActionLink(
+                            "Details",
+                            "Details",
+                            new
+                            {
+                                id = item.CarePlanID
+                            },
+                            new
+                            {
+                                @class = "details-link"
+                            }
+                        )
+
+
+                        @Html.ActionLink(
+                            "Delete",
+                            "Delete",
+                            new
+                            {
+                                id = item.CarePlanID
+                            },
+                            new
+                            {
+                                @class = "delete-link"
+                            }
+                        )
+
+                    </div>
+                }
+
+
+                @* =================================================
+                    NURSE ONLY
+                    ================================================= *@
+
+                else if (User.IsInRole("Nurse"))
+                {
+                    <span class="view-only">
+                        View Only
+                    </span>
+                }
+
+            </td>
+
+        </tr>
+    }
+
+
+}
+else
+{ <tr>
+
+   
+    <td colspan="7" class="empty-state">
+
+        <div style="font-size:40px; margin-bottom:10px;">
+            📋
+        </div>
+
+        <strong>
+            No Care Plans Found
+        </strong>
+
+        <div style="margin-top:6px; font-size:13px;">
+            There are currently no patient care plans available.
+        </div>
+
+    </td>
+
+</tr>
+
+
+}

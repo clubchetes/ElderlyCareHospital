@@ -1,0 +1,408 @@
+﻿@model ElderlyCareHospital.Models.DoctorNotes
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<style>
+    /* =========================================================
+       DOCTOR NOTES THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f4f8fb;
+        --surface: #ffffff;
+        --surface-soft: #f8fbfd;
+        --text-main: #102a43;
+        --text-secondary: #486581;
+        --text-muted: #627d98;
+        --border: #d9e2ec;
+        --border-soft: #e8eef3;
+        --accent: #2f6f73;
+        --accent-dark: #25575a;
+        --accent-soft: #eef7f7;
+        --success: #2e7d5b;
+        --danger: #c94c4c;
+        --shadow-sm: 0 4px 14px rgba(16, 42, 67, 0.06);
+        --shadow-md: 0 8px 24px rgba(16, 42, 67, 0.08);
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+    }
+
+    /* =========================================================
+       PAGE WRAPPER
+       ========================================================= */
+
+    .details-page {
+        padding-top: 28px;
+        padding-bottom: 35px;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .details-header {
+        background: var(--surface);
+        border: 1px solid var(--border-soft);
+        border-radius: 18px;
+        padding: 26px 30px;
+        margin-bottom: 22px;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .details-header::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: var(--accent);
+        }
+
+        .details-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+
+        .details-header p {
+            margin: 9px 0 0;
+            max-width: 900px;
+            font-size: 14px;
+            line-height: 1.65;
+            color: var(--text-secondary);
+        }
+
+    .header-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-left: 10px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 700;
+        vertical-align: middle;
+        letter-spacing: 0.2px;
+    }
+
+    .header-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--success);
+    }
+
+    /* =========================================================
+       MAIN PANEL
+       ========================================================= */
+
+    .details-panel {
+        background: var(--surface);
+        border: 1px solid var(--border-soft);
+        border-radius: 18px;
+        padding: 26px;
+        box-shadow: var(--shadow-sm);
+    }
+
+        .details-panel h4 {
+            margin: 0 0 7px;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+    .details-description {
+        margin: 0 0 22px;
+        font-size: 13px;
+        color: var(--text-muted);
+    }
+
+    /* =========================================================
+       DETAILS LIST
+       ========================================================= */
+
+    .details-list {
+        margin: 0;
+        padding: 0;
+    }
+
+        .details-list dt {
+            width: 190px;
+            padding: 15px 18px;
+            margin-bottom: 1px;
+            background: #f7fafc;
+            border-bottom: 1px solid var(--border-soft);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.45px;
+        }
+
+        .details-list dd {
+            margin-left: 210px;
+            padding: 15px 18px;
+            min-height: 49px;
+            margin-bottom: 1px;
+            border-bottom: 1px solid var(--border-soft);
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+            .details-list dt:last-of-type,
+            .details-list dd:last-of-type {
+                border-bottom: none;
+            }
+
+    .patient-value {
+        color: var(--text-main);
+        font-weight: 700;
+    }
+
+    .doctor-value {
+        color: var(--text-secondary);
+        font-weight: 600;
+    }
+
+    .note-value {
+        max-width: 700px;
+        color: var(--text-secondary);
+        line-height: 1.65;
+        white-space: normal;
+    }
+
+    .date-value {
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .action-row {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-top: 22px;
+    }
+
+    .edit-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 16px;
+        min-height: 40px;
+        background: var(--accent);
+        border: 1px solid var(--accent);
+        border-radius: 9px;
+        color: #ffffff !important;
+        text-decoration: none !important;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 3px 10px rgba(47, 111, 115, 0.15);
+        transition: all 0.2s ease;
+    }
+
+        .edit-link:hover {
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
+            color: #ffffff !important;
+            text-decoration: none !important;
+            transform: translateY(-1px);
+        }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 15px;
+        min-height: 40px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text-secondary) !important;
+        border-radius: 9px;
+        text-decoration: none !important;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.18s ease;
+    }
+
+        .back-link:hover {
+            background: var(--surface-soft);
+            border-color: #bcccdc;
+            color: var(--accent) !important;
+            text-decoration: none !important;
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .details-page {
+            padding-top: 18px;
+        }
+
+        .details-header {
+            padding: 22px;
+            border-radius: 15px;
+        }
+
+            .details-header h2 {
+                font-size: 24px;
+            }
+
+        .header-label {
+            display: flex;
+            width: fit-content;
+            margin: 10px 0 0;
+        }
+
+        .details-panel {
+            padding: 20px 15px;
+            border-radius: 15px;
+        }
+
+        .details-list dt {
+            width: 100%;
+            padding: 11px 12px 6px;
+            border-bottom: none;
+        }
+
+        .details-list dd {
+            margin-left: 0;
+            padding: 5px 12px 13px;
+        }
+
+        .action-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .edit-link,
+        .back-link {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="container details-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="details-header">
+
+        <h2>
+            Doctor's Note Details
+
+            <span class="header-label">
+                <span class="header-dot"></span>
+                Clinical Record
+            </span>
+        </h2>
+
+        <p>
+            View the clinical information and note recorded by the doctor
+            for the selected patient.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         DETAILS PANEL
+         ===================================================== -->
+
+    <div class="details-panel">
+
+        <h4>Doctor Note Information</h4>
+
+        <p class="details-description">
+            Review the details of this clinical note below.
+        </p>
+
+
+        <dl class="dl-horizontal details-list">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Patient.FirstName)
+            </dt>
+
+            <dd class="patient-value">
+                @Html.DisplayFor(model => model.Patient.FirstName)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DoctorID)
+            </dt>
+
+            <dd class="doctor-value">
+                @Html.DisplayFor(model => model.DoctorID)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NoteText)
+            </dt>
+
+            <dd>
+                <div class="note-value">
+                    @Html.DisplayFor(model => model.NoteText)
+                </div>
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </dt>
+
+            <dd class="date-value">
+                @Html.DisplayFor(model => model.DateCreated)
+            </dd>
+
+        </dl>
+
+
+        <!-- =================================================
+             ACTIONS
+             ================================================= -->
+
+        <div class="action-row">
+
+            @Html.ActionLink(
+                "Edit",
+                "Edit",
+                new { id = Model.NoteID },
+                new { @class = "edit-link" })
+
+            @Html.ActionLink(
+                "←  Back to List",
+                "Index",
+                null,
+                new { @class = "back-link" })
+
+        </div>
+
+    </div>
+
+</div>

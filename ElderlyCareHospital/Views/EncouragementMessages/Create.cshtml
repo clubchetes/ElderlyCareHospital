@@ -1,0 +1,375 @@
+﻿@model ElderlyCareHospital.Models.EncouragementMessage
+
+@{
+    ViewBag.Title = "Send Encouragement Message";
+}
+
+<style>
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    .encouragement-page {
+        max-width: 900px;
+        margin: 35px auto;
+        padding: 0 20px;
+    }
+
+
+    /* =========================================================
+       CARD
+       ========================================================= */
+
+    .encouragement-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 32px;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .encouragement-header {
+        margin-bottom: 28px;
+    }
+
+        .encouragement-header h2 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .encouragement-header p {
+            margin: 8px 0 0;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+
+    /* =========================================================
+       AUTOMATIC PEOPLE INFORMATION
+       ========================================================= */
+
+    .people-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 26px;
+    }
+
+    .person-card {
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        padding: 20px;
+    }
+
+    .person-label {
+        display: block;
+        color: #64748b;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        margin-bottom: 8px;
+    }
+
+    .person-name {
+        display: block;
+        color: #0f172a;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+
+    /* =========================================================
+       MESSAGE
+       ========================================================= */
+
+    .form-group-custom {
+        margin-bottom: 22px;
+    }
+
+    .form-label-custom {
+        display: block;
+        color: #0f172a;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 8px;
+    }
+
+    .message-box {
+        width: 100%;
+        min-height: 170px;
+        padding: 14px 16px;
+        border: 1px solid #cbd5e1;
+        border-radius: 12px;
+        background: #ffffff;
+        color: #0f172a;
+        font-family: inherit;
+        font-size: 14px;
+        line-height: 1.6;
+        resize: vertical;
+        outline: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .message-box:focus {
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.10);
+        }
+
+        .message-box::placeholder {
+            color: #94a3b8;
+        }
+
+
+    /* =========================================================
+       VALIDATION
+       ========================================================= */
+
+    .validation-message {
+        display: block;
+        color: #dc2626;
+        font-size: 12px;
+        margin-top: 6px;
+    }
+
+    .validation-summary {
+        margin-bottom: 20px;
+        color: #dc2626;
+    }
+
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 25px;
+    }
+
+    .send-button {
+        border: none;
+        border-radius: 10px;
+        padding: 11px 22px;
+        background: linear-gradient( 135deg, #4f46e5, #6366f1 );
+        color: #ffffff;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 5px 14px rgba(79, 70, 229, 0.18);
+        transition: all 0.2s ease;
+    }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+            color: #ffffff;
+            box-shadow: 0 8px 18px rgba(79, 70, 229, 0.25);
+        }
+
+    .back-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 10px;
+        background: #f1f5f9;
+        color: #475569;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+        .back-button:hover {
+            background: #e2e8f0;
+            color: #0f172a;
+            text-decoration: none;
+        }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 650px) {
+
+        .encouragement-page {
+            margin: 20px auto;
+            padding: 0 14px;
+        }
+
+        .encouragement-card {
+            padding: 22px;
+        }
+
+        .people-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .send-button,
+        .back-button {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="encouragement-page">
+
+    <div class="encouragement-card">
+
+
+        <!-- =====================================================
+             HEADER
+             ===================================================== -->
+
+        <div class="encouragement-header">
+
+            <h2>
+                Send Encouragement Message
+            </h2>
+
+            <p>
+                Send a supportive message to your assigned patient.
+            </p>
+
+        </div>
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new
+                {
+                    @class = "validation-summary"
+                }
+            )
+
+
+            <!-- =================================================
+                 AUTOMATIC FAMILY MEMBER / PATIENT
+                 ================================================= -->
+
+            <div class="people-grid">
+
+
+                <!-- FAMILY MEMBER -->
+
+                <div class="person-card">
+
+                    <span class="person-label">
+                        Family Member
+                    </span>
+
+                    <span class="person-name">
+                        @ViewBag.FamilyMemberName
+                    </span>
+
+                </div>
+
+
+                <!-- PATIENT -->
+
+                <div class="person-card">
+
+                    <span class="person-label">
+                        Assigned Patient
+                    </span>
+
+                    <span class="person-name">
+                        @ViewBag.PatientName
+                    </span>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 MESSAGE
+                 ================================================= -->
+
+            <div class="form-group-custom">
+
+                <label class="form-label-custom">
+                    Encouragement Message
+                </label>
+
+
+                @Html.TextAreaFor(
+                    model => model.MessageText,
+                    new
+                    {
+                        @class = "message-box",
+                        placeholder =
+                            "Write an encouraging message for your loved one..."
+                    }
+                )
+
+
+                @Html.ValidationMessageFor(
+                    model => model.MessageText,
+                    "",
+                    new
+                    {
+                        @class = "validation-message"
+                    }
+                )
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIONS
+                 ================================================= -->
+
+            <div class="form-actions">
+
+                <button type="submit"
+                        class="send-button">
+
+                    Send Message
+
+                </button>
+
+
+                <a href="@Url.Action(
+                            "Dashboard",
+                            "Family"
+                        )"
+                   class="back-button">
+
+                    Back to Dashboard
+
+                </a>
+
+            </div>
+
+        }
+
+    </div>
+
+</div>

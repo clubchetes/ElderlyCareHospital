@@ -1,0 +1,403 @@
+﻿@model ElderlyCareHospital.Models.CarePlan
+
+@{
+    ViewBag.Title = "Care Plan Details";
+}
+
+<style>
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .details-container {
+        max-width: 1000px;
+        margin: 35px auto 45px;
+    }
+
+    .details-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 28px 32px;
+        border-radius: 18px;
+        margin-bottom: 24px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+
+        .details-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 30px;
+        }
+
+        .details-header p {
+            margin-top: 8px;
+            margin-bottom: 0;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+    .patient-badge {
+        display: inline-block;
+        margin-top: 16px;
+        padding: 8px 14px;
+        background: rgba(255,255,255,0.16);
+        border: 1px solid rgba(255,255,255,0.25);
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .details-card {
+        background: white;
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+        color: #2f6f73;
+        font-weight: 700;
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .section-subtitle {
+        color: #78909c;
+        font-size: 14px;
+        margin-bottom: 22px;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 18px;
+    }
+
+    .detail-item {
+        background: #f8fbfc;
+        border: 1px solid #e4edef;
+        border-radius: 14px;
+        padding: 20px;
+        min-height: 150px;
+    }
+
+        .detail-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+    .detail-label {
+        display: block;
+        color: #2f6f73;
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        margin-bottom: 10px;
+    }
+
+    .detail-value {
+        color: #37474f;
+        font-size: 15px;
+        line-height: 1.7;
+        white-space: pre-line;
+    }
+
+    .patient-name {
+        font-size: 18px;
+        font-weight: 700;
+        color: #2f6f73;
+    }
+
+    .empty-value {
+        color: #90a4ae;
+        font-style: italic;
+    }
+
+    .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 26px;
+        padding-top: 22px;
+        border-top: 1px solid #e5ecef;
+    }
+
+    .btn-edit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #2f6f73;
+        color: white !important;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+        .btn-edit:hover {
+            background: #25575a;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #6c757d;
+        color: white !important;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+        .btn-back:hover {
+            background: #5a6268;
+            color: white !important;
+            text-decoration: none;
+        }
+
+    @@media (max-width: 768px) {
+
+        .details-container {
+            margin: 20px 15px 35px;
+        }
+
+        .details-header {
+            padding: 24px;
+        }
+
+            .details-header h2 {
+                font-size: 25px;
+            }
+
+        .details-card {
+            padding: 20px;
+        }
+
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .detail-item.full-width {
+            grid-column: auto;
+        }
+    }
+</style>
+
+<div class="details-container">
+
+    <div class="details-header">
+
+        <h2>Care Plan Details</h2>
+
+        <p>
+            Review the patient's individualized care plan, including medication,
+            dietary requirements, mobility support, therapy, and memory care guidance.
+        </p>
+
+        <div class="patient-badge">
+             Patient:
+            @(Model.Patient != null
+                ? Model.Patient.FirstName + " " + Model.Patient.LastName
+                : "Patient Record")
+        </div>
+
+    </div>
+
+    <div class="details-card">
+
+        <div class="section-title">
+            Care Plan Information
+        </div>
+
+        <div class="section-subtitle">
+            Current care instructions and support requirements for this patient.
+        </div>
+
+        <div class="detail-grid">
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Patient
+                </span>
+
+                <div class="detail-value patient-name">
+
+                    @if (Model.Patient != null)
+                    {
+                        @Html.DisplayFor(model => model.Patient.FirstName)
+
+                        if (!string.IsNullOrEmpty(Model.Patient.LastName))
+                        {
+                            @: @Html.DisplayFor(model => model.Patient.LastName)
+                        }
+                    }
+                    else
+                    {
+                        <span class="empty-value">
+                            Patient information unavailable
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Care Plan ID
+                </span>
+
+                <div class="detail-value">
+                    @Html.DisplayFor(model => model.CarePlanID)
+                </div>
+
+            </div>
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Medication Routine
+                </span>
+
+                <div class="detail-value">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.MedicationRoutine))
+                    {
+                        @Html.DisplayFor(model => model.MedicationRoutine)
+                    }
+                    else
+                    {
+                        <span class="empty-value">
+                            No medication instructions recorded.
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Diet Instructions
+                </span>
+
+                <div class="detail-value">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.DietInstructions))
+                    {
+                        @Html.DisplayFor(model => model.DietInstructions)
+                    }
+                    else
+                    {
+                        <span class="empty-value">
+                            No dietary instructions recorded.
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Mobility Support
+                </span>
+
+                <div class="detail-value">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.MobilitySupport))
+                    {
+                        @Html.DisplayFor(model => model.MobilitySupport)
+                    }
+                    else
+                    {
+                        <span class="empty-value">
+                            No mobility support information recorded.
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="detail-item">
+
+                <span class="detail-label">
+                    Therapy Schedule
+                </span>
+
+                <div class="detail-value">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.TherapySchedule))
+                    {
+                        @Html.DisplayFor(model => model.TherapySchedule)
+                    }
+                    else
+                    {
+                        <span class="empty-value">
+                            No therapy schedule recorded.
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+            <div class="detail-item full-width">
+
+                <span class="detail-label">
+                    Memory Care Notes
+                </span>
+
+                <div class="detail-value">
+
+                    @if (!string.IsNullOrWhiteSpace(Model.MemoryCareNotes))
+                    {
+                        @Html.DisplayFor(model => model.MemoryCareNotes)
+                    }
+                    else
+                    {
+                        <span class="empty-value">
+                            No memory care notes recorded.
+                        </span>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="actions">
+
+            @if (User.IsInRole("Doctor"))
+            {
+                @Html.ActionLink(
+                    "✏ Edit Care Plan",
+                    "Edit",
+                    new { id = Model.CarePlanID },
+                    new { @class = "btn-edit" })
+            }
+
+            @Html.ActionLink(
+                "← Back to Care Plans",
+                "Index",
+                null,
+                new { @class = "btn-back" })
+
+        </div>
+
+    </div>
+
+</div>

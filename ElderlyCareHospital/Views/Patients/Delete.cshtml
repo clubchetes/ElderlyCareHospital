@@ -1,0 +1,668 @@
+﻿@model ElderlyCareHospital.Models.Patient
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<style>
+
+    /* =========================================================
+       ROOT / DOCTOR DASHBOARD THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --border-color: #e2e8f0;
+        --doctor-accent: #0f766e;
+        --doctor-accent-light: #14b8a6;
+        --blue: #0284c7;
+        --danger: #dc2626;
+        --danger-dark: #b91c1c;
+    }
+
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+    .patient-delete-container {
+        width: 100%;
+        max-width: 100%;
+        box-sizing: border-box;
+        margin-top: 40px;
+        margin-bottom: 40px;
+        padding-left: 40px;
+        padding-right: 40px;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .delete-header {
+        position: relative;
+        overflow: hidden;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 30px 36px;
+        border-radius: 18px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+        .delete-header::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            right: -70px;
+            top: -80px;
+            border-radius: 50%;
+            background: rgba(220, 38, 38, 0.035);
+            pointer-events: none;
+        }
+
+        .delete-header h2 {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+
+        .delete-header p {
+            position: relative;
+            z-index: 1;
+            margin: 10px 0 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+    .delete-badge {
+        float: right;
+        font-size: 13px;
+        background: rgba(220, 38, 38, 0.08);
+        color: var(--danger);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        border: 1px solid rgba(220, 38, 38, 0.12);
+    }
+
+
+    /* =========================================================
+       WARNING PANEL
+       ========================================================= */
+
+    .warning-panel {
+        background: #ffffff;
+        border: 1px solid rgba(220, 38, 38, 0.18);
+        border-left: 4px solid var(--danger);
+        border-radius: 14px;
+        padding: 18px 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    .warning-title {
+        margin: 0 0 6px 0;
+        color: var(--danger);
+        font-size: 15px;
+        font-weight: 700;
+    }
+
+    .warning-text {
+        margin: 0;
+        color: var(--text-muted);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+
+    /* =========================================================
+       DETAILS CARD
+       ========================================================= */
+
+    .details-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    .details-heading {
+        margin: 0;
+        color: var(--text-main);
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .details-subtitle {
+        margin: 6px 0 24px 0;
+        color: var(--text-muted);
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+
+    /* =========================================================
+       PATIENT INFORMATION
+       ========================================================= */
+
+    .patient-info {
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+    }
+
+    .info-row {
+        display: flex;
+        width: 100%;
+        border-bottom: 1px solid #eef2f7;
+        min-height: 58px;
+        box-sizing: border-box;
+    }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+    .info-label {
+        width: 32%;
+        box-sizing: border-box;
+        padding: 16px 18px;
+        background: #f8fafc;
+        color: var(--text-muted);
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.4px;
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        align-items: center;
+    }
+
+    .info-value {
+        width: 68%;
+        box-sizing: border-box;
+        padding: 16px 18px;
+        color: var(--text-main);
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        line-height: 1.5;
+        word-break: break-word;
+    }
+
+
+    /* =========================================================
+       ACTION AREA
+       ========================================================= */
+
+    .delete-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 12px;
+        margin-top: 26px;
+    }
+
+    .btn-delete {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        box-sizing: border-box;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+        color: white !important;
+        font-weight: 600;
+        font-size: 13px;
+        cursor: pointer;
+        box-shadow: 0 4px 10px rgba(220, 38, 38, 0.12);
+        transition: all 0.2s ease;
+    }
+
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #b91c1c, #dc2626);
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 16px rgba(220, 38, 38, 0.18);
+        }
+
+    .btn-back {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        box-sizing: border-box;
+        padding: 10px 18px;
+        background: linear-gradient(135deg, #475569, #64748b);
+        color: white !important;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 13px;
+        box-shadow: 0 4px 10px rgba(15, 23, 42, 0.06);
+        transition: all 0.2s ease;
+    }
+
+        .btn-back:hover {
+            background: linear-gradient(135deg, #334155, #475569);
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 16px rgba(15, 23, 42, 0.10);
+        }
+
+
+    /* =========================================================
+       RESPONSIVE - TABLET
+       ========================================================= */
+
+    @@media (max-width: 1100px) {
+
+        .patient-delete-container {
+            padding-left: 28px;
+            padding-right: 28px;
+        }
+
+        .delete-header {
+            padding: 26px;
+        }
+
+        .details-card {
+            padding: 24px;
+        }
+
+        .info-label {
+            width: 35%;
+        }
+
+        .info-value {
+            width: 65%;
+        }
+    }
+
+
+    /* =========================================================
+       RESPONSIVE - MOBILE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .patient-delete-container {
+            margin-top: 25px;
+            padding-left: 18px;
+            padding-right: 18px;
+        }
+
+        .delete-header {
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 22px;
+        }
+
+            .delete-header h2 {
+                font-size: 20px;
+            }
+
+            .delete-header p {
+                font-size: 13px;
+            }
+
+        .delete-badge {
+            float: none;
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        .warning-panel {
+            padding: 16px;
+        }
+
+        .details-card {
+            padding: 18px;
+            border-radius: 15px;
+        }
+
+        .details-heading {
+            font-size: 17px;
+        }
+
+        .info-row {
+            display: block;
+        }
+
+        .info-label,
+        .info-value {
+            width: 100%;
+        }
+
+        .info-label {
+            border-right: none;
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 14px;
+        }
+
+        .info-value {
+            padding: 13px 14px;
+        }
+
+        .delete-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-delete,
+        .btn-back {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+
+
+    /* =========================================================
+       RESPONSIVE - SMALL PHONE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .patient-delete-container {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .delete-header {
+            padding: 20px;
+        }
+
+            .delete-header h2 {
+                font-size: 18px;
+            }
+
+            .delete-header p {
+                font-size: 12.5px;
+            }
+
+        .details-card {
+            padding: 14px;
+        }
+
+        .details-heading {
+            font-size: 16px;
+        }
+    }
+</style>
+
+
+<div class="container patient-delete-container">
+
+
+    <!-- =====================================================
+         PAGE HEADER
+         ====================================================== -->
+
+    <div class="delete-header">
+
+        <h2>
+
+            Delete Patient
+
+            <span class="delete-badge">
+                ⚠️ Delete Record
+            </span>
+
+        </h2>
+
+        <p>
+            Review the patient information carefully before permanently deleting this record.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         WARNING
+         ====================================================== -->
+
+    <div class="warning-panel">
+
+        <h3 class="warning-title">
+            Are you sure you want to delete this patient?
+        </h3>
+
+        <p class="warning-text">
+            This action will permanently delete the patient record. Please make sure you have selected the correct patient before continuing.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         PATIENT DETAILS
+         ====================================================== -->
+
+    <div class="details-card">
+
+        <h3 class="details-heading">
+            Patient Information
+        </h3>
+
+        <p class="details-subtitle">
+            The following patient record is selected for deletion.
+        </p>
+
+
+        <div class="patient-info">
+
+
+            <!-- FIRST NAME -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    @Html.DisplayNameFor(model => model.FirstName)
+                </div>
+
+                <div class="info-value">
+                    @Html.DisplayFor(model => model.FirstName)
+                </div>
+
+            </div>
+
+
+            <!-- LAST NAME -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    @Html.DisplayNameFor(model => model.LastName)
+                </div>
+
+                <div class="info-value">
+                    @Html.DisplayFor(model => model.LastName)
+                </div>
+
+            </div>
+
+
+            <!-- DATE OF BIRTH -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    @Html.DisplayNameFor(model => model.DateOfBirth)
+                </div>
+
+                <div class="info-value">
+                    @Html.DisplayFor(model => model.DateOfBirth)
+                </div>
+
+            </div>
+
+
+            <!-- GENDER -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    @Html.DisplayNameFor(model => model.Gender)
+                </div>
+
+                <div class="info-value">
+                    @Html.DisplayFor(model => model.Gender)
+                </div>
+
+            </div>
+
+
+            <!-- ROOM NUMBER -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    @Html.DisplayNameFor(model => model.RoomNumber)
+                </div>
+
+                <div class="info-value">
+                    @Html.DisplayFor(model => model.RoomNumber)
+                </div>
+
+            </div>
+
+
+            <!-- ADMISSION DATE -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    @Html.DisplayNameFor(model => model.AdmissionDate)
+                </div>
+
+                <div class="info-value">
+                    @Html.DisplayFor(model => model.AdmissionDate)
+                </div>
+
+            </div>
+
+
+            <!-- EMERGENCY CONTACT -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    @Html.DisplayNameFor(model => model.EmergencyContact)
+                </div>
+
+                <div class="info-value">
+                    @Html.DisplayFor(model => model.EmergencyContact)
+                </div>
+
+            </div>
+
+
+            <!-- ALLERGIES -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    @Html.DisplayNameFor(model => model.Allergies)
+                </div>
+
+                <div class="info-value">
+                    @Html.DisplayFor(model => model.Allergies)
+                </div>
+
+            </div>
+
+
+            <!-- MEDICAL HISTORY -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    @Html.DisplayNameFor(model => model.MedicalHistory)
+                </div>
+
+                <div class="info-value">
+                    @Html.DisplayFor(model => model.MedicalHistory)
+                </div>
+
+            </div>
+
+
+            <!-- FALL RISK -->
+
+            <div class="info-row">
+
+                <div class="info-label">
+                    @Html.DisplayNameFor(model => model.FallRisk)
+                </div>
+
+                <div class="info-value">
+                    @Html.DisplayFor(model => model.FallRisk)
+                </div>
+
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             DELETE FORM / ACTIONS
+             ================================================== -->
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="delete-actions">
+
+                <input type="submit"
+                       value="🗑 Delete Patient"
+                       class="btn-delete" />
+
+                @Html.ActionLink(
+                    "← Back to List",
+                    "Index",
+                    null,
+                    new { @class = "btn-back" })
+
+            </div>
+        }
+
+    </div>
+
+</div>
+

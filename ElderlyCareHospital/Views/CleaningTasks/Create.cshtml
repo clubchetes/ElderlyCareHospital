@@ -1,0 +1,850 @@
+﻿@model ElderlyCareHospital.Models.CleaningTask
+
+@{
+    ViewBag.Title = "Create Cleaning Task";
+}
+
+<style>
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .create-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 28px 32px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 20px rgba(47, 111, 115, 0.15);
+        text-align: center;
+    }
+
+        .create-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 30px;
+        }
+
+        .create-header p {
+            margin-top: 8px;
+            margin-bottom: 0;
+            opacity: 0.95;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+    .live-badge {
+        float: right;
+        font-size: 13px;
+        background: rgba(255,255,255,0.2);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: normal;
+    }
+
+    /* =========================================================
+       INFORMATION / MOTIVATION BOX
+       ========================================================= */
+
+    .motivation-box {
+        max-width: 850px;
+        margin: 20px auto 0 auto;
+        background: rgba(255,255,255,0.12);
+        border: 1px solid rgba(255,255,255,0.22);
+        padding: 16px 18px;
+        border-radius: 14px;
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    .motivation-title {
+        font-weight: 700;
+        margin-bottom: 5px;
+    }
+
+    .hospital-joke {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid rgba(255,255,255,0.18);
+    }
+
+    /* =========================================================
+       FORM PANEL
+       ========================================================= */
+
+    .create-panel {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 32px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        text-align: center;
+    }
+
+    .form-title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 8px;
+        color: #2f6f73;
+        font-size: 20px;
+        font-weight: 700;
+    }
+
+    .form-description {
+        color: #6c7a86;
+        font-size: 14px;
+        margin-bottom: 22px;
+        text-align: center;
+    }
+
+    .form-divider {
+        border: 0;
+        border-top: 1px solid #e4ecef;
+        margin: 0 auto 25px auto;
+        max-width: 700px;
+    }
+
+    /* =========================================================
+       FORM FIELDS - CENTERED
+       ========================================================= */
+
+    .form-group {
+        margin-bottom: 24px;
+        text-align: center;
+    }
+
+        .form-group label {
+            display: block;
+            width: 100%;
+            max-width: 520px;
+            margin: 0 auto 8px auto;
+            font-weight: 700;
+            color: #2f4858;
+            font-size: 14px;
+            text-align: center;
+        }
+
+    .form-control {
+        display: block;
+        width: 100%;
+        max-width: 520px;
+        margin: 0 auto;
+        border: 1px solid #d6e3e5;
+        border-radius: 10px;
+        padding: 11px 13px;
+        font-size: 14px;
+        background: #fbfdfe;
+        color: #263238;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+        text-align: center;
+        box-sizing: border-box;
+    }
+
+        .form-control:focus {
+            border-color: #4c8c91;
+            box-shadow: 0 0 0 3px rgba(76, 140, 145, 0.15);
+            outline: none;
+            background: #ffffff;
+        }
+
+    select.form-control {
+        cursor: pointer;
+        text-align: center;
+        text-align-last: center;
+    }
+
+    input[type="datetime-local"].form-control {
+        cursor: pointer;
+        text-align: center;
+    }
+
+    /* =========================================================
+       VALIDATION
+       ========================================================= */
+
+    .validation-summary {
+        width: 100%;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+        .validation-summary ul {
+            display: inline-block;
+            margin: 0 auto;
+            padding-left: 20px;
+            text-align: left;
+        }
+
+    .text-danger {
+        display: block;
+        width: 100%;
+        max-width: 520px;
+        margin: 7px auto 0 auto;
+        color: #c62828;
+        font-size: 13px;
+        text-align: center;
+    }
+
+    /* Added validation styling */
+    .validation-error {
+        border-color: #c62828 !important;
+        background: #fff8f8 !important;
+        box-shadow: 0 0 0 3px rgba(198, 40, 40, 0.08) !important;
+    }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .form-actions {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px;
+        padding-top: 22px;
+        border-top: 1px solid #e8eef2;
+    }
+
+    .btn-create {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white !important;
+        border: none;
+        padding: 11px 24px;
+        border-radius: 10px;
+        font-weight: 700;
+        font-size: 14px;
+        min-width: 150px;
+        box-shadow: 0 4px 12px rgba(47, 111, 115, 0.2);
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+        .btn-create:hover {
+            background: linear-gradient(135deg, #25575a, #3b7a7f);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(47, 111, 115, 0.3);
+        }
+
+    /* =========================================================
+       BACK BUTTON
+       ========================================================= */
+
+    .back-wrapper {
+        margin-top: 22px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+
+    .back-link {
+        display: inline-block;
+        padding: 10px 18px;
+        background: #455a64;
+        color: white !important;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #263238;
+            text-decoration: none;
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .create-header {
+            padding: 22px;
+        }
+
+            .create-header h2 {
+                font-size: 25px;
+            }
+
+        .live-badge {
+            float: none;
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        .create-panel {
+            padding: 20px;
+        }
+
+        .form-control {
+            max-width: 100%;
+        }
+
+        .form-group label {
+            max-width: 100%;
+        }
+
+        .text-danger {
+            max-width: 100%;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .btn-create {
+            width: 100%;
+            max-width: 520px;
+        }
+
+        .back-link {
+            width: 100%;
+            text-align: center;
+            box-sizing: border-box;
+        }
+    }
+</style>
+
+<div class="container mt-4">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ====================================================== -->
+
+    <div class="create-header">
+
+        <h2>
+
+            Create Cleaning Task
+
+            <span class="live-badge">
+                🟢 Live Sync Active
+            </span>
+
+        </h2>
+
+        <p>
+            Assign a new cleaning task to a staff member, specify the cleaning area,
+            and schedule the task date for hospital sanitation operations.
+        </p>
+
+        <div class="motivation-box">
+
+            <div class="motivation-title">
+                Hospital Care Reminder
+            </div>
+
+            A clean hospital is a caring hospital. Patients recover better in a
+            safe and hygienic environment, and every cleaned room helps protect
+            both residents and staff.
+
+            <div class="hospital-joke">
+
+                <strong>Hospital joke:</strong>
+
+                "In this hospital we try to keep the floors so clean that even
+                the germs need an appointment before they can enter."
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM PANEL
+         ====================================================== -->
+
+    <div class="create-panel">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-title">
+                Task Assignment Details
+            </div>
+
+            <div class="form-description">
+                Complete the information below to assign and schedule the cleaning task.
+            </div>
+
+            <hr class="form-divider" />
+
+
+            <!-- =================================================
+                 VALIDATION
+                 ================================================== -->
+
+            <div class="validation-summary">
+
+                @Html.ValidationSummary(
+                    true,
+                    "",
+                    new { @class = "text-danger" })
+
+            </div>
+
+
+            <!-- =================================================
+                 CLEANER
+                 ================================================== -->
+
+            <div class="form-group">
+
+                @Html.LabelFor(
+                    model => model.CleanerID,
+                    "Assign To Cleaner")
+
+                @Html.DropDownList(
+                    "CleanerID",
+                    null,
+                    "-- Select Cleaner --",
+                    new
+                    {
+                        @class = "form-control",
+                        id = "CleanerID"
+                    })
+
+                @Html.ValidationMessageFor(
+                    model => model.CleanerID,
+                    "",
+                    new { @class = "text-danger" })
+
+            </div>
+
+
+            <!-- =================================================
+                 AREA
+                 ================================================== -->
+
+            <div class="form-group">
+
+                @Html.LabelFor(
+                    model => model.Area)
+
+                @Html.DropDownListFor(
+                    model => model.Area,
+                    new List<SelectListItem>
+                    {
+                        new SelectListItem
+                        {
+                            Text = "-- Select Floor & Room --",
+                            Value = ""
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 1 - Room 101",
+                            Value = "Floor 1 - Room 101"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 1 - Room 102",
+                            Value = "Floor 1 - Room 102"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 1 - Room 103",
+                            Value = "Floor 1 - Room 103"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 1 - Room 104",
+                            Value = "Floor 1 - Room 104"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 2 - Room 201",
+                            Value = "Floor 2 - Room 201"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 2 - Room 202",
+                            Value = "Floor 2 - Room 202"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 2 - Room 203",
+                            Value = "Floor 2 - Room 203"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 2 - Room 204",
+                            Value = "Floor 2 - Room 204"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 3 - Room 301",
+                            Value = "Floor 3 - Room 301"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 3 - Room 302",
+                            Value = "Floor 3 - Room 302"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 3 - Room 303",
+                            Value = "Floor 3 - Room 303"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 3 - Room 304",
+                            Value = "Floor 3 - Room 304"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 4 - Room 401",
+                            Value = "Floor 4 - Room 401"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 4 - Room 402",
+                            Value = "Floor 4 - Room 402"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 4 - Room 403",
+                            Value = "Floor 4 - Room 403"
+                        },
+
+                        new SelectListItem
+                        {
+                            Text = "Floor 4 - Room 404",
+                            Value = "Floor 4 - Room 404"
+                        }
+                    },
+                    new
+                    {
+                        @class = "form-control",
+                        id = "Area"
+                    })
+
+                @Html.ValidationMessageFor(
+                    model => model.Area,
+                    "",
+                    new { @class = "text-danger" })
+
+            </div>
+
+
+            <!-- =================================================
+                 TASK DATE
+                 ================================================== -->
+
+            <div class="form-group">
+
+                @Html.LabelFor(
+                    model => model.TaskDate)
+
+                @Html.TextBoxFor(
+                    model => model.TaskDate,
+                    "{0:yyyy-MM-ddTHH:mm}",
+                    new
+                    {
+                        @class = "form-control",
+                        type = "datetime-local",
+                        id = "TaskDate"
+                    })
+
+                @Html.ValidationMessageFor(
+                    model => model.TaskDate,
+                    "",
+                    new { @class = "text-danger" })
+
+            </div>
+
+
+            <!-- =================================================
+                 SUBMIT
+                 ================================================== -->
+
+            <div class="form-actions">
+
+                <input type="submit"
+                       value="Create Task"
+                       class="btn-create" />
+
+            </div>
+
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK LINK
+         ====================================================== -->
+
+    <div class="back-wrapper">
+
+        @Html.ActionLink(
+            "Back to Cleaning Tasks",
+            "Index",
+            "CleaningTasks",
+            null,
+            new { @class = "back-link" })
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CLIENT-SIDE VALIDATION
+     ========================================================= -->
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        var form = document.querySelector(".create-panel form");
+
+        var cleaner = document.getElementById("CleanerID");
+        var area = document.getElementById("Area");
+        var taskDate = document.getElementById("TaskDate");
+
+        if (!form) {
+            return;
+        }
+
+
+        /* =====================================================
+           VALIDATION MESSAGE HELPERS
+           ===================================================== */
+
+        function showError(input, message) {
+
+            input.classList.add("validation-error");
+
+            var existingMessage =
+                input.parentElement.querySelector(".custom-validation-message");
+
+            if (!existingMessage) {
+
+                var error = document.createElement("span");
+
+                error.className =
+                    "text-danger custom-validation-message";
+
+                error.innerText = message;
+
+                input.parentElement.appendChild(error);
+            }
+            else {
+
+                existingMessage.innerText = message;
+            }
+        }
+
+
+        function clearError(input) {
+
+            input.classList.remove("validation-error");
+
+            var existingMessage =
+                input.parentElement.querySelector(".custom-validation-message");
+
+            if (existingMessage) {
+                existingMessage.remove();
+            }
+        }
+
+
+        /* =====================================================
+           CLEANER VALIDATION
+           ===================================================== */
+
+        function validateCleaner() {
+
+            if (!cleaner || cleaner.value === "") {
+
+                showError(
+                    cleaner,
+                    "Please select a cleaner."
+                );
+
+                return false;
+            }
+
+            clearError(cleaner);
+
+            return true;
+        }
+
+
+        /* =====================================================
+           AREA VALIDATION
+           ===================================================== */
+
+        function validateArea() {
+
+            if (!area || area.value === "") {
+
+                showError(
+                    area,
+                    "Please select a floor and room."
+                );
+
+                return false;
+            }
+
+            clearError(area);
+
+            return true;
+        }
+
+
+        /* =====================================================
+           TASK DATE VALIDATION
+           ===================================================== */
+
+        function validateTaskDate() {
+
+            if (!taskDate || taskDate.value === "") {
+
+                showError(
+                    taskDate,
+                    "Please select a task date and time."
+                );
+
+                return false;
+            }
+
+
+            var selectedDate =
+                new Date(taskDate.value);
+
+            var currentDate =
+                new Date();
+
+
+            if (isNaN(selectedDate.getTime())) {
+
+                showError(
+                    taskDate,
+                    "Please enter a valid date and time."
+                );
+
+                return false;
+            }
+
+
+            if (selectedDate < currentDate) {
+
+                showError(
+                    taskDate,
+                    "Task date and time cannot be in the past."
+                );
+
+                return false;
+            }
+
+
+            clearError(taskDate);
+
+            return true;
+        }
+
+
+        /* =====================================================
+           LIVE VALIDATION
+           ===================================================== */
+
+        if (cleaner) {
+
+            cleaner.addEventListener(
+                "change",
+                validateCleaner
+            );
+
+        }
+
+
+        if (area) {
+
+            area.addEventListener(
+                "change",
+                validateArea
+            );
+
+        }
+
+
+        if (taskDate) {
+
+            taskDate.addEventListener(
+                "change",
+                validateTaskDate
+            );
+
+        }
+
+
+        /* =====================================================
+           FORM SUBMISSION VALIDATION
+           ===================================================== */
+
+        form.addEventListener("submit", function (event) {
+
+            var cleanerValid =
+                validateCleaner();
+
+            var areaValid =
+                validateArea();
+
+            var dateValid =
+                validateTaskDate();
+
+
+            if (!cleanerValid ||
+                !areaValid ||
+                !dateValid) {
+
+                event.preventDefault();
+
+                var firstInvalid =
+                    document.querySelector(
+                        ".validation-error"
+                    );
+
+                if (firstInvalid) {
+
+                    firstInvalid.focus();
+
+                }
+
+                return false;
+            }
+
+        });
+
+    });
+
+</script>
+

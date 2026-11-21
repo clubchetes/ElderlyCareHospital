@@ -1,0 +1,210 @@
+﻿@model ElderlyCareHospital.Models.RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+
+<style>
+    :root {
+        --primary: #4f46e5;
+        --secondary: #2f6f73;
+        --card-bg: #ffffff;
+    }
+
+    body {
+        /* Soft, clean gradient background */
+        background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .elderly-register-container {
+        margin-top: 50px;
+        margin-bottom: 50px;
+        max-width: 1000px;
+    }
+
+    /* Left Panel - Information */
+    .welcome-panel {
+        background: linear-gradient(135deg, #4f46e5, #2f6f73);
+        color: white;
+        border-radius: 20px;
+        padding: 45px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 100%;
+    }
+
+        .welcome-panel h2 {
+            font-weight: 800;
+            margin-bottom: 25px;
+            letter-spacing: -0.5px;
+        }
+
+        .welcome-panel p {
+            line-height: 1.7;
+            font-size: 15px;
+            opacity: 0.9;
+        }
+
+    .contact-box {
+        margin-top: 40px;
+        background: rgba(255,255,255,0.1);
+        padding: 25px;
+        border-radius: 15px;
+        border: 1px solid rgba(255,255,255,0.2);
+    }
+
+        .contact-box h4 {
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+    /* Right Panel - Register */
+    .register-panel {
+        background: var(--card-bg);
+        border-radius: 20px;
+        padding: 45px;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        height: 100%;
+    }
+
+        .register-panel h2 {
+            color: #1e293b;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .register-panel h4 {
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+
+    .form-control {
+        border-radius: 12px;
+        padding: 12px 16px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        transition: all 0.3s ease;
+    }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+        }
+
+    .btn-outline-dark {
+        border-radius: 12px;
+        padding: 12px 25px;
+        background: var(--primary);
+        border: none;
+        color: white;
+        font-weight: 600;
+        width: 100%;
+        transition: transform 0.2s, background 0.3s;
+    }
+
+        .btn-outline-dark:hover {
+            background: #4338ca;
+            transform: translateY(-2px);
+            color: white;
+        }
+
+    .help-text {
+        margin-top: 25px;
+        font-size: 13px;
+        color: #64748b;
+        text-align: center;
+    }
+
+        .help-text a {
+            color: var(--primary);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+</style>
+
+<main aria-labelledby="title">
+    <div class="container elderly-register-container">
+        <div class="row align-items-stretch">
+
+            <!-- LEFT: INFORMATION PANEL -->
+            <div class="col-lg-5 d-flex">
+                <div class="welcome-panel">
+                    <h2>Join Elderly Care Hospital</h2>
+                    <p>Create an account to access the Elderly Care Management System. Authorized healthcare staff and caregivers can securely manage patient-related activities.</p>
+                    <p><strong>Working together to provide compassionate care.</strong></p>
+
+                    <div class="contact-box">
+                        <h4>Contact Details</h4>
+                        <p style="margin-bottom: 5px;"><small>Phone: +27 12 345 6789</small></p>
+                        <p style="margin-bottom: 5px;"><small>Emergency: +27 80 111 2222</small></p>
+                        <p style="margin-bottom: 5px;"><small>Email: support@elderlycarehospital.co.za</small></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: REGISTER PANEL -->
+            <div class="col-lg-7 d-flex">
+                <div class="register-panel">
+                    <h2 id="title">Create Account</h2>
+                    <h4>Register to continue to the system.</h4>
+
+                    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { role = "form" }))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.UserRole, new { @class = "form-label" })
+                            @Html.DropDownListFor(m => m.UserRole,
+                                new List<SelectListItem> {
+                                    new SelectListItem { Text = "Admin", Value = "Admin" },
+                                    new SelectListItem { Text = "Cleaner", Value = "Cleaner" },
+                                    new SelectListItem { Text = "Doctor", Value = "Doctor" },
+                                    new SelectListItem { Text = "Nurse", Value = "Nurse" },
+                                    new SelectListItem { Text = "Pharmacist", Value = "Pharmacist" }
+                                }, "-- Select Role --", new { @class = "form-control" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Email, new { @class = "form-label" })
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "name@hospital.co.za" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.Password, new { @class = "form-label" })
+                            @Html.PasswordFor(m => m.Password, new { @class = "form-control", placeholder = "••••••••" })
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "form-label" })
+                            @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", placeholder = "••••••••" })
+                        </div>
+
+                        <div class="mt-4">
+                            <input type="submit" value="Register Account" class="btn btn-outline-dark" />
+                        </div>
+
+                        <div class="help-text">
+                            Already have an account? @Html.ActionLink("Log in here", "Login", "Account")
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

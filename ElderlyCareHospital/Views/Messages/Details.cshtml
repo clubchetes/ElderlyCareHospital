@@ -1,0 +1,363 @@
+﻿@model ElderlyCareHospital.Models.Message
+
+@{
+    ViewBag.Title = "Message Details";
+}
+
+<style>
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .details-container {
+        max-width: 850px;
+        margin: 35px auto 45px;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .details-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 28px 32px;
+        border-radius: 18px;
+        margin-bottom: 24px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    }
+
+        .details-header h2 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .details-header p {
+            margin: 8px 0 0;
+            font-size: 15px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+    .status-badge {
+        float: right;
+        font-size: 13px;
+        background: rgba(255, 255, 255, 0.20);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: normal;
+    }
+
+    /* =========================================================
+       DETAILS CARD
+       ========================================================= */
+
+    .details-card {
+        background: white;
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+        .details-card h4 {
+            margin: 0 0 8px;
+            color: #2f6f73;
+            font-weight: 700;
+        }
+
+        .details-card hr {
+            border: 0;
+            border-top: 1px solid #e5ecef;
+            margin: 18px 0 24px;
+        }
+
+    /* =========================================================
+       INFORMATION ROWS
+       ========================================================= */
+
+    .details-row {
+        display: flex;
+        align-items: flex-start;
+        padding: 16px 0;
+        border-bottom: 1px solid #eef2f5;
+    }
+
+    .details-label {
+        width: 180px;
+        flex-shrink: 0;
+        font-weight: 700;
+        color: #2f6f73;
+    }
+
+    .details-value {
+        flex: 1;
+        color: #37474f;
+        line-height: 1.6;
+    }
+
+    .id-value {
+        display: inline-block;
+        background: #f1f7f8;
+        border: 1px solid #dce9eb;
+        border-radius: 8px;
+        padding: 5px 10px;
+        font-size: 13px;
+        font-weight: 600;
+        color: #455a64;
+    }
+
+    .date-value {
+        font-weight: 600;
+        color: #546e7a;
+    }
+
+    /* =========================================================
+       MESSAGE
+       ========================================================= */
+
+    .message-box {
+        background: #f8fbfc;
+        border: 1px solid #e1ecee;
+        border-radius: 12px;
+        padding: 18px;
+        color: #37474f;
+        line-height: 1.7;
+        white-space: pre-wrap;
+        min-height: 120px;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 28px;
+        padding-top: 22px;
+        border-top: 1px solid #e8eef0;
+    }
+
+    .btn-custom {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn-edit {
+        background: #2f6f73;
+        color: white !important;
+    }
+
+        .btn-edit:hover {
+            background: #25575a;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(47, 111, 115, 0.20);
+        }
+
+    .btn-back {
+        background: #6c757d;
+        color: white !important;
+    }
+
+        .btn-back:hover {
+            background: #5a6268;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .details-container {
+            margin: 20px 15px 35px;
+        }
+
+        .details-header {
+            padding: 24px;
+        }
+
+            .details-header h2 {
+                font-size: 25px;
+            }
+
+        .status-badge {
+            float: none;
+            display: inline-block;
+            margin-top: 12px;
+        }
+
+        .details-card {
+            padding: 22px;
+        }
+
+        .details-row {
+            display: block;
+        }
+
+        .details-label {
+            width: auto;
+            margin-bottom: 6px;
+        }
+
+        .actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-custom {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="details-container">
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="details-header">
+
+        <h2>
+
+            Message Details
+
+            <span class="status-badge">
+                 Hospital Communication
+            </span>
+
+        </h2>
+
+        <p>
+            View the complete details of this communication between
+            users of the Elderly Care Hospital system.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         DETAILS CARD
+         ====================================================== -->
+
+    <div class="details-card">
+
+        <h4>Message Information</h4>
+
+        <hr />
+
+
+        <!-- Sender -->
+
+        <div class="details-row">
+
+            <div class="details-label">
+                Sender ID
+            </div>
+
+            <div class="details-value">
+
+                <span class="id-value">
+                    @Html.DisplayFor(model => model.SenderID)
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Receiver -->
+
+        <div class="details-row">
+
+            <div class="details-label">
+                Receiver ID
+            </div>
+
+            <div class="details-value">
+
+                <span class="id-value">
+                    @Html.DisplayFor(model => model.ReceiverID)
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- Date -->
+
+        <div class="details-row">
+
+            <div class="details-label">
+                Sent Date
+            </div>
+
+            <div class="details-value date-value">
+
+                @(Model.SentDate?.ToString("dd MMM yyyy • HH:mm"))
+
+            </div>
+
+        </div>
+
+
+        <!-- Message -->
+
+        <div class="details-row" style="border-bottom: none;">
+
+            <div class="details-label">
+                Message
+            </div>
+
+            <div class="details-value">
+
+                <div class="message-box">
+                    @Html.DisplayFor(model => model.MessageText)
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTIONS
+             ================================================== -->
+
+        <div class="actions">
+
+            @Html.ActionLink(
+                " Edit Message",
+                "Edit",
+                new { id = Model.MessageID },
+                new { @class = "btn-custom btn-edit" })
+
+            @Html.ActionLink(
+                "← Back to Inbox",
+                "Inbox",
+                null,
+                new { @class = "btn-custom btn-back" })
+
+        </div>
+
+    </div>
+
+</div>

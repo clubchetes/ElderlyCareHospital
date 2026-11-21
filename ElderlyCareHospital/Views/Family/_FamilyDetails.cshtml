@@ -1,0 +1,732 @@
+﻿@model ElderlyCareHospital.Models.Patient
+
+<style>
+
+    /* =========================================================
+       FAMILY DETAILS
+       ========================================================= */
+
+    .family-details {
+        width: 100%;
+    }
+
+
+    /* =========================================================
+       STATISTICS
+       ========================================================= */
+
+    .family-statistics {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+        margin-bottom: 22px;
+    }
+
+    .family-stat-card {
+        position: relative;
+        min-height: 145px;
+        padding: 24px;
+        background: #ffffff;
+        border: 1px solid #e5e9f0;
+        border-radius: 17px;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, .04);
+        overflow: hidden;
+        transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+
+        .family-stat-card:hover {
+            transform: translateY(-4px);
+            border-color: #d7ddea;
+            box-shadow: 0 12px 30px rgba(15, 23, 42, .08);
+        }
+
+        .family-stat-card::after {
+            content: "";
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            right: -45px;
+            top: -45px;
+            border-radius: 50%;
+            background: rgba(79, 70, 229, .045);
+        }
+
+    .stat-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 2;
+    }
+
+    .stat-title {
+        color: #64748b;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .5px;
+    }
+
+    .stat-icon {
+        width: 43px;
+        height: 43px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        color: white;
+        box-shadow: 0 7px 16px rgba(15,23,42,.10);
+    }
+
+    .visits-icon {
+        background: linear-gradient(135deg, #0284c7, #0ea5e9);
+    }
+
+    .messages-icon {
+        background: linear-gradient(135deg, #0d9488, #14b8a6);
+    }
+
+    .stat-number {
+        position: relative;
+        z-index: 2;
+        margin: 17px 0 4px;
+        color: #172033;
+        font-size: 34px;
+        line-height: 1;
+        font-weight: 750;
+        letter-spacing: -1px;
+    }
+
+    .stat-description {
+        position: relative;
+        z-index: 2;
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+
+    /* =========================================================
+       PATIENT CARD
+       ========================================================= */
+
+    .family-patient-card {
+        width: 100%;
+        background: #ffffff;
+        border: 1px solid #e5e9f0;
+        border-radius: 18px;
+        box-shadow: 0 2px 8px rgba(15,23,42,.04);
+        overflow: hidden;
+    }
+
+
+    /* =========================================================
+       PATIENT HEADER
+       ========================================================= */
+
+    .patient-card-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        padding: 22px 25px;
+        border-bottom: 1px solid #e5e9f0;
+        background: linear-gradient( 135deg, #ffffff, #f8faff );
+    }
+
+    .patient-heading {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+    }
+
+    .patient-heading-icon {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        background: linear-gradient( 135deg, rgba(79,70,229,.12), rgba(14,165,233,.10) );
+        color: #4f46e5;
+    }
+
+    .patient-heading h3 {
+        margin: 0;
+        color: #172033;
+        font-size: 18px;
+        font-weight: 750;
+    }
+
+    .patient-heading span {
+        display: block;
+        margin-top: 3px;
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    .patient-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: #ecfdf5;
+        color: #047857;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 0 4px rgba(16,185,129,.10);
+    }
+
+
+    /* =========================================================
+       PATIENT BODY
+       ========================================================= */
+
+    .patient-card-body {
+        padding: 25px;
+    }
+
+    .patient-profile {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 17px;
+        margin-bottom: 20px;
+        background: #f8fafc;
+        border: 1px solid #edf0f4;
+        border-radius: 14px;
+    }
+
+    .patient-avatar {
+        width: 56px;
+        height: 56px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px;
+        background: linear-gradient( 135deg, #4f46e5, #0ea5e9 );
+        color: white;
+        font-size: 18px;
+        font-weight: 750;
+        box-shadow: 0 7px 17px rgba(79,70,229,.18);
+    }
+
+    .patient-name {
+        margin: 0;
+        color: #172033;
+        font-size: 17px;
+        font-weight: 700;
+    }
+
+    .patient-room {
+        margin-top: 5px;
+        color: #64748b;
+        font-size: 12px;
+    }
+
+
+    /* =========================================================
+       PATIENT INFORMATION
+       ========================================================= */
+
+    .patient-information-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .patient-information {
+        min-height: 92px;
+        padding: 17px;
+        border: 1px solid #e8ecf2;
+        border-radius: 13px;
+        background: #ffffff;
+        transition: all .2s ease;
+    }
+
+        .patient-information:hover {
+            background: #fafbff;
+            border-color: #dce2ed;
+            transform: translateY(-2px);
+        }
+
+    .information-label {
+        display: flex;
+        align-items: center;
+        gap: 7px;
+        margin-bottom: 9px;
+        color: #94a3b8;
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .45px;
+    }
+
+        .information-label svg {
+            color: #4f46e5;
+        }
+
+    .information-value {
+        margin: 0;
+        color: #172033;
+        font-size: 14px;
+        line-height: 1.5;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+
+    /* =========================================================
+       EMPTY PATIENT
+       ========================================================= */
+
+    .no-patient {
+        padding: 45px 25px;
+        text-align: center;
+    }
+
+    .no-patient-icon {
+        width: 55px;
+        height: 55px;
+        margin: 0 auto 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 15px;
+        background: #f1f5f9;
+        color: #94a3b8;
+    }
+
+    .no-patient h4 {
+        margin: 0 0 6px;
+        color: #172033;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .no-patient p {
+        margin: 0;
+        color: #94a3b8;
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .family-statistics {
+            grid-template-columns: 1fr;
+        }
+
+        .patient-information-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .patient-card-header {
+            align-items: flex-start;
+            flex-direction: column;
+        }
+
+        .patient-status {
+            align-self: flex-start;
+        }
+    }
+
+    @@media (max-width: 520px) {
+
+        .family-stat-card {
+            padding: 20px;
+        }
+
+        .patient-card-header {
+            padding: 19px;
+        }
+
+        .patient-card-body {
+            padding: 18px;
+        }
+
+        .patient-profile {
+            padding: 14px;
+        }
+
+        .stat-number {
+            font-size: 30px;
+        }
+    }
+</style>
+
+
+<div class="family-details">
+
+    <!-- =====================================================
+         STATISTICS
+         ===================================================== -->
+
+    <div class="family-statistics">
+
+        <!-- VISITS -->
+
+        <div class="family-stat-card">
+
+            <div class="stat-header">
+
+                <span class="stat-title">
+                    Visits Booked
+                </span>
+
+                <div class="stat-icon visits-icon">
+
+                    <svg width="20"
+                         height="20"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z">
+                        </path>
+
+                    </svg>
+
+                </div>
+
+            </div>
+
+            <h2 class="stat-number">
+                @ViewBag.Visits
+            </h2>
+
+            <div class="stat-description">
+                Total scheduled visits
+            </div>
+
+        </div>
+
+
+        <!-- MESSAGES -->
+
+        <div class="family-stat-card">
+
+            <div class="stat-header">
+
+                <span class="stat-title">
+                    Messages Received
+                </span>
+
+                <div class="stat-icon messages-icon">
+
+                    <svg width="20"
+                         height="20"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M3 8l9 6 9-6M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z">
+                        </path>
+
+                    </svg>
+
+                </div>
+
+            </div>
+
+            <h2 class="stat-number">
+                @ViewBag.Messages
+            </h2>
+
+            <div class="stat-description">
+                Messages from the care team
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         MY PATIENT
+         ===================================================== -->
+
+    <div class="family-patient-card">
+
+        <div class="patient-card-header">
+
+            <div class="patient-heading">
+
+                <div class="patient-heading-icon">
+
+                    <svg width="21"
+                         height="21"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M20 21a8 8 0 00-16 0M12 13a4 4 0 100-8 4 4 0 000 8z">
+                        </path>
+
+                    </svg>
+
+                </div>
+
+                <div>
+
+                    <h3>
+                        My Patient
+                    </h3>
+
+                    <span>
+                        Patient care information
+                    </span>
+
+                </div>
+
+            </div>
+
+            @if (Model != null)
+            {
+                <div class="patient-status">
+
+                    <span class="status-dot"></span>
+
+                    Patient Linked
+
+                </div>
+            }
+
+        </div>
+
+
+        @if (Model != null)
+        {
+            <div class="patient-card-body">
+
+                <!-- PATIENT PROFILE -->
+
+                <div class="patient-profile">
+
+                    <div class="patient-avatar">
+
+                        @Model.FirstName.Substring(0, 1)
+                        @Model.LastName.Substring(0, 1)
+
+                    </div>
+
+                    <div>
+
+                        <h4 class="patient-name">
+
+                            @Model.FirstName @Model.LastName
+
+                        </h4>
+
+                        <div class="patient-room">
+
+                            Room Number:
+                            <strong>
+                                @Model.RoomNumber
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- INFORMATION GRID -->
+
+                <div class="patient-information-grid">
+
+
+                    <!-- ALLERGIES -->
+
+                    <div class="patient-information">
+
+                        <div class="information-label">
+
+                            <svg width="14"
+                                 height="14"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M12 9v4m0 4h.01M10.3 3.2L2.8 16a2 2 0 001.7 3h15a2 2 0 001.7-3L13.7 3.2a2 2 0 00-3.4 0z">
+                                </path>
+
+                            </svg>
+
+                            Allergies
+
+                        </div>
+
+                        <p class="information-value">
+
+                            @Model.Allergies
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- MEDICAL HISTORY -->
+
+                    <div class="patient-information">
+
+                        <div class="information-label">
+
+                            <svg width="14"
+                                 height="14"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M9 3h6v3h3v15H6V6h3V3z">
+                                </path>
+
+                            </svg>
+
+                            Medical History
+
+                        </div>
+
+                        <p class="information-value">
+
+                            @Model.MedicalHistory
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- ROOM -->
+
+                    <div class="patient-information">
+
+                        <div class="information-label">
+
+                            <svg width="14"
+                                 height="14"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M3 21h18M5 21V5a2 2 0 012-2h10a2 2 0 012 2v16M9 8h6M9 12h6">
+                                </path>
+
+                            </svg>
+
+                            Room Number
+
+                        </div>
+
+                        <p class="information-value">
+
+                            @Model.RoomNumber
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- FALL RISK -->
+
+                    <div class="patient-information">
+
+                        <div class="information-label">
+
+                            <svg width="14"
+                                 height="14"
+                                 fill="none"
+                                 stroke="currentColor"
+                                 stroke-width="2"
+                                 viewBox="0 0 24 24">
+
+                                <path stroke-linecap="round"
+                                      stroke-linejoin="round"
+                                      d="M12 9v4m0 4h.01M10.3 3.2L2.8 16a2 2 0 001.7 3h15a2 2 0 001.7-3L13.7 3.2a2 2 0 00-3.4 0z">
+                                </path>
+
+                            </svg>
+
+                            Fall Risk
+
+                        </div>
+
+                        <p class="information-value">
+
+                            @Model.FallRisk
+
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="no-patient">
+
+                <div class="no-patient-icon">
+
+                    <svg width="24"
+                         height="24"
+                         fill="none"
+                         stroke="currentColor"
+                         stroke-width="2"
+                         viewBox="0 0 24 24">
+
+                        <path stroke-linecap="round"
+                              stroke-linejoin="round"
+                              d="M20 21a8 8 0 00-16 0M12 13a4 4 0 100-8 4 4 0 000 8z">
+                        </path>
+
+                    </svg>
+
+                </div>
+
+                <h4>
+                    No Patient Linked
+                </h4>
+
+                <p>
+                    No patient record is currently linked to this family account.
+                </p>
+
+            </div>
+        }
+
+    </div>
+
+</div>

@@ -1,0 +1,2255 @@
+﻿@model ElderlyCareHospital.Models.VitalSign
+
+@{
+    ViewBag.Title = "Record Vital Signs";
+}
+
+<style>
+
+    /* =========================================================
+       ELDERLYCARE HOSPITAL
+       RECORD VITAL SIGNS
+       ========================================================= */
+
+    :root {
+        --app-bg: #f5f8f6;
+        --surface: #ffffff;
+        --surface-soft: #f8fbf9;
+        --text-main: #23352f;
+        --text-muted: #687b74;
+        --text-light: #8b9b95;
+        --primary: #2f6f73;
+        --primary-dark: #25575a;
+        --primary-light: #eaf5f5;
+        --secondary: #5f9699;
+        --soft-teal: #eef7f7;
+        --success: #4f9277;
+        --success-soft: #edf8f2;
+        --danger: #c75d68;
+        --danger-dark: #a94450;
+        --danger-soft: #fff1f3;
+        --border: #dce7e1;
+        --border-soft: #e9efec;
+        --shadow: 0 12px 35px rgba(35, 53, 47, .07);
+        --radius-lg: 22px;
+        --radius-md: 17px;
+        --radius-sm: 12px;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: radial-gradient( circle at 8% 8%, rgba(47, 111, 115, .045), transparent 27% ), radial-gradient( circle at 92% 90%, rgba(79, 146, 119, .04), transparent 25% ), var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    .vital-create-page {
+        position: relative;
+        min-height: 100vh;
+        padding: 40px 20px 45px;
+    }
+
+    .vital-bg-shape {
+        position: fixed;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+    }
+
+        .vital-bg-shape.shape-one {
+            width: 340px;
+            height: 340px;
+            top: -130px;
+            left: -100px;
+            background: rgba(47, 111, 115, .025);
+        }
+
+        .vital-bg-shape.shape-two {
+            width: 280px;
+            height: 280px;
+            right: -90px;
+            bottom: 4%;
+            background: rgba(79, 146, 119, .025);
+        }
+
+    /* =========================================================
+       CONTAINER
+       ========================================================= */
+
+    .vital-create-container {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .vital-header {
+        position: relative;
+        overflow: hidden;
+        padding: 34px 38px;
+        margin-bottom: 25px;
+        border-radius: 24px;
+        color: #ffffff;
+        background: linear-gradient( 135deg, #285f63 0%, #2f6f73 50%, #5f9699 100% );
+        box-shadow: 0 18px 42px rgba(47, 111, 115, .16);
+    }
+
+        .vital-header::before {
+            content: "";
+            position: absolute;
+            width: 260px;
+            height: 260px;
+            right: -70px;
+            top: -130px;
+            border-radius: 50%;
+            border: 35px solid rgba(255, 255, 255, .07);
+        }
+
+        .vital-header::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            right: 110px;
+            bottom: -120px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, .05);
+        }
+
+    .vital-header-content {
+        position: relative;
+        z-index: 2;
+        max-width: 900px;
+    }
+
+    .vital-header-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 13px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: rgba(255, 255, 255, .13);
+        border: 1px solid rgba(255, 255, 255, .15);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .7px;
+        text-transform: uppercase;
+    }
+
+    .vital-header-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #b7d8d9;
+        box-shadow: 0 0 0 5px rgba(183, 216, 217, .10);
+    }
+
+    .vital-header h2 {
+        margin: 0;
+        font-size: 30px;
+        line-height: 1.2;
+        font-weight: 800;
+        letter-spacing: -.7px;
+    }
+
+    .vital-header p {
+        margin: 12px 0 0;
+        max-width: 850px;
+        color: rgba(255, 255, 255, .84);
+        font-size: 14px;
+        line-height: 1.7;
+    }
+
+    /* =========================================================
+       PANEL
+       ========================================================= */
+
+    .vital-panel {
+        position: relative;
+        width: 100%;
+        padding: 30px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        background: rgba(255, 255, 255, .97);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+    }
+
+        .vital-panel::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient( 90deg, #2f6f73, #5f9699, #7ca5a6 );
+        }
+
+    /* =========================================================
+       FORM HEADER
+       ========================================================= */
+
+    .form-panel-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 25px;
+        padding-bottom: 18px;
+        border-bottom: 1px solid #e4ece8;
+    }
+
+    .form-title-area {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .form-title-icon {
+        width: 42px;
+        height: 42px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 13px;
+        color: #ffffff;
+        background: linear-gradient( 135deg, #2f6f73, #5f9699 );
+        font-size: 17px;
+        font-weight: 800;
+        box-shadow: 0 8px 18px rgba(47, 111, 115, .20);
+    }
+
+    .form-title-text h3 {
+        margin: 0;
+        color: var(--text-main);
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .form-title-text p {
+        margin: 4px 0 0;
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    .form-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        color: #397461;
+        background: var(--success-soft);
+        border: 1px solid #cee9df;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+        .form-status::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--success);
+        }
+
+    /* =========================================================
+       SECTION TITLE
+       ========================================================= */
+
+    .section-title {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin: 0 0 25px;
+        padding-bottom: 12px;
+        border-bottom: 1px solid #e4ece8;
+        color: var(--primary);
+        font-size: 14px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .6px;
+    }
+
+        .section-title::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+    /* =========================================================
+       FORM GROUPS
+       ========================================================= */
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .control-label {
+        display: flex;
+        align-items: center;
+        min-height: 46px;
+        padding-top: 0 !important;
+        color: #354840;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    /* =========================================================
+       INPUTS
+       ========================================================= */
+
+    .form-control {
+        width: 100%;
+        min-height: 46px;
+        padding: 10px 14px;
+        border: 1px solid #d5e0dc;
+        border-radius: 12px;
+        background: #ffffff;
+        color: var(--text-main);
+        font-size: 13px;
+        box-shadow: none;
+        outline: none;
+        transition: border-color .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+
+        .form-control:hover {
+            border-color: #bfcfca;
+        }
+
+        .form-control:focus {
+            border-color: var(--secondary);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(76, 140, 145, .12);
+        }
+
+        .form-control::placeholder {
+            color: #9aa9a4;
+            opacity: 1;
+        }
+
+    select.form-control {
+        cursor: pointer;
+    }
+
+    /* =========================================================
+       VALIDATION INPUT STATES
+       ========================================================= */
+
+    .field-error {
+        border-color: var(--danger) !important;
+        background: #fffafa !important;
+        box-shadow: 0 0 0 3px rgba(199, 93, 104, .10) !important;
+    }
+
+    .field-valid {
+        border-color: #79b49d !important;
+        background: #fbfffd !important;
+    }
+
+    .custom-validation {
+        display: none;
+        margin-top: 6px;
+        color: var(--danger-dark);
+        font-size: 11px;
+        font-weight: 600;
+        line-height: 1.45;
+    }
+
+        .custom-validation.show {
+            display: block;
+        }
+
+    .text-danger {
+        display: block;
+        margin-top: 6px;
+        color: var(--danger);
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .validation-summary-errors {
+        margin-bottom: 20px;
+        padding: 12px 15px;
+        border: 1px solid #f0cdd2;
+        border-radius: 11px;
+        background: var(--danger-soft);
+        color: #a74b56;
+        font-size: 12px;
+    }
+
+        .validation-summary-errors ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+    /* =========================================================
+       DATE/TIME
+       ========================================================= */
+
+    .datetime-info {
+        margin-top: 7px;
+        color: var(--text-light);
+        font-size: 11px;
+        line-height: 1.5;
+    }
+
+    .current-time-display {
+        display: inline-block;
+        margin-top: 8px;
+        padding: 6px 10px;
+        border-radius: 8px;
+        background: var(--primary-light);
+        color: var(--primary);
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    /* =========================================================
+       SUBMIT
+       ========================================================= */
+
+    .submit-row {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 30px;
+        padding-top: 22px;
+        border-top: 1px solid #e4ece8;
+    }
+
+    .btn-submit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 210px;
+        padding: 12px 25px;
+        border: 1px solid var(--primary);
+        border-radius: 11px;
+        background: linear-gradient( 135deg, #2f6f73, #4c8589 );
+        color: #ffffff !important;
+        font-size: 12px;
+        font-weight: 750;
+        box-shadow: 0 8px 20px rgba(47, 111, 115, .18);
+        transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+        cursor: pointer;
+    }
+
+        .btn-submit::before {
+            content: "✓";
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .btn-submit:hover {
+            background: linear-gradient( 135deg, #25575a, #39777b );
+            transform: translateY(-2px);
+            box-shadow: 0 12px 27px rgba(47, 111, 115, .24);
+        }
+
+        .btn-submit:disabled {
+            opacity: .65;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+    /* =========================================================
+       INFORMATION NOTE
+       ========================================================= */
+
+    .info-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-top: 25px;
+        padding: 16px 18px;
+        border: 1px solid #dce9e5;
+        border-left: 4px solid var(--primary);
+        border-radius: 12px;
+        background: var(--soft-teal);
+        color: #466066;
+        font-size: 12px;
+        line-height: 1.65;
+    }
+
+        .info-note::before {
+            content: "i";
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 8px;
+            background: #ffffff;
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+    /* =========================================================
+       BACK
+       ========================================================= */
+
+    .back-wrapper {
+        margin-top: 20px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 17px;
+        background: #ffffff;
+        border: 1px solid #dce5e0;
+        color: #687b74 !important;
+        border-radius: 11px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        box-shadow: 0 6px 18px rgba(35, 53, 47, .045);
+        transition: all .2s ease;
+    }
+
+        .back-link::before {
+            content: "←";
+            font-size: 15px;
+        }
+
+        .back-link:hover {
+            background: #f8fbfa;
+            color: var(--primary) !important;
+            border-color: #c8dbd2;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @@media (max-width: 992px) {
+
+        .vital-create-page {
+            padding: 30px 22px 40px;
+        }
+
+        .vital-header {
+            padding: 30px;
+        }
+
+            .vital-header h2 {
+                font-size: 27px;
+            }
+
+        .vital-panel {
+            padding: 25px;
+        }
+
+        .control-label {
+            min-height: 44px;
+        }
+    }
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .vital-create-page {
+            padding: 20px 16px 30px;
+        }
+
+        .vital-header {
+            padding: 25px 22px;
+            border-radius: 19px;
+            margin-bottom: 18px;
+        }
+
+            .vital-header h2 {
+                font-size: 23px;
+            }
+
+            .vital-header p {
+                font-size: 12px;
+            }
+
+        .vital-header-label {
+            font-size: 10px;
+        }
+
+        .vital-panel {
+            padding: 19px;
+            border-radius: 18px;
+        }
+
+        .form-panel-header {
+            align-items: flex-start;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .form-status {
+            align-self: flex-start;
+        }
+
+        .form-title-icon {
+            width: 38px;
+            height: 38px;
+        }
+
+        .form-title-text h3 {
+            font-size: 16px;
+        }
+
+        .form-title-text p {
+            font-size: 11px;
+        }
+
+        .section-title {
+            margin-bottom: 20px;
+            font-size: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .control-label {
+            min-height: auto;
+            margin-bottom: 7px;
+            padding: 0 !important;
+        }
+
+        .form-group.row {
+            display: block;
+        }
+
+            .form-group.row > [class*="col-"] {
+                width: 100%;
+                max-width: 100%;
+            }
+
+        .form-control {
+            min-height: 45px;
+        }
+
+        .submit-row {
+            margin-top: 24px;
+        }
+
+        .btn-submit {
+            width: 100%;
+        }
+
+        .info-note {
+            font-size: 11px;
+        }
+
+        .back-wrapper {
+            margin-top: 16px;
+        }
+
+        .back-link {
+            width: 100%;
+        }
+    }
+
+    /* =========================================================
+       SMALL PHONE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .vital-create-page {
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .vital-header {
+            padding: 22px 18px;
+        }
+
+            .vital-header h2 {
+                font-size: 21px;
+            }
+
+            .vital-header p {
+                font-size: 11px;
+            }
+
+        .vital-panel {
+            padding: 16px;
+        }
+
+        .form-title-area {
+            align-items: flex-start;
+        }
+
+        .form-title-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 11px;
+        }
+
+        .form-title-text h3 {
+            font-size: 15px;
+        }
+
+        .form-title-text p {
+            font-size: 10px;
+        }
+
+        .section-title {
+            font-size: 11px;
+        }
+
+        .info-note {
+            padding: 14px;
+        }
+    }
+</style>
+
+<!-- =========================================================
+     BACKGROUND
+     ========================================================= -->
+
+<div class="vital-bg-shape shape-one"></div>
+<div class="vital-bg-shape shape-two"></div>
+
+<!-- =========================================================
+     PAGE
+     ========================================================= -->
+
+<div class="vital-create-page">
+
+   
+    <div class="vital-create-container">
+
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <section class="vital-header">
+
+            <div class="vital-header-content">
+
+                <div class="vital-header-label">
+
+                    <span class="vital-header-dot"></span>
+
+                    Clinical Documentation
+
+                </div>
+
+                <h2>
+                    Record Patient Vital Signs
+                </h2>
+
+                <p>
+                    Capture accurate patient vital signs including
+                    temperature, blood pressure, pulse rate, oxygen
+                    saturation, glucose level, weight, and the exact
+                    date and time of the assessment.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =================================================
+             FORM PANEL
+             ================================================= -->
+
+        <section class="vital-panel">
+
+            <div class="form-panel-header">
+
+                <div class="form-title-area">
+
+                    <div class="form-title-icon">
+                        ♥
+                    </div>
+
+                    <div class="form-title-text">
+
+                        <h3>
+                            Vital Sign Details
+                        </h3>
+
+                        <p>
+                            Enter the patient's latest clinical observations
+                        </p>
+
+                    </div>
+
+                </div>
+
+                <span class="form-status">
+                    Clinical Entry
+                </span>
+
+            </div>
+
+
+            @using (Html.BeginForm(
+                "Create",
+                "VitalSigns",
+                FormMethod.Post,
+                new
+                {
+                    id = "vitalSignsForm",
+                    autocomplete = "off"
+                }))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(
+                    true,
+                    "",
+                    new { @class = "text-danger" })
+
+
+                <h4 class="section-title">
+                    Patient Observation Details
+                </h4>
+
+
+                <!-- =================================================
+                     PATIENT
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.PatientID,
+                        "Patient Name",
+                        new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.DropDownList(
+                            "PatientID",
+                            null,
+                            "-- Select Patient --",
+                            new
+                            {
+                                @class = "form-control",
+                                id = "PatientID"
+                            })
+
+                        <div id="PatientIDError"
+                             class="custom-validation">
+                            Please select a patient before saving the vital signs.
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            model => model.PatientID,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     TEMPERATURE
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Temperature,
+                        new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.Temperature,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    id = "Temperature",
+                                    placeholder = "e.g. 36.8",
+                                    autocomplete = "off",
+                                    inputmode = "decimal"
+                                }
+                            })
+
+                        <div id="TemperatureError"
+                             class="custom-validation">
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            model => model.Temperature,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     BLOOD PRESSURE
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.BloodPressure,
+                        new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.BloodPressure,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    id = "BloodPressure",
+                                    placeholder = "e.g. 120/80",
+                                    autocomplete = "off",
+                                    inputmode = "numeric",
+                                    maxlength = "7"
+                                }
+                            })
+
+                        <div id="BloodPressureError"
+                             class="custom-validation">
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            model => model.BloodPressure,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     PULSE RATE
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.PulseRate,
+                        new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.PulseRate,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    id = "PulseRate",
+                                    placeholder = "e.g. 72",
+                                    autocomplete = "off",
+                                    inputmode = "numeric"
+                                }
+                            })
+
+                        <div id="PulseRateError"
+                             class="custom-validation">
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            model => model.PulseRate,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     OXYGEN
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.OxygenLevel,
+                        new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.OxygenLevel,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    id = "OxygenLevel",
+                                    placeholder = "e.g. 98",
+                                    autocomplete = "off",
+                                    inputmode = "decimal"
+                                }
+                            })
+
+                        <div id="OxygenLevelError"
+                             class="custom-validation">
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            model => model.OxygenLevel,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SUGAR
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.SugarLevel,
+                        new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.SugarLevel,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    id = "SugarLevel",
+                                    placeholder = "e.g. 5.6",
+                                    autocomplete = "off",
+                                    inputmode = "decimal"
+                                }
+                            })
+
+                        <div id="SugarLevelError"
+                             class="custom-validation">
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            model => model.SugarLevel,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     WEIGHT
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Weight,
+                        new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.Weight,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    id = "Weight",
+                                    placeholder = "e.g. 72",
+                                    autocomplete = "off",
+                                    inputmode = "decimal"
+                                }
+                            })
+
+                        <div id="WeightError"
+                             class="custom-validation">
+                        </div>
+
+                        @Html.ValidationMessageFor(
+                            model => model.Weight,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DATE AND TIME
+                     ================================================= -->
+
+        <div class="form-group row">
+
+            @Html.LabelFor(
+                model => model.DateRecorded,
+                "Date & Time Recorded",
+                new
+                {
+                    @class = "control-label col-md-3"
+                })
+
+            <!-- =========================================
+    DATE RECORDED
+    DISPLAY ONLY - NOT EDITABLE
+    ========================================= -->
+
+            <div class="form-group row align-items-center">
+
+                @Html.LabelFor(
+                    model => model.DateRecorded,
+                    htmlAttributes: new
+                    {
+                        @class = "control-label col-md-3"
+                    })
+
+                <div class="col-md-9">
+
+                    @Html.TextBoxFor(
+                        model => model.DateRecorded,
+                        "{0:dd MMMM yyyy, HH:mm}",
+                        new
+                        {
+                            @class = "form-control",
+                            @readonly = "readonly",
+                            tabindex = "-1",
+                            autocomplete = "off"
+                        })
+
+                    @Html.ValidationMessageFor(
+                        model => model.DateRecorded,
+                        "",
+                        new
+                        {
+                            @class = "text-danger"
+                        })
+
+                </div>
+
+           
+
+            <div class="datetime-info">
+                The current date and time are automatically selected.
+                Future dates and times are not allowed.
+            </div>
+
+            <div id="currentTimeDisplay"
+                 class="current-time-display">
+                Current time: loading...
+            </div>
+
+            <div id="DateRecordedError"
+                 class="custom-validation">
+            </div>
+
+            @Html.ValidationMessageFor(
+                model => model.DateRecorded,
+                "",
+                new
+                {
+                    @class = "text-danger"
+                })
+
+        </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SUBMIT
+                     ================================================= -->
+
+                <div class="submit-row">
+
+                    <button type="submit"
+                            id="saveVitalButton"
+                            class="btn btn-submit">
+
+                        Save Vital Signs
+
+                    </button>
+
+                </div>
+
+            }
+
+
+            <!-- =================================================
+                 INFORMATION NOTE
+                 ================================================= -->
+
+            <div class="info-note">
+
+                <span>
+                    Ensure all readings are measured correctly before
+                    saving. Temperature should normally be recorded in
+                    degrees Celsius, blood pressure in systolic/diastolic
+                    format, pulse in beats per minute, oxygen saturation
+                    as a percentage, glucose in mmol/L, and weight in kg.
+                    The recorded date and time are automatically captured
+                    from the current local time.
+                </span>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- =================================================
+             BACK
+             ================================================= -->
+
+        <div class="back-wrapper">
+
+            @Html.ActionLink(
+                "Back to Vital Signs",
+                "Index",
+                "VitalSigns",
+                null,
+                new
+                {
+                    @class = "back-link"
+                })
+
+        </div>
+
+
+    </div>
+    
+
+</div>
+
+@section Scripts {
+
+    ```
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery Validation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
+
+    <script>
+
+        /* =========================================================
+           CURRENT DATE/TIME
+           ========================================================= */
+
+        function getCurrentDateTimeLocal() {
+
+            var now = new Date();
+
+            var year = now.getFullYear();
+
+            var month = String(now.getMonth() + 1).padStart(2, '0');
+
+            var day = String(now.getDate()).padStart(2, '0');
+
+            var hours = String(now.getHours()).padStart(2, '0');
+
+            var minutes = String(now.getMinutes()).padStart(2, '0');
+
+            return year + "-" +
+                month + "-" +
+                day + "T" +
+                hours + ":" +
+                minutes;
+        }
+
+
+        /* =========================================================
+           SET CURRENT DATE/TIME AUTOMATICALLY
+           ========================================================= */
+
+        function setCurrentDateTime() {
+
+            var dateInput = document.getElementById("DateRecorded");
+
+            if (!dateInput) {
+                return;
+            }
+
+            /*
+             * Always use current local date/time when creating
+             * a new vital sign.
+             */
+            dateInput.value = getCurrentDateTimeLocal();
+
+            /*
+             * Prevent future date/time selection.
+             */
+            dateInput.max = getCurrentDateTimeLocal();
+
+        }
+
+
+        /* =========================================================
+           LIVE CLOCK
+           ========================================================= */
+
+        function updateCurrentTimeDisplay() {
+
+            var display = document.getElementById(
+                "currentTimeDisplay"
+            );
+
+            if (!display) {
+                return;
+            }
+
+            var now = new Date();
+
+            var dateText = now.toLocaleDateString(
+                undefined,
+                {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                }
+            );
+
+            var timeText = now.toLocaleTimeString(
+                undefined,
+                {
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    second: "2-digit"
+                }
+            );
+
+            display.innerHTML =
+                "Current time: " +
+                dateText +
+                " • " +
+                timeText;
+
+        }
+
+
+        /* =========================================================
+           VALIDATION HELPER
+           ========================================================= */
+
+        function showError(inputId, errorId, message) {
+
+            var input = document.getElementById(inputId);
+
+            var error = document.getElementById(errorId);
+
+            if (input) {
+                input.classList.remove("field-valid");
+                input.classList.add("field-error");
+            }
+
+            if (error) {
+                error.textContent = message;
+                error.classList.add("show");
+            }
+
+            return false;
+        }
+
+
+        /* =========================================================
+           VALIDATION SUCCESS
+           ========================================================= */
+
+        function showValid(inputId, errorId) {
+
+            var input = document.getElementById(inputId);
+
+            var error = document.getElementById(errorId);
+
+            if (input) {
+                input.classList.remove("field-error");
+
+                if (input.value.trim() !== "") {
+                    input.classList.add("field-valid");
+                }
+            }
+
+            if (error) {
+                error.textContent = "";
+                error.classList.remove("show");
+            }
+
+            return true;
+        }
+
+
+        /* =========================================================
+           NUMERIC VALIDATION
+           ========================================================= */
+
+        function getNumericValue(id) {
+
+            var element = document.getElementById(id);
+
+            if (!element) {
+                return NaN;
+            }
+
+            var value = element.value.trim();
+
+            if (value === "") {
+                return NaN;
+            }
+
+            return Number(value);
+        }
+
+
+        /* =========================================================
+           PATIENT VALIDATION
+           ========================================================= */
+
+        function validatePatient() {
+
+            var value =
+                document.getElementById("PatientID").value;
+
+            if (!value || value === "0") {
+
+                return showError(
+                    "PatientID",
+                    "PatientIDError",
+                    "Please select a patient."
+                );
+
+            }
+
+            return showValid(
+                "PatientID",
+                "PatientIDError"
+            );
+        }
+
+
+        /* =========================================================
+           TEMPERATURE VALIDATION
+           ========================================================= */
+
+        function validateTemperature() {
+
+            var element =
+                document.getElementById("Temperature");
+
+            var value =
+                element.value.trim();
+
+            if (value === "") {
+
+                return showError(
+                    "Temperature",
+                    "TemperatureError",
+                    "Temperature is required."
+                );
+
+            }
+
+            if (!/^[0-9]+([.,][0-9]+)?$/.test(value)) {
+
+                return showError(
+                    "Temperature",
+                    "TemperatureError",
+                    "Enter a valid temperature, for example 36.8."
+                );
+
+            }
+
+            var number =
+                parseFloat(value.replace(",", "."));
+
+            if (isNaN(number)) {
+
+                return showError(
+                    "Temperature",
+                    "TemperatureError",
+                    "Temperature must be a valid number."
+                );
+
+            }
+
+            if (number < 30 || number > 45) {
+
+                return showError(
+                    "Temperature",
+                    "TemperatureError",
+                    "Temperature must be between 30°C and 45°C."
+                );
+
+            }
+
+            return showValid(
+                "Temperature",
+                "TemperatureError"
+            );
+        }
+
+
+        /* =========================================================
+           BLOOD PRESSURE VALIDATION
+           ========================================================= */
+
+        function validateBloodPressure() {
+
+            var value =
+                document.getElementById("BloodPressure")
+                    .value
+                    .trim();
+
+            if (value === "") {
+
+                return showError(
+                    "BloodPressure",
+                    "BloodPressureError",
+                    "Blood pressure is required."
+                );
+
+            }
+
+            var match =
+                value.match(/^(\d{2,3})\s*\/\s*(\d{2,3})$/);
+
+            if (!match) {
+
+                return showError(
+                    "BloodPressure",
+                    "BloodPressureError",
+                    "Enter blood pressure in the format 120/80."
+                );
+
+            }
+
+            var systolic =
+                parseInt(match[1]);
+
+            var diastolic =
+                parseInt(match[2]);
+
+            if (systolic < 60 || systolic > 250) {
+
+                return showError(
+                    "BloodPressure",
+                    "BloodPressureError",
+                    "Systolic pressure must be between 60 and 250 mmHg."
+                );
+
+            }
+
+            if (diastolic < 30 || diastolic > 150) {
+
+                return showError(
+                    "BloodPressure",
+                    "BloodPressureError",
+                    "Diastolic pressure must be between 30 and 150 mmHg."
+                );
+
+            }
+
+            if (systolic <= diastolic) {
+
+                return showError(
+                    "BloodPressure",
+                    "BloodPressureError",
+                    "Systolic pressure must be greater than diastolic pressure."
+                );
+
+            }
+
+            return showValid(
+                "BloodPressure",
+                "BloodPressureError"
+            );
+        }
+
+
+        /* =========================================================
+           PULSE VALIDATION
+           ========================================================= */
+
+        function validatePulse() {
+
+            var value =
+                document.getElementById("PulseRate")
+                    .value
+                    .trim();
+
+            if (value === "") {
+
+                return showError(
+                    "PulseRate",
+                    "PulseRateError",
+                    "Pulse rate is required."
+                );
+
+            }
+
+            if (!/^\d+$/.test(value)) {
+
+                return showError(
+                    "PulseRate",
+                    "PulseRateError",
+                    "Pulse rate must contain whole numbers only."
+                );
+
+            }
+
+            var pulse =
+                parseInt(value);
+
+            if (pulse < 20 || pulse > 250) {
+
+                return showError(
+                    "PulseRate",
+                    "PulseRateError",
+                    "Pulse rate must be between 20 and 250 bpm."
+                );
+
+            }
+
+            return showValid(
+                "PulseRate",
+                "PulseRateError"
+            );
+        }
+
+
+        /* =========================================================
+           OXYGEN VALIDATION
+           ========================================================= */
+
+        function validateOxygen() {
+
+            var value =
+                document.getElementById("OxygenLevel")
+                    .value
+                    .trim();
+
+            if (value === "") {
+
+                return showError(
+                    "OxygenLevel",
+                    "OxygenLevelError",
+                    "Oxygen saturation is required."
+                );
+
+            }
+
+            if (!/^[0-9]+([.,][0-9]+)?$/.test(value)) {
+
+                return showError(
+                    "OxygenLevel",
+                    "OxygenLevelError",
+                    "Enter a valid oxygen saturation percentage."
+                );
+
+            }
+
+            var oxygen =
+                parseFloat(value.replace(",", "."));
+
+            if (oxygen < 50 || oxygen > 100) {
+
+                return showError(
+                    "OxygenLevel",
+                    "OxygenLevelError",
+                    "Oxygen saturation must be between 50% and 100%."
+                );
+
+            }
+
+            return showValid(
+                "OxygenLevel",
+                "OxygenLevelError"
+            );
+        }
+
+
+        /* =========================================================
+           SUGAR VALIDATION
+           ========================================================= */
+
+        function validateSugar() {
+
+            var value =
+                document.getElementById("SugarLevel")
+                    .value
+                    .trim();
+
+            if (value === "") {
+
+                return showError(
+                    "SugarLevel",
+                    "SugarLevelError",
+                    "Sugar level is required."
+                );
+
+            }
+
+            if (!/^[0-9]+([.,][0-9]+)?$/.test(value)) {
+
+                return showError(
+                    "SugarLevel",
+                    "SugarLevelError",
+                    "Enter a valid glucose level, for example 5.6."
+                );
+
+            }
+
+            var sugar =
+                parseFloat(value.replace(",", "."));
+
+            if (sugar < 1 || sugar > 40) {
+
+                return showError(
+                    "SugarLevel",
+                    "SugarLevelError",
+                    "Sugar level must be between 1 and 40 mmol/L."
+                );
+
+            }
+
+            return showValid(
+                "SugarLevel",
+                "SugarLevelError"
+            );
+        }
+
+
+        /* =========================================================
+           WEIGHT VALIDATION
+           ========================================================= */
+
+        function validateWeight() {
+
+            var value =
+                document.getElementById("Weight")
+                    .value
+                    .trim();
+
+            if (value === "") {
+
+                return showError(
+                    "Weight",
+                    "WeightError",
+                    "Weight is required."
+                );
+
+            }
+
+            if (!/^[0-9]+([.,][0-9]+)?$/.test(value)) {
+
+                return showError(
+                    "Weight",
+                    "WeightError",
+                    "Enter a valid weight, for example 72."
+                );
+
+            }
+
+            var weight =
+                parseFloat(value.replace(",", "."));
+
+            if (weight < 1 || weight > 500) {
+
+                return showError(
+                    "Weight",
+                    "WeightError",
+                    "Weight must be between 1 kg and 500 kg."
+                );
+
+            }
+
+            return showValid(
+                "Weight",
+                "WeightError"
+            );
+        }
+
+
+        /* =========================================================
+           DATE/TIME VALIDATION
+           ========================================================= */
+
+        function validateDateRecorded() {
+
+            var input =
+                document.getElementById("DateRecorded");
+
+            var value =
+                input.value;
+
+            if (!value) {
+
+                return showError(
+                    "DateRecorded",
+                    "DateRecordedError",
+                    "Date and time are required."
+                );
+
+            }
+
+            var selectedDate =
+                new Date(value);
+
+            var now =
+                new Date();
+
+            if (isNaN(selectedDate.getTime())) {
+
+                return showError(
+                    "DateRecorded",
+                    "DateRecordedError",
+                    "Please enter a valid date and time."
+                );
+
+            }
+
+            /*
+             * Allow a tiny difference because the browser time
+             * continues moving while the user is filling in the form.
+             */
+            if (selectedDate.getTime() > now.getTime() + 60000) {
+
+                return showError(
+                    "DateRecorded",
+                    "DateRecordedError",
+                    "The recorded date and time cannot be in the future."
+                );
+
+            }
+
+            return showValid(
+                "DateRecorded",
+                "DateRecordedError"
+            );
+        }
+
+
+        /* =========================================================
+           VALIDATE EVERYTHING
+           ========================================================= */
+
+        function validateAllFields() {
+
+            var valid = true;
+
+            if (!validatePatient()) {
+                valid = false;
+            }
+
+            if (!validateTemperature()) {
+                valid = false;
+            }
+
+            if (!validateBloodPressure()) {
+                valid = false;
+            }
+
+            if (!validatePulse()) {
+                valid = false;
+            }
+
+            if (!validateOxygen()) {
+                valid = false;
+            }
+
+            if (!validateSugar()) {
+                valid = false;
+            }
+
+            if (!validateWeight()) {
+                valid = false;
+            }
+
+            if (!validateDateRecorded()) {
+                valid = false;
+            }
+
+            return valid;
+        }
+
+
+        /* =========================================================
+           INPUT CLEANING
+           ========================================================= */
+
+        function allowNumericInput(input) {
+
+            input.addEventListener("input", function () {
+
+                var value = this.value;
+
+                /*
+                 * Allows numbers and one decimal separator.
+                 */
+                value = value.replace(/[^0-9.,]/g, "");
+
+                var firstSeparator =
+                    value.search(/[.,]/);
+
+                if (firstSeparator !== -1) {
+
+                    var before =
+                        value.substring(
+                            0,
+                            firstSeparator + 1
+                        );
+
+                    var after =
+                        value.substring(
+                            firstSeparator + 1
+                        )
+                            .replace(/[.,]/g, "");
+
+                    value =
+                        before +
+                        after;
+                }
+
+                this.value = value;
+
+            });
+
+        }
+
+
+        /* =========================================================
+           BLOOD PRESSURE INPUT
+           ========================================================= */
+
+        function setupBloodPressureInput() {
+
+            var input =
+                document.getElementById("BloodPressure");
+
+            if (!input) {
+                return;
+            }
+
+            input.addEventListener(
+                "input",
+                function () {
+
+                    this.value =
+                        this.value.replace(
+                            /[^0-9\/\s]/g,
+                            ""
+                        );
+
+                }
+            );
+
+        }
+
+
+        /* =========================================================
+           LIVE FIELD VALIDATION
+           ========================================================= */
+
+        function setupLiveValidation() {
+
+            $("#PatientID").on(
+                "change",
+                validatePatient
+            );
+
+            $("#Temperature").on(
+                "blur",
+                validateTemperature
+            );
+
+            $("#BloodPressure").on(
+                "blur",
+                validateBloodPressure
+            );
+
+            $("#PulseRate").on(
+                "blur",
+                validatePulse
+            );
+
+            $("#OxygenLevel").on(
+                "blur",
+                validateOxygen
+            );
+
+            $("#SugarLevel").on(
+                "blur",
+                validateSugar
+            );
+
+            $("#Weight").on(
+                "blur",
+                validateWeight
+            );
+
+            $("#DateRecorded").on(
+                "change",
+                validateDateRecorded
+            );
+
+        }
+
+
+        /* =========================================================
+           FORM SUBMISSION
+           ========================================================= */
+
+        $("#vitalSignsForm").on(
+            "submit",
+            function (event) {
+
+                /*
+                 * Make sure date/time is present.
+                 */
+                if (!$("#DateRecorded").val()) {
+
+                    setCurrentDateTime();
+
+                }
+
+                /*
+                 * Validate all fields before allowing
+                 * the form to reach the controller.
+                 */
+                var valid =
+                    validateAllFields();
+
+                if (!valid) {
+
+                    event.preventDefault();
+
+                    /*
+                     * Scroll to the first error.
+                     */
+                    var firstError =
+                        document.querySelector(
+                            ".field-error"
+                        );
+
+                    if (firstError) {
+
+                        firstError.scrollIntoView({
+                            behavior: "smooth",
+                            block: "center"
+                        });
+
+                        firstError.focus();
+                    }
+
+                    return false;
+                }
+
+                /*
+                 * Prevent double-click submissions.
+                 */
+                $("#saveVitalButton")
+                    .prop("disabled", true)
+                    .text("Saving...");
+
+                return true;
+
+            }
+        );
+
+
+        /* =========================================================
+           INITIALISE PAGE
+           ========================================================= */
+
+        $(document).ready(function () {
+
+            /*
+             * Set current date/time immediately.
+             */
+            setCurrentDateTime();
+
+            /*
+             * Display live current time.
+             */
+            updateCurrentTimeDisplay();
+
+            /*
+             * Update visible clock every second.
+             */
+            setInterval(
+                updateCurrentTimeDisplay,
+                1000
+            );
+
+            /*
+             * Keep the datetime maximum current.
+             */
+            setInterval(
+                function () {
+
+                    var input =
+                        document.getElementById(
+                            "DateRecorded"
+                        );
+
+                    if (input) {
+
+                        input.max =
+                            getCurrentDateTimeLocal();
+
+                    }
+
+                },
+                1000
+            );
+
+            /*
+             * Numeric fields.
+             */
+            allowNumericInput(
+                document.getElementById("Temperature")
+            );
+
+            allowNumericInput(
+                document.getElementById("OxygenLevel")
+            );
+
+            allowNumericInput(
+                document.getElementById("SugarLevel")
+            );
+
+            allowNumericInput(
+                document.getElementById("Weight")
+            );
+
+            /*
+             * Pulse only accepts whole numbers.
+             */
+            var pulse =
+                document.getElementById("PulseRate");
+
+            if (pulse) {
+
+                pulse.addEventListener(
+                    "input",
+                    function () {
+
+                        this.value =
+                            this.value.replace(
+                                /\D/g,
+                                ""
+                            );
+
+                    }
+                );
+
+            }
+
+            /*
+             * Blood pressure.
+             */
+            setupBloodPressureInput();
+
+            /*
+             * Live validation.
+             */
+            setupLiveValidation();
+
+        });
+
+    </script>
+  
+
+}

@@ -1,0 +1,1268 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.NurseNote>
+
+@using ElderlyCareHospital.Models
+
+@{
+    ViewBag.Title = "Nurse Notes";
+
+    var doctorNotes =
+        ViewBag.DoctorNotes as List<DoctorNotes>;
+}
+
+<style>
+
+    /* =========================================================
+       ROOT / DASHBOARD THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --border-color: #e2e8f0;
+        --doctor-accent: #0f766e;
+        --doctor-accent-light: #14b8a6;
+    }
+
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+
+    /* =========================================================
+       BACKGROUND EFFECTS
+       ========================================================= */
+
+    .bg-shape {
+        position: fixed;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        filter: blur(5px);
+        transition: transform 0.15s linear;
+    }
+
+    .shape1 {
+        width: 300px;
+        height: 300px;
+        top: 5%;
+        left: 5%;
+        background: rgba(79, 70, 229, 0.035);
+    }
+
+    .shape2 {
+        width: 220px;
+        height: 220px;
+        bottom: 10%;
+        right: 5%;
+        background: rgba(20, 184, 166, 0.04);
+    }
+
+    .shape3 {
+        width: 160px;
+        height: 160px;
+        top: 50%;
+        left: 40%;
+        background: rgba(79, 70, 229, 0.02);
+    }
+
+
+    /* =========================================================
+       MAIN CONTENT
+       ========================================================= */
+
+    .notes-page {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 112px 40px 40px 40px;
+    }
+
+    .notes-container {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+    }
+
+
+    /* =========================================================
+       PAGE HEADER
+       ========================================================= */
+
+    .notes-header {
+        position: relative;
+        overflow: hidden;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 30px 36px;
+        border-radius: 18px;
+        margin-bottom: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+        .notes-header::after {
+            content: "";
+            position: absolute;
+            width: 180px;
+            height: 180px;
+            right: -70px;
+            top: -80px;
+            border-radius: 50%;
+            background: rgba(20, 184, 166, 0.045);
+            pointer-events: none;
+        }
+
+        .notes-header h2 {
+            position: relative;
+            z-index: 1;
+            margin: 0;
+            color: var(--text-main);
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+
+        .notes-header p {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 14px 0 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+
+    /* =========================================================
+       LIVE STATUS
+       ========================================================= */
+
+    .live-status {
+        position: relative;
+        z-index: 2;
+        float: right;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-left: 15px;
+        margin-top: 2px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        background: rgba(79, 70, 229, 0.08);
+        border: 1px solid rgba(79, 70, 229, 0.12);
+        color: var(--primary);
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       CONTENT CARD
+       ========================================================= */
+
+    .notes-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        padding: 30px 36px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        margin-bottom: 22px;
+    }
+
+
+    /* =========================================================
+       TOOLBAR
+       ========================================================= */
+
+    .notes-toolbar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 15px;
+        margin-bottom: 22px;
+    }
+
+    .toolbar-title {
+        margin: 0;
+        color: var(--text-main);
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .toolbar-description {
+        margin: 5px 0 0 0;
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+       CREATE BUTTON
+       ========================================================= */
+
+    .btn-create {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-height: 42px;
+        padding: 10px 18px;
+        box-sizing: border-box;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        border: none;
+        color: white !important;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.16);
+        transition: all 0.2s ease;
+    }
+
+        .btn-create:hover {
+            background: linear-gradient(135deg, #4338ca, #4f46e5);
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(79, 70, 229, 0.20);
+        }
+
+        .btn-create:focus {
+            outline: none;
+            color: white !important;
+            text-decoration: none;
+        }
+
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+    }
+
+    .notes-table {
+        width: 100%;
+        margin: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        background: white;
+    }
+
+        .notes-table thead {
+            background: #f8fafc;
+        }
+
+        .notes-table th {
+            padding: 15px 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+        .notes-table td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--text-main);
+            font-size: 14px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .notes-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+            .notes-table tbody tr:hover {
+                background: #fafbfc;
+            }
+
+            .notes-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+
+    /* =========================================================
+       PATIENT
+       ========================================================= */
+
+    .patient-name {
+        color: var(--doctor-accent);
+        font-weight: 700;
+        text-align: left !important;
+        white-space: nowrap;
+    }
+
+    .patient-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        margin-right: 8px;
+        border-radius: 8px;
+        background: rgba(20, 184, 166, 0.08);
+        color: var(--doctor-accent);
+        font-size: 13px;
+        vertical-align: middle;
+    }
+
+
+    /* =========================================================
+       DOCTOR
+       ========================================================= */
+
+    .doctor-name {
+        color: var(--text-main);
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       NOTE CONTENT
+       ========================================================= */
+
+    .note-text {
+        max-width: 650px;
+        margin: 0 auto;
+        color: #475569;
+        line-height: 1.7;
+        text-align: left !important;
+    }
+
+
+    /* =========================================================
+       DATE
+       ========================================================= */
+
+    .date-text {
+        color: var(--text-muted);
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       DOCTOR NOTES LABEL
+       ========================================================= */
+
+    .section-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-left: 8px;
+        padding: 4px 9px;
+        border-radius: 20px;
+        background: rgba(20, 184, 166, 0.08);
+        color: var(--doctor-accent);
+        font-size: 10px;
+        font-weight: 700;
+        vertical-align: middle;
+    }
+
+    .section-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--doctor-accent-light);
+    }
+
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .empty-notes {
+        padding: 40px 20px;
+        text-align: center;
+        color: var(--text-muted);
+    }
+
+        .empty-notes strong {
+            display: block;
+            margin-bottom: 6px;
+            color: var(--text-main);
+            font-size: 15px;
+        }
+
+        .empty-notes span {
+            font-size: 13px;
+        }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-top: 24px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 10px 18px;
+        box-sizing: border-box;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #475569, #64748b);
+        color: white !important;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: linear-gradient(135deg, #334155, #475569);
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.10);
+        }
+
+
+    /* =========================================================
+       CURSOR GLOW
+       ========================================================= */
+
+    #cursorCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 999;
+    }
+
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @@media (max-width: 1100px) {
+
+        .notes-page {
+            padding-left: 28px;
+            padding-right: 28px;
+        }
+
+        .notes-header {
+            padding: 26px;
+        }
+
+        .notes-card {
+            padding: 26px;
+        }
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .notes-page {
+            padding: 105px 18px 25px 18px;
+        }
+
+        .notes-header {
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 22px;
+        }
+
+            .notes-header h2 {
+                font-size: 20px;
+            }
+
+            .notes-header p {
+                font-size: 13px;
+            }
+
+        .notes-card {
+            padding: 22px;
+            border-radius: 15px;
+        }
+
+        .notes-toolbar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-create {
+            width: 100%;
+        }
+
+        .table-wrapper {
+            border-radius: 12px;
+        }
+
+        .notes-table th,
+        .notes-table td {
+            padding: 12px 10px;
+            font-size: 13px;
+        }
+
+        .footer-row {
+            justify-content: stretch;
+        }
+
+        .back-link {
+            width: 100%;
+        }
+    }
+
+
+    /* =========================================================
+       SMALL PHONE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .notes-page {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .notes-header {
+            padding: 20px;
+        }
+
+            .notes-header h2 {
+                font-size: 18px;
+            }
+
+            .notes-header p {
+                font-size: 12.5px;
+            }
+
+        .live-status {
+            float: none;
+            display: inline-flex;
+            margin: 10px 0 0 0;
+        }
+
+        .notes-card {
+            padding: 18px;
+        }
+
+        .toolbar-title {
+            font-size: 16px;
+        }
+
+        .toolbar-description {
+            font-size: 12px;
+        }
+
+        .notes-table th,
+        .notes-table td {
+            padding: 10px 8px;
+            font-size: 12px;
+        }
+
+        .note-text {
+            min-width: 300px;
+        }
+    }
+    /* =========================================================
+   CLINICAL NOTES TABLE ALIGNMENT
+   ========================================================= */
+
+    .notes-table {
+        width: 100%;
+        table-layout: fixed;
+        border-collapse: collapse;
+    }
+
+        .notes-table th,
+        .notes-table td {
+            text-align: left;
+            vertical-align: middle;
+        }
+
+            /* Patient column */
+            .notes-table th:nth-child(1),
+            .notes-table td:nth-child(1) {
+                width: 25%;
+            }
+
+            /* Note column */
+            .notes-table th:nth-child(2),
+            .notes-table td:nth-child(2) {
+                width: 50%;
+            }
+
+            /* Date column */
+            .notes-table th:nth-child(3),
+            .notes-table td:nth-child(3) {
+                width: 25%;
+            }
+
+        /* Keep patient information aligned */
+        .notes-table .patient-name {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            white-space: nowrap;
+        }
+
+        /* Keep note text inside its column */
+        .notes-table .note-text {
+            width: 100%;
+            max-width: none;
+            line-height: 1.55;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        /* Keep dates aligned */
+        .notes-table .date-text {
+            display: inline-block;
+            white-space: nowrap;
+        }
+
+        /* Consistent cell spacing */
+        .notes-table th {
+            padding: 14px 16px;
+        }
+
+        .notes-table td {
+            padding: 16px;
+        }
+</style>
+
+
+<!-- =========================================================
+     BACKGROUND SHAPES
+     ========================================================= -->
+
+<div class="bg-shape shape1"></div>
+<div class="bg-shape shape2"></div>
+<div class="bg-shape shape3"></div>
+
+
+<!-- =========================================================
+     MAIN PAGE
+     ========================================================= -->
+
+<div class="notes-page">
+
+    <div class="notes-container">
+
+
+        <!-- =====================================================
+             PAGE HEADER
+             ===================================================== -->
+
+        <div class="notes-header">
+
+            <h2>
+
+                Nurse Notes
+
+                <span class="live-status">
+                    🟢 Live Sync Active
+                </span>
+
+            </h2>
+
+            <p>
+                Review nursing observations, patient care updates,
+                medication-related comments, and clinical notes shared
+                with the medical team to support coordinated treatment
+                and continuity of care.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             NURSE NOTES CARD
+             ===================================================== -->
+
+        <div class="notes-card">
+
+            <div class="notes-toolbar">
+
+                <div>
+
+                    <h3 class="toolbar-title">
+                        Nursing Clinical Notes
+                    </h3>
+
+                    <p class="toolbar-description">
+                        Review the latest observations and care information
+                        recorded by nursing staff.
+                    </p>
+
+                </div>
+
+
+                @Html.ActionLink(
+                    "＋ Create New Note",
+                    "Create",
+                    "NurseNotes",
+                    null,
+                    new { @class = "btn-create" }
+                )
+
+            </div>
+
+
+            <!-- =================================================
+                 NURSE NOTES TABLE
+                 ================================================= -->
+
+            <div class="table-wrapper">
+
+                <table class="notes-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Patient
+                            </th>
+
+                            <th>
+                                Nursing Note
+                            </th>
+
+                            <th>
+                                Date Created
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="liveNurseNotesBody">
+
+                        @Html.Partial(
+                            "_NurseNotesRows",
+                            Model
+                        )
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             DOCTOR NOTES CARD
+             ===================================================== -->
+
+        <div class="notes-card">
+
+            <div class="notes-toolbar">
+
+                <div>
+
+                    <h3 class="toolbar-title">
+
+                        Doctor Clinical Notes
+
+                        <span class="section-label">
+                            <span class="section-dot"></span>
+                            Medical Team
+                        </span>
+
+                    </h3>
+
+                    <p class="toolbar-description">
+                        Review clinical notes, assessments, treatment updates,
+                        and patient care information recorded by doctors.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 DOCTOR NOTES TABLE
+                 ================================================= -->
+
+            <div class="table-wrapper">
+
+                <table class="notes-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Patient
+                            </th>
+
+                            <th>
+                                Doctor's Clinical Note
+                            </th>
+
+                            <th>
+                                Date Created
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody id="liveDoctorNotesBody">
+
+                        @if (doctorNotes != null && doctorNotes.Any())
+                        {
+                            foreach (var note in doctorNotes)
+                            {
+                                <tr>
+
+                                    <td>
+
+                                        <span class="patient-name">
+
+                                            <span class="patient-icon">
+                                                👨‍⚕️
+                                            </span>
+
+                                            @if (note.Patient != null)
+                                            {
+                                                @note.Patient.FirstName
+                                                @note.Patient.LastName
+                                            }
+                                            else
+                                            {
+                                                @:Unknown Patient
+                                            }
+
+                                        </span>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <div class="note-text">
+
+                                            @note.NoteText
+
+                                        </div>
+
+                                    </td>
+
+
+                                    <td>
+
+                                        <span class="date-text">
+
+                                            @note.DateCreated.ToString(
+                                                "dd MMM yyyy HH:mm"
+                                            )
+
+                                        </span>
+
+                                    </td>
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+
+                                <td colspan="3">
+
+                                    <div class="empty-notes">
+
+                                        <strong>
+                                            No doctor notes available
+                                        </strong>
+
+                                        <span>
+                                            Doctor clinical notes will appear
+                                            here when they are recorded.
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             FOOTER
+             ===================================================== -->
+
+        <div class="footer-row">
+
+            @Html.ActionLink(
+                "← Back to Dashboard",
+                "Dashboard",
+                "Nurse",
+                null,
+                new { @class = "back-link" }
+            )
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CURSOR GLOW
+     ========================================================= -->
+
+<canvas id="cursorCanvas"></canvas>
+
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+    <script>
+
+        /* =====================================================
+           BACKGROUND PARALLAX
+           ===================================================== */
+
+        const shapes =
+            document.querySelectorAll('.bg-shape');
+
+
+        document.addEventListener(
+            'mousemove',
+            function (e) {
+
+                const x =
+                    (
+                        window.innerWidth / 2 -
+                        e.clientX
+                    ) / 30;
+
+
+                const y =
+                    (
+                        window.innerHeight / 2 -
+                        e.clientY
+                    ) / 30;
+
+
+                shapes.forEach(
+                    function (shape, index) {
+
+                        const speed =
+                            (index + 1) * 0.6;
+
+
+                        shape.style.transform =
+                            `translate(
+                                ${x * speed}px,
+                                ${y * speed}px
+                            )`;
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           CURSOR GLOW
+           ===================================================== */
+
+        const canvas =
+            document.getElementById('cursorCanvas');
+
+
+        const ctx =
+            canvas.getContext('2d');
+
+
+        let w =
+            canvas.width =
+            window.innerWidth;
+
+
+        let h =
+            canvas.height =
+            window.innerHeight;
+
+
+        let mouse = {
+
+            x: w / 2,
+
+            y: h / 2
+
+        };
+
+
+        window.addEventListener(
+            'resize',
+            function () {
+
+                w =
+                    canvas.width =
+                    window.innerWidth;
+
+
+                h =
+                    canvas.height =
+                    window.innerHeight;
+
+            }
+        );
+
+
+        document.addEventListener(
+            'mousemove',
+            function (e) {
+
+                mouse.x =
+                    e.clientX;
+
+
+                mouse.y =
+                    e.clientY;
+
+            }
+        );
+
+
+        function drawGlow(
+            x,
+            y,
+            radius,
+            color
+        ) {
+
+            const gradient =
+                ctx.createRadialGradient(
+                    x,
+                    y,
+                    0,
+                    x,
+                    y,
+                    radius
+                );
+
+
+            gradient.addColorStop(
+                0,
+                color
+            );
+
+
+            gradient.addColorStop(
+                1,
+                'transparent'
+            );
+
+
+            ctx.fillStyle =
+                gradient;
+
+
+            ctx.beginPath();
+
+
+            ctx.arc(
+                x,
+                y,
+                radius,
+                0,
+                Math.PI * 2
+            );
+
+
+            ctx.fill();
+
+        }
+
+
+        function animate() {
+
+            ctx.clearRect(
+                0,
+                0,
+                w,
+                h
+            );
+
+
+            drawGlow(
+                mouse.x,
+                mouse.y,
+                45,
+                'rgba(79, 70, 229, 0.12)'
+            );
+
+
+            requestAnimationFrame(
+                animate
+            );
+
+        }
+
+
+        animate();
+
+
+        /* =====================================================
+           LIVE NURSE NOTES
+           ===================================================== */
+
+        function refreshNurseNotes() {
+
+            $.ajax({
+
+                url:
+                    '@Url.Action(
+                        "GetLiveNurseNotes",
+                        "NurseNotes"
+                    )',
+
+                type: 'GET',
+
+                success:
+                    function (data) {
+
+                        $('#liveNurseNotesBody')
+                            .html(data);
+
+                    },
+
+                error:
+                    function (err) {
+
+                        console.log(
+                            "Error refreshing nurse notes:",
+                            err
+                        );
+
+                    }
+
+            });
+
+        }
+
+
+        /* =====================================================
+           LIVE DOCTOR NOTES
+           ===================================================== */
+
+        function refreshDoctorNotes() {
+
+            $.ajax({
+
+                url:
+                    '@Url.Action(
+                        "GetLiveDoctorNotes",
+                        "NurseNotes"
+                    )',
+
+                type: 'GET',
+
+                success:
+                    function (data) {
+
+                        $('#liveDoctorNotesBody')
+                            .html(data);
+
+                    },
+
+                error:
+                    function (err) {
+
+                        console.log(
+                            "Error refreshing doctor notes:",
+                            err
+                        );
+
+                    }
+
+            });
+
+        }
+
+
+        /* =====================================================
+           AUTO REFRESH
+           ===================================================== */
+
+        setInterval(
+            refreshNurseNotes,
+            5000
+        );
+
+
+        setInterval(
+            refreshDoctorNotes,
+            5000
+        );
+
+    </script>
+
+}
+

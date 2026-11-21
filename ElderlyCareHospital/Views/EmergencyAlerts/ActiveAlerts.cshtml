@@ -1,0 +1,458 @@
+﻿
+@model IEnumerable<ElderlyCareHospital.Models.EmergencyAlert>
+
+<style>
+    body {
+        background: #f5f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #263238;
+    }
+
+    .container {
+        max-width: 1400px;
+    }
+
+    /* ==============================
+       HEADER
+       ============================== */
+
+    .alert-header {
+        background: linear-gradient(135deg, #b00020, #d32f2f);
+        color: white;
+        padding: 28px 32px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 20px rgba(176, 0, 32, 0.18);
+    }
+
+    .alert-header h2 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+    }
+
+    .alert-header p {
+        margin: 10px 0 0;
+        opacity: 0.95;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .live-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255,255,255,0.16);
+        padding: 7px 13px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    /* ==============================
+       PANEL
+       ============================== */
+
+    .emergency-panel {
+        background: #ffffff;
+        border-radius: 18px;
+        padding: 24px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.07);
+        overflow-x: auto;
+    }
+
+    /* ==============================
+       TABLE
+       ============================== */
+
+    .emergency-table {
+        width: 100%;
+        min-width: 1150px;
+        margin: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        table-layout: fixed;
+    }
+
+    .emergency-table thead th {
+        background: #b00020;
+        color: #ffffff;
+        border: none;
+        padding: 15px 12px;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.45px;
+        vertical-align: middle;
+        white-space: nowrap;
+    }
+
+    .emergency-table thead th:first-child {
+        border-top-left-radius: 12px;
+    }
+
+    .emergency-table thead th:last-child {
+        border-top-right-radius: 12px;
+    }
+
+    .emergency-table tbody td {
+        padding: 15px 12px;
+        vertical-align: middle;
+        border-bottom: 1px solid #edf0f2;
+        font-size: 13px;
+        line-height: 1.45;
+        word-wrap: break-word;
+    }
+
+    .emergency-table tbody tr {
+        background: #ffffff;
+        transition: background 0.2s ease;
+    }
+
+    .emergency-table tbody tr:hover {
+        background: #fff6f7;
+    }
+
+    .emergency-table tbody tr:last-child td {
+        border-bottom: none;
+    }
+
+    /* ==============================
+       COLUMN WIDTHS
+       ============================== */
+
+    .col-patient {
+        width: 13%;
+    }
+
+    .col-type {
+        width: 11%;
+    }
+
+    .col-description {
+        width: 20%;
+    }
+
+    .col-severity {
+        width: 9%;
+        text-align: center;
+    }
+
+    .col-date {
+        width: 11%;
+    }
+
+    .col-status {
+        width: 9%;
+        text-align: center;
+    }
+
+    .col-resolved-by {
+        width: 10%;
+    }
+
+    .col-resolved-date {
+        width: 10%;
+    }
+
+    .col-action {
+        width: 7%;
+        text-align: center;
+    }
+
+    /* ==============================
+       PATIENT
+       ============================== */
+
+    .patient-name {
+        font-weight: 600;
+        color: #263238;
+    }
+
+    /* ==============================
+       ALERT TYPE
+       ============================== */
+
+    .alert-type {
+        font-weight: 600;
+        color: #455a64;
+    }
+
+    /* ==============================
+       DESCRIPTION
+       ============================== */
+
+    .description-text {
+        color: #607d8b;
+        max-width: 280px;
+    }
+
+    /* ==============================
+       SEVERITY
+       ============================== */
+
+    .severity-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 68px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .severity-critical {
+        background: #b00020;
+        color: #ffffff;
+    }
+
+    .severity-high {
+        background: #d32f2f;
+        color: #ffffff;
+    }
+
+    .severity-medium {
+        background: #f57c00;
+        color: #ffffff;
+    }
+
+    .severity-low {
+        background: #388e3c;
+        color: #ffffff;
+    }
+
+    /* ==============================
+       STATUS
+       ============================== */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 65px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .status-active {
+        background: #ffebee;
+        color: #b00020;
+        border: 1px solid #ffcdd2;
+    }
+
+    .status-resolved {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+
+    /* ==============================
+       DATE / RESOLVED BY
+       ============================== */
+
+    .date-text {
+        color: #546e7a;
+        white-space: nowrap;
+    }
+
+    .resolved-by {
+        color: #546e7a;
+        font-weight: 500;
+    }
+
+    .empty-value {
+        color: #9aa7ad;
+    }
+
+    /* ==============================
+       ACTION
+       ============================== */
+
+    .action-links {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    .resolve-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 13px;
+        background: #c62828;
+        color: #ffffff !important;
+        border-radius: 9px;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        transition: all 0.2s ease;
+    }
+
+    .resolve-link:hover {
+        background: #8e0000;
+        color: #ffffff !important;
+        text-decoration: none;
+        transform: translateY(-1px);
+    }
+
+    .resolved-label {
+        color: #78909c;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    /* ==============================
+       BACK BUTTON
+       ============================== */
+
+    .back-link-wrapper {
+        margin-top: 22px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 18px;
+        background: #455a64;
+        color: #ffffff !important;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+    .back-link:hover {
+        background: #263238;
+        color: #ffffff !important;
+        text-decoration: none;
+        transform: translateY(-1px);
+    }
+
+    /* ==============================
+       EMPTY TABLE
+       ============================== */
+
+    .empty-alerts {
+        text-align: center;
+        padding: 35px !important;
+        color: #78909c;
+        font-size: 14px;
+    }
+
+    /* ==============================
+       RESPONSIVE
+       ============================== */
+
+    @@media (max-width: 900px) {
+
+        .alert-header h2 {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .emergency-panel {
+            padding: 15px;
+        }
+    }
+</style>
+
+<div class="container mt-4">
+
+    <!-- HEADER -->
+    <div class="alert-header">
+
+        <h2>
+            <span>Active Emergency Alerts</span>
+
+            <span class="live-status">
+                🟢 Live Sync Active
+            </span>
+        </h2>
+
+        <p>
+            Monitor and respond to urgent patient incidents, critical medical events,
+            and high-priority emergency notifications across the Elderly Care Hospital.
+        </p>
+
+    </div>
+
+    <!-- TABLE PANEL -->
+    <div class="emergency-panel">
+
+        <table class="emergency-table">
+
+            <thead>
+                <tr>
+                    <th class="col-patient">Patient</th>
+                    <th class="col-type">Type</th>
+                    <th class="col-description">Description</th>
+                    <th class="col-severity">Severity</th>
+                    <th class="col-date">Date</th>
+                    <th class="col-status">Status</th>
+                    <th class="col-resolved-by">Resolved By</th>
+                    <th class="col-resolved-date">Resolved Date</th>
+                    <th class="col-action">Action</th>
+                </tr>
+            </thead>
+
+            <tbody id="liveAlertsBody">
+                @Html.Partial("_EmergencyAlertRows", Model)
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- BACK BUTTON -->
+    <div class="back-link-wrapper">
+        @Html.ActionLink(
+            "Back to Dashboard",
+            "Dashboard",
+            "Admin",
+            null,
+            new { @class = "back-link" }
+        )
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+        function refreshEmergencyAlerts() {
+
+            $.ajax({
+                url: '@Url.Action("GetLiveAlerts", "EmergencyAlerts")',
+                type: 'GET',
+
+                success: function (data) {
+                    $('#liveAlertsBody').html(data);
+                },
+
+                error: function () {
+                    console.log("Unable to refresh emergency alerts.");
+                }
+            });
+
+        }
+
+        // Refresh alerts every 5 seconds
+        setInterval(refreshEmergencyAlerts, 5000);
+
+    </script>
+}
+

@@ -1,0 +1,543 @@
+﻿@model ElderlyCareHospital.Models.CleaningTask
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<style>
+
+    /* =========================================================
+       ROOT / ELDERLYCARE HOSPITAL THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f8fafc;
+        --surface: #ffffff;
+        --surface-soft: #f8fbfd;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --secondary: #0ea5e9;
+        --border-color: #e2e8f0;
+        --danger: #dc2626;
+        --danger-hover: #b91c1c;
+    }
+
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+
+    /* =========================================================
+       MAIN PAGE WRAPPER
+       ========================================================= */
+
+    .delete-page {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 36px 40px 45px;
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .delete-header {
+        background: var(--surface);
+        color: var(--text-main);
+        padding: 28px 34px;
+        border-radius: 18px;
+        margin-bottom: 26px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+    }
+
+        .delete-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+
+        .delete-header p {
+            margin: 8px 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+
+    /* =========================================================
+       WARNING MESSAGE
+       ========================================================= */
+
+    .delete-warning {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 14px 16px;
+        margin-bottom: 22px;
+        background: rgba(220, 38, 38, 0.05);
+        border: 1px solid rgba(220, 38, 38, 0.12);
+        border-radius: 10px;
+        color: var(--danger);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+
+    /* =========================================================
+       DETAILS PANEL
+       ========================================================= */
+
+    .delete-panel {
+        background: var(--surface);
+        border-radius: 18px;
+        padding: 30px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.025);
+        box-sizing: border-box;
+    }
+
+
+        /* =========================================================
+       PANEL TITLE
+       ========================================================= */
+
+        .delete-panel h4 {
+            margin: 0 0 8px;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .delete-panel hr {
+            margin: 0 0 26px;
+            border: 0;
+            border-top: 1px solid var(--border-color);
+        }
+
+
+    /* =========================================================
+       DETAILS LIST
+       ========================================================= */
+
+    .details-list {
+        margin: 0;
+        padding: 0;
+    }
+
+        .details-list dt {
+            width: 30%;
+            float: left;
+            clear: left;
+            padding: 15px 20px 15px 0;
+            box-sizing: border-box;
+            color: var(--text-muted);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+        .details-list dd {
+            margin-left: 30%;
+            padding: 15px 0;
+            color: var(--text-main);
+            font-size: 13.5px;
+            font-weight: 500;
+            min-height: 48px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+            .details-list dt:last-of-type,
+            .details-list dd:last-of-type {
+                border-bottom: none;
+            }
+
+
+    /* =========================================================
+       STATUS BADGE
+       ========================================================= */
+
+    .status-value {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 82px;
+        padding: 6px 12px;
+        background: rgba(79, 70, 229, 0.07);
+        border: 1px solid rgba(79, 70, 229, 0.10);
+        color: var(--primary);
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       ACTION AREA
+       ========================================================= */
+
+    .delete-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 26px;
+    }
+
+
+    /* =========================================================
+       DELETE BUTTON
+       ========================================================= */
+
+    .btn-delete {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 10px 20px;
+        box-sizing: border-box;
+        background: linear-gradient(135deg, #dc2626, #ef4444);
+        color: white !important;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        text-decoration: none !important;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(220, 38, 38, 0.16);
+        transition: all 0.2s ease;
+    }
+
+        .btn-delete:hover {
+            background: linear-gradient(135deg, #b91c1c, #dc2626);
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 16px rgba(220, 38, 38, 0.22);
+        }
+
+
+    /* =========================================================
+       BACK LINK
+       ========================================================= */
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 10px 18px;
+        box-sizing: border-box;
+        background: #475569;
+        color: white !important;
+        border-radius: 10px;
+        text-decoration: none !important;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #334155;
+            color: white !important;
+            text-decoration: none !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+        }
+
+
+    /* =========================================================
+       LARGE TABLET
+       ========================================================= */
+
+    @@media (max-width: 1200px) {
+
+        .delete-page {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+    }
+
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @@media (max-width: 900px) {
+
+        .delete-page {
+            padding: 30px 24px 40px;
+        }
+
+        .delete-header {
+            padding: 25px;
+        }
+
+        .delete-panel {
+            padding: 25px;
+        }
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .delete-page {
+            padding: 95px 18px 30px;
+        }
+
+        .delete-header {
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 22px;
+        }
+
+            .delete-header h2 {
+                font-size: 20px;
+            }
+
+            .delete-header p {
+                font-size: 13px;
+            }
+
+        .delete-panel {
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .details-list dt {
+            width: 100%;
+            float: none;
+            padding: 13px 0 5px;
+            border-bottom: none;
+        }
+
+        .details-list dd {
+            margin-left: 0;
+            padding: 0 0 13px;
+            min-height: auto;
+        }
+
+        .delete-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-delete,
+        .back-link {
+            width: 100%;
+        }
+    }
+
+
+    /* =========================================================
+       SMALL PHONE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .delete-page {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .delete-header {
+            padding: 19px;
+        }
+
+            .delete-header h2 {
+                font-size: 18px;
+            }
+
+            .delete-header p {
+                font-size: 12.5px;
+            }
+
+        .delete-panel {
+            padding: 16px;
+        }
+
+        .details-list dt {
+            font-size: 10px;
+        }
+
+        .details-list dd {
+            font-size: 13px;
+        }
+
+        .btn-delete,
+        .back-link {
+            font-size: 12px;
+        }
+    }
+</style>
+
+
+<!-- =========================================================
+     DELETE CLEANING TASK PAGE
+     ========================================================= -->
+
+<div class="delete-page">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="delete-header">
+
+        <h2>
+            Delete Cleaning Task
+        </h2>
+
+        <p>
+            Review the cleaning task details before permanently
+            deleting this task.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         WARNING
+         ===================================================== -->
+
+    <div class="delete-warning">
+
+        <span>
+            Are you sure you want to delete this cleaning task?
+        </span>
+
+    </div>
+
+
+    <!-- =====================================================
+         DETAILS PANEL
+         ===================================================== -->
+
+    <div class="delete-panel">
+
+        <h4>
+            Cleaning Task Information
+        </h4>
+
+        <hr />
+
+
+        <dl class="details-list">
+
+
+            <!-- =================================================
+                 CLEANER
+                 ================================================= -->
+
+            <dt>
+                @Html.DisplayNameFor(model => model.CleanerID)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.CleanerID)
+            </dd>
+
+
+            <!-- =================================================
+                 AREA
+                 ================================================= -->
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Area)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.Area)
+            </dd>
+
+
+            <!-- =================================================
+                 STATUS
+                 ================================================= -->
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+
+            <dd>
+                <span class="status-value">
+                    @Html.DisplayFor(model => model.Status)
+                </span>
+            </dd>
+
+
+            <!-- =================================================
+                 TASK DATE
+                 ================================================= -->
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TaskDate)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TaskDate)
+            </dd>
+
+
+        </dl>
+
+
+        <!-- =================================================
+             DELETE FORM
+             ================================================= -->
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="delete-actions">
+
+                <input type="submit"
+                       value="Delete"
+                       class="btn-delete" />
+
+                @Html.ActionLink(
+                    "Back to List",
+                    "Index",
+                    null,
+                    new { @class = "back-link" })
+
+            </div>
+        }
+
+    </div>
+
+</div>
+

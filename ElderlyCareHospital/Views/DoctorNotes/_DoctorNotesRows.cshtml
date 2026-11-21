@@ -1,0 +1,112 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.DoctorNotes>
+@using ElderlyCareHospital.Models
+
+@{
+    var doctors = ViewBag.Doctors as List<Doctor>;
+}
+
+@foreach (var item in Model)
+{
+    <tr>
+
+        <!-- =================================================
+             DOCTOR
+             ================================================= -->
+
+        <td class="doctor-name">
+
+            @{
+                var doctor = doctors != null
+                    ? doctors.FirstOrDefault(
+                        d => d.DoctorID == item.DoctorID
+                    )
+                    : null;
+            }
+
+            @if (doctor != null)
+            {
+                @doctor.FullName
+            }
+            else
+            {
+                <span>Unknown Doctor</span>
+            }
+
+        </td>
+
+
+        <!-- =================================================
+             CLINICAL NOTE
+             ================================================= -->
+
+        <td class="note-text">
+
+            @Html.DisplayFor(
+                modelItem => item.NoteText
+            )
+
+        </td>
+
+
+        <!-- =================================================
+             PATIENT
+             ================================================= -->
+
+        <td class="patient-name">
+
+            @if (item.Patient != null)
+            {
+                @item.Patient.FirstName @item.Patient.LastName
+            }
+            else
+            {
+                <span>Unknown Patient</span>
+            }
+
+        </td>
+
+
+        <!-- =================================================
+             DATE CREATED
+             ================================================= -->
+
+        <td class="date-text">
+
+            @item.DateCreated.ToString(
+                "dd MMM yyyy HH:mm"
+            )
+
+        </td>
+
+
+        <!-- =================================================
+             ACTIONS
+             ================================================= -->
+
+        @if (User.IsInRole("Doctor"))
+        {
+            <td class="action-links">
+
+                @Html.ActionLink(
+                    "Edit",
+                    "Edit",
+                    new { id = item.NoteID }
+                )
+
+                @Html.ActionLink(
+                    "Details",
+                    "Details",
+                    new { id = item.NoteID }
+                )
+
+                @Html.ActionLink(
+                    "Delete",
+                    "Delete",
+                    new { id = item.NoteID }
+                )
+
+            </td>
+        }
+
+    </tr>
+}

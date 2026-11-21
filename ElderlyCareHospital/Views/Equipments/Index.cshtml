@@ -1,0 +1,469 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Equipment>
+
+@{
+    ViewBag.Title = "Equipment Inventory";
+}
+
+<style>
+    /* =========================================================
+       ELDERLYCARE HOSPITAL - EQUIPMENT INVENTORY
+       ========================================================= */
+
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .equipment-page {
+        max-width: 1200px;
+        margin: 40px auto;
+        padding: 0 20px;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .equipment-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 30px 35px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.10);
+    }
+
+        .equipment-header h2 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .equipment-header p {
+            margin: 8px 0 0;
+            max-width: 850px;
+            font-size: 15px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+    .live-status {
+        float: right;
+        font-size: 13px;
+        background: rgba(255,255,255,0.20);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-weight: normal;
+    }
+
+    /* =========================================================
+       TOOLBAR
+       ========================================================= */
+
+    .equipment-toolbar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 18px;
+    }
+
+    .add-equipment {
+        display: inline-block;
+        background: linear-gradient(135deg, #2f6f73, #3f858a);
+        color: white !important;
+        padding: 11px 20px;
+        border-radius: 10px;
+        text-decoration: none !important;
+        font-weight: 600;
+        box-shadow: 0 6px 15px rgba(47, 111, 115, 0.20);
+        transition: all 0.25s ease;
+    }
+
+        .add-equipment:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 20px rgba(47, 111, 115, 0.28);
+            background: linear-gradient(135deg, #255b5f, #34757a);
+        }
+
+    /* =========================================================
+       INVENTORY CARD
+       ========================================================= */
+
+    .equipment-card {
+        background: white;
+        border-radius: 18px;
+        padding: 20px;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.07);
+        overflow: hidden;
+    }
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .equipment-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 0;
+    }
+
+        .equipment-table thead th {
+            background: #eef5f6;
+            color: #2f6f73;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            padding: 15px 14px;
+            border-bottom: 2px solid #d7e3e5;
+            white-space: nowrap;
+            text-align: left;
+        }
+
+            .equipment-table thead th:first-child {
+                border-top-left-radius: 10px;
+            }
+
+            .equipment-table thead th:last-child {
+                border-top-right-radius: 10px;
+            }
+
+        .equipment-table tbody td {
+            padding: 15px 14px;
+            border-bottom: 1px solid #edf1f2;
+            vertical-align: middle;
+            color: #3d4b4d;
+            font-size: 14px;
+        }
+
+        .equipment-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+            .equipment-table tbody tr:hover {
+                background: #f8fbfb;
+            }
+
+    /* =========================================================
+       EQUIPMENT NAME
+       ========================================================= */
+
+    .equipment-name {
+        font-weight: 700;
+        color: #263f41;
+    }
+
+    /* =========================================================
+       BADGES
+       ========================================================= */
+
+    .category-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: #eef5f6;
+        color: #2f6f73;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .quantity-badge {
+        display: inline-block;
+        min-width: 45px;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: #eaf6ed;
+        color: #28743b;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .condition-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        background: #fff4d6;
+        color: #946c00;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .location-text {
+        color: #526568;
+        font-weight: 600;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .actions {
+        white-space: nowrap;
+    }
+
+    .action-link {
+        display: inline-block;
+        padding: 7px 11px;
+        border-radius: 7px;
+        text-decoration: none !important;
+        font-size: 12px;
+        font-weight: 600;
+        margin-right: 4px;
+        transition: all 0.2s ease;
+    }
+
+    .edit-link {
+        color: #2f6f73 !important;
+        background: #e8f3f4;
+    }
+
+        .edit-link:hover {
+            background: #d7e9eb;
+        }
+
+    .details-link {
+        color: #356b91 !important;
+        background: #eaf2f8;
+    }
+
+        .details-link:hover {
+            background: #dbeaf4;
+        }
+
+    .delete-link {
+        color: #b52b2b !important;
+        background: #fbeaea;
+    }
+
+        .delete-link:hover {
+            background: #f6dada;
+        }
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .empty-state {
+        text-align: center;
+        padding: 45px 20px;
+        color: #718083;
+    }
+
+        .empty-state h4 {
+            margin-bottom: 8px;
+            color: #3d5557;
+            font-weight: 600;
+        }
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .page-footer {
+        margin-top: 22px;
+    }
+
+    .back-link {
+        display: inline-block;
+        color: #2f6f73;
+        font-weight: 600;
+        text-decoration: none !important;
+        padding: 10px 0;
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            color: #1f5053;
+            text-decoration: underline !important;
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .equipment-page {
+            margin: 25px auto;
+            padding: 0 12px;
+        }
+
+        .equipment-header {
+            padding: 25px;
+        }
+
+            .equipment-header h2 {
+                font-size: 24px;
+            }
+
+        .live-status {
+            float: none;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .equipment-toolbar {
+            justify-content: stretch;
+        }
+
+        .add-equipment {
+            width: 100%;
+            text-align: center;
+        }
+
+        .equipment-card {
+            padding: 12px;
+        }
+
+        .equipment-table {
+            min-width: 900px;
+        }
+
+            .equipment-table thead th,
+            .equipment-table tbody td {
+                padding: 12px 10px;
+            }
+    }
+</style>
+
+
+<div class="equipment-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="equipment-header">
+
+        <h2>
+            Equipment Inventory
+
+            <span class="live-status">
+                🟢 Live Sync Active
+            </span>
+        </h2>
+
+        <p>
+            Manage hospital equipment, monitor available quantities,
+            track equipment condition, and maintain accurate records
+            of where essential equipment is located.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOOLBAR
+         ===================================================== -->
+
+    <div class="equipment-toolbar">
+
+        @Html.ActionLink(
+            "Add Equipment",
+            "Create",
+            null,
+            new { @class = "add-equipment" })
+
+    </div>
+
+
+    <!-- =====================================================
+         INVENTORY TABLE
+         ===================================================== -->
+
+    <div class="equipment-card">
+
+        <div class="table-responsive">
+
+            <table class="equipment-table">
+
+                <thead>
+                    <tr>
+                        <th>Equipment Name</th>
+                        <th>Category</th>
+                        <th>Quantity</th>
+                        <th>Condition</th>
+                        <th>Location</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody id="liveEquipmentBody">
+
+                    @Html.Partial(
+                        "_EquipmentRows",
+                        Model)
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK TO DASHBOARD
+         ===================================================== -->
+
+    <div class="page-footer">
+
+        @Html.ActionLink(
+            "Back to Dashboard",
+            "Dashboard",
+            "Pharmacist",
+            null,
+            new { @class = "back-link" })
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+        function refreshEquipmentInventory() {
+
+            $.ajax({
+
+                url: '@Url.Action("GetLiveEquipment", "Equipments")',
+
+                type: 'GET',
+
+                success: function (data) {
+
+                    $('#liveEquipmentBody').html(data);
+
+                },
+
+                error: function () {
+
+                    // Keep the existing table visible if the
+                    // background refresh fails.
+
+                    console.log("Equipment inventory refresh failed.");
+
+                }
+
+            });
+
+        }
+
+        // Refresh equipment inventory every 5 seconds
+        setInterval(refreshEquipmentInventory, 5000);
+
+    </script>
+
+}

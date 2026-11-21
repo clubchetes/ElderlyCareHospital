@@ -1,0 +1,240 @@
+﻿@model ElderlyCareHospital.Models.EmergencyAlert
+
+@{
+    ViewBag.Title = "Create Emergency Alert";
+}
+
+<style>
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .alert-header {
+        background: linear-gradient(135deg, #b71c1c, #d84315);
+        color: white;
+        padding: 30px 34px;
+        border-radius: 22px;
+        margin-bottom: 28px;
+        box-shadow: 0 12px 28px rgba(183, 28, 28, 0.18);
+    }
+
+        .alert-header h2 {
+            margin: 0;
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .alert-header p {
+            margin-top: 10px;
+            font-size: 15px;
+            opacity: 0.96;
+            line-height: 1.6;
+            max-width: 860px;
+        }
+
+    .alert-panel {
+        background: white;
+        border-radius: 22px;
+        padding: 34px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+        color: #b71c1c;
+        font-weight: 700;
+        margin-bottom: 26px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #f4d7d7;
+    }
+
+    .form-group {
+        margin-bottom: 24px;
+    }
+
+    .form-label {
+        display: block;
+        font-weight: 700;
+        color: #2f3e46;
+        margin-bottom: 8px;
+    }
+
+    .form-control {
+        width: 100%;
+        border-radius: 12px;
+        border: 1px solid #cfd8dc;
+        min-height: 46px;
+        padding: 10px 14px;
+        font-size: 14px;
+        box-shadow: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: #d84315;
+            box-shadow: 0 0 0 0.2rem rgba(216, 67, 21, 0.12);
+            outline: none;
+        }
+
+    textarea.form-control {
+        min-height: 140px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    .submit-row {
+        display: flex;
+        justify-content: center;
+        margin-top: 34px;
+    }
+
+    .btn-danger {
+        background: linear-gradient(135deg, #c62828, #d84315);
+        border: none;
+        color: white;
+        border-radius: 12px;
+        padding: 12px 34px;
+        font-weight: 700;
+        min-width: 210px;
+        transition: 0.2s ease;
+        box-shadow: 0 6px 16px rgba(198, 40, 40, 0.25);
+    }
+
+        .btn-danger:hover {
+            background: linear-gradient(135deg, #b71c1c, #bf360c);
+            color: white;
+            transform: translateY(-1px);
+        }
+
+    .alert-note {
+        margin-top: 28px;
+        padding: 16px 18px;
+        background: #fff3f3;
+        border-left: 4px solid #d84315;
+        border-radius: 10px;
+        color: #5f3a3a;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    @@media (max-width: 768px) {
+        .alert-header,
+        .alert-panel {
+            padding: 24px;
+        }
+
+            .alert-header h2 {
+                font-size: 28px;
+            }
+    }
+</style>
+
+<div class="container mt-4">
+
+  
+    <div class="alert-header">
+        <h2>Create Emergency Alert</h2>
+        <p>
+            Report urgent patient incidents that require immediate clinical attention. Select the affected patient,
+            choose the alert type and severity level, and provide a clear description to support rapid emergency response,
+            escalation, and patient safety management.
+        </p>
+    </div>
+
+    <div class="alert-panel">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <h4 class="section-title">Emergency Alert Details</h4>
+
+            <div class="form-group">
+
+                <label class="form-label">Patient</label>
+
+                @Html.DropDownList(
+                    "PatientID",
+                    null,
+                    "-- Select Patient --",
+                    new { @class = "form-control" })
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="form-label">Alert Type</label>
+
+                @Html.DropDownListFor(
+                    x => x.AlertType,
+
+                    new SelectList(new[]
+                    {
+                        "Fall",
+                        "Heart Emergency",
+                        "Breathing Problem",
+                        "Dementia Wandering",
+                        "Medication Reaction",
+                        "Other"
+                    }),
+
+                    "-- Select Alert Type --",
+
+                    new { @class = "form-control" })
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="form-label">Severity</label>
+
+                @Html.DropDownListFor(
+                    x => x.Severity,
+
+                    new SelectList(new[]
+                    {
+                        "Low",
+                        "Medium",
+                        "High",
+                        "Critical"
+                    }),
+
+                    "-- Select Severity --",
+
+                    new { @class = "form-control" })
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="form-label">Description</label>
+
+                @Html.TextAreaFor(
+                    x => x.Description,
+                    new
+                    {
+                        @class = "form-control",
+                        rows = "6",
+                        placeholder = "Describe the emergency situation, patient symptoms, observations, immediate actions taken, and any additional information that will assist the emergency response team..."
+                    })
+
+            </div>
+
+            <div class="submit-row">
+
+                <button type="submit" class="btn btn-danger">
+                    Create Alert
+                </button>
+
+            </div>
+        }
+
+        <div class="alert-note">
+            Emergency alerts should only be created for situations that require urgent clinical review, escalation,
+            or immediate intervention. Accurate and detailed information helps the medical team respond faster,
+            coordinate care effectively, and maintain patient safety throughout the hospital.
+        </div>
+
+    </div>
+    
+</div>

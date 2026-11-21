@@ -1,0 +1,646 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.EmergencyAlert>
+
+@{
+    ViewBag.Title = "Emergency Alerts Monitoring";
+    bool isAdmin = User.IsInRole("Admin");
+}
+
+<style>
+
+    /* =========================================================
+       NURSE DASHBOARD THEME
+       ========================================================= */
+
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #2f3e46;
+    }
+
+    .alerts-page {
+        max-width: 1250px;
+        margin: 35px auto;
+        padding: 0 20px;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .alerts-header {
+        background: linear-gradient(135deg, #405b66, #58747e);
+        color: white;
+        padding: 30px 34px;
+        border-radius: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 25px rgba(47, 62, 70, 0.14);
+    }
+
+        .alerts-header h2 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.3;
+        }
+
+        .alerts-header p {
+            margin: 10px 0 0;
+            max-width: 950px;
+            font-size: 15px;
+            line-height: 1.65;
+            color: rgba(255,255,255,0.94);
+        }
+
+    .live-status {
+        float: right;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: rgba(255,255,255,0.16);
+        padding: 7px 13px;
+        border-radius: 30px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: 20px;
+        margin-top: 2px;
+    }
+
+    .live-dot {
+        width: 10px;
+        height: 10px;
+        background: #2ecc40;
+        border-radius: 50%;
+        display: inline-block;
+        box-shadow: 0 0 0 3px rgba(46,204,64,0.12);
+    }
+
+    /* =========================================================
+       TOOLBAR
+       ========================================================= */
+
+    .toolbar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 18px;
+    }
+
+    .btn-create {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 20px;
+        background: #2f6f73;
+        color: white !important;
+        border-radius: 10px;
+        text-decoration: none !important;
+        font-size: 14px;
+        font-weight: 700;
+        box-shadow: 0 5px 12px rgba(47,111,115,0.18);
+        transition: all 0.2s ease;
+    }
+
+        .btn-create:hover {
+            background: #25575a;
+            color: white !important;
+            text-decoration: none !important;
+            transform: translateY(-1px);
+            box-shadow: 0 7px 16px rgba(47,111,115,0.24);
+        }
+
+    /* =========================================================
+       TABLE PANEL
+       ========================================================= */
+
+    .alerts-panel {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 24px;
+        box-shadow: 0 7px 22px rgba(0,0,0,0.07);
+    }
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        border-radius: 14px;
+    }
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .alerts-table {
+        width: 100%;
+        min-width: 1050px;
+        margin: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+        table-layout: fixed;
+    }
+
+        .alerts-table thead th {
+            background: #405b66;
+            color: white;
+            border: none !important;
+            padding: 15px 10px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.35px;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+        }
+
+            .alerts-table thead th:first-child {
+                border-radius: 12px 0 0 0;
+            }
+
+            .alerts-table thead th:last-child {
+                border-radius: 0 12px 0 0;
+            }
+
+        .alerts-table tbody td {
+            background: #ffffff;
+            padding: 15px 10px;
+            border-bottom: 1px solid #e4ebee;
+            border-right: 1px solid #e4ebee;
+            font-size: 13px;
+            color: #405057;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 1.5;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+            .alerts-table tbody td:first-child {
+                border-left: 1px solid #e4ebee;
+            }
+
+        .alerts-table tbody tr {
+            transition: background 0.2s ease;
+        }
+
+            .alerts-table tbody tr:hover td {
+                background: #f8fbfc;
+            }
+
+    /* =========================================================
+       FIXED COLUMN WIDTHS
+       ========================================================= */
+
+    .col-patient {
+        width: 15%;
+    }
+
+    .col-type {
+        width: 12%;
+    }
+
+    .col-description {
+        width: 19%;
+    }
+
+    .col-severity {
+        width: 9%;
+    }
+
+    .col-alert-date {
+        width: 12%;
+    }
+
+    .col-status {
+        width: 9%;
+    }
+
+    .col-resolved-by {
+        width: 10%;
+    }
+
+    .col-resolved-date {
+        width: 10%;
+    }
+
+    .col-actions {
+        width: 8%;
+    }
+
+    /* =========================================================
+       PATIENT
+       ========================================================= */
+
+    .patient-name {
+        font-weight: 700;
+        color: #2f6f73;
+        text-align: left !important;
+    }
+
+    /* =========================================================
+       ALERT TYPE
+       ========================================================= */
+
+    .alert-type {
+        font-weight: 600;
+        color: #37474f;
+    }
+
+    /* =========================================================
+       DESCRIPTION
+       ========================================================= */
+
+    .description-text {
+        text-align: left !important;
+        color: #54656d;
+        line-height: 1.55;
+    }
+
+    /* =========================================================
+       SEVERITY
+       ========================================================= */
+
+    .severity-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 75px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .severity-critical {
+        background: #ffebee;
+        color: #c62828;
+        border: 1px solid #ffcdd2;
+    }
+
+    .severity-high {
+        background: #fff3e0;
+        color: #e65100;
+        border: 1px solid #ffe0b2;
+    }
+
+    .severity-medium {
+        background: #fff8e1;
+        color: #b77900;
+        border: 1px solid #ffe9a8;
+    }
+
+    .severity-low {
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+    }
+
+    /* =========================================================
+       STATUS
+       ========================================================= */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 72px;
+        padding: 6px 10px;
+        border-radius: 20px;
+        background: #eef5f6;
+        color: #2f6f73;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .status-active {
+        background: #fff3e0;
+        color: #e65100;
+    }
+
+    .status-resolved {
+        background: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    /* =========================================================
+       DATES
+       ========================================================= */
+
+    .date-text {
+        color: #546e7a;
+        font-size: 12px;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    .resolved-by {
+        font-weight: 600;
+        color: #455a64;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .action-links {
+        white-space: nowrap;
+        text-align: center;
+    }
+
+    .resolve-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 7px 11px;
+        background: #e8f5e9;
+        color: #2e7d32 !important;
+        border: 1px solid #c8e6c9;
+        border-radius: 8px;
+        text-decoration: none !important;
+        font-size: 12px;
+        font-weight: 700;
+        transition: all 0.2s ease;
+    }
+
+        .resolve-link:hover {
+            background: #2e7d32;
+            color: white !important;
+            border-color: #2e7d32;
+            text-decoration: none !important;
+            transform: translateY(-1px);
+        }
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .empty-state {
+        text-align: center;
+        padding: 45px 20px !important;
+        color: #78909c !important;
+    }
+
+    .empty-state-title {
+        display: block;
+        font-size: 17px;
+        font-weight: 700;
+        color: #2f6f73;
+        margin-bottom: 5px;
+    }
+
+    /* =========================================================
+       BACK BUTTON
+       ========================================================= */
+
+    .footer-row {
+        margin-top: 24px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 18px;
+        background: #455a64;
+        color: white !important;
+        border-radius: 10px;
+        text-decoration: none !important;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #263238;
+            color: white !important;
+            text-decoration: none !important;
+            transform: translateY(-1px);
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .alerts-page {
+            margin-top: 20px;
+            padding: 0 12px;
+        }
+
+        .alerts-header {
+            padding: 24px 20px;
+        }
+
+            .alerts-header h2 {
+                font-size: 25px;
+            }
+
+        .live-status {
+            float: none;
+            margin: 12px 0 0;
+            width: fit-content;
+        }
+
+        .toolbar {
+            justify-content: stretch;
+        }
+
+        .btn-create {
+            width: 100%;
+        }
+
+        .alerts-panel {
+            padding: 14px;
+        }
+    }
+</style>
+
+
+<div class="alerts-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="alerts-header">
+
+        <span class="live-status">
+            <span class="live-dot"></span>
+            Live Sync Active
+        </span>
+
+        <h2>Emergency Alerts Monitoring</h2>
+
+        <p>
+            Review and manage active and resolved emergency alerts for patients across the hospital.
+            Monitor alert severity, response status, resolution details, and information required
+            for rapid clinical response and patient safety.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOOLBAR
+         ===================================================== -->
+
+    <div class="toolbar">
+
+        @Html.ActionLink(
+            "Create Emergency Alert",
+            "Create",
+            "EmergencyAlerts",
+            null,
+            new { @class = "btn-create" })
+
+    </div>
+
+
+    <!-- =====================================================
+         TABLE
+         ===================================================== -->
+
+    <div class="alerts-panel">
+
+        <div class="table-wrapper">
+
+            <table class="alerts-table">
+
+                <colgroup>
+
+                    <col class="col-patient" />
+                    <col class="col-type" />
+                    <col class="col-description" />
+                    <col class="col-severity" />
+                    <col class="col-alert-date" />
+                    <col class="col-status" />
+                    <col class="col-resolved-by" />
+                    <col class="col-resolved-date" />
+
+                    @if (isAdmin)
+                    {
+                        <col class="col-actions" />
+                    }
+
+                </colgroup>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>Patient</th>
+
+                        <th>Alert Type</th>
+
+                        <th>Description</th>
+
+                        <th>Severity</th>
+
+                        <th>Alert Date</th>
+
+                        <th>Status</th>
+
+                        <th>Resolved By</th>
+
+                        <th>Resolved Date</th>
+
+                        @if (isAdmin)
+                        {
+                            <th>Actions</th>
+                        }
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="liveAlertsBody">
+
+                    @Html.Partial("_EmergencyAlertRows", Model)
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK TO DASHBOARD
+         ===================================================== -->
+
+    <div class="footer-row">
+
+        @if (User.IsInRole("Nurse"))
+        {
+            @Html.ActionLink(
+                "Back to Dashboard",
+                "Dashboard",
+                "Nurse",
+                null,
+                new { @class = "back-link" })
+        }
+        else if (User.IsInRole("Doctor"))
+        {
+            @Html.ActionLink(
+                "Back to Dashboard",
+                "Dashboard",
+                "Doctor",
+                null,
+                new { @class = "back-link" })
+        }
+        else if (User.IsInRole("Admin"))
+        {
+            @Html.ActionLink(
+                "Back to Dashboard",
+                "Dashboard",
+                "Admin",
+                null,
+                new { @class = "back-link" })
+        }
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+        function refreshEmergencyAlerts() {
+
+            $.ajax({
+
+                url: '@Url.Action("GetLiveAlerts", "EmergencyAlerts")',
+
+                type: 'GET',
+
+                cache: false,
+
+                success: function (data) {
+
+                    $('#liveAlertsBody').html(data);
+
+                },
+
+                error: function () {
+
+                    console.log("Unable to refresh emergency alerts.");
+
+                }
+
+            });
+
+        }
+
+        // Refresh every 5 seconds
+        setInterval(refreshEmergencyAlerts, 5000);
+
+    </script>
+
+}

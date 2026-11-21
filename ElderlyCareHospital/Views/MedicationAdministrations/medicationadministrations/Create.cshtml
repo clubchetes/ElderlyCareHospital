@@ -1,0 +1,259 @@
+﻿@model ElderlyCareHospital.Models.MedicationAdministration
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<style>
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .mar-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 28px 32px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 20px rgba(47, 111, 115, 0.15);
+    }
+
+        .mar-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 30px;
+        }
+
+        .mar-header p {
+            margin-top: 8px;
+            opacity: 0.95;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+    .mar-panel {
+        background: white;
+        border-radius: 18px;
+        padding: 32px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+
+    .section-title {
+        color: #2f6f73;
+        font-weight: 700;
+        margin-bottom: 24px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #e6eff1;
+    }
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .control-label {
+        font-weight: 600;
+        color: #2f3e46;
+        padding-top: 10px;
+    }
+
+    .form-control {
+        border-radius: 10px;
+        border: 1px solid #cfd8dc;
+        min-height: 44px;
+        padding: 10px 14px;
+        box-shadow: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: #4c8c91;
+            box-shadow: 0 0 0 0.2rem rgba(76, 140, 145, 0.15);
+        }
+
+    .readonly-box {
+        background-color: #f8f9fa !important;
+        font-weight: 600;
+        color: #495057;
+    }
+
+    .submit-row {
+        text-align: center;
+        margin-top: 34px;
+    }
+
+    .btn-submit {
+        background-color: #2f6f73;
+        border-color: #2f6f73;
+        color: white;
+        border-radius: 10px;
+        padding: 12px 34px;
+        font-weight: 600;
+        min-width: 200px;
+        transition: 0.2s ease;
+    }
+
+        .btn-submit:hover {
+            background-color: #25575a;
+            border-color: #25575a;
+            color: white;
+        }
+
+    .mar-footer {
+        margin-top: 28px;
+        padding: 16px 18px;
+        background: #eef7f7;
+        border-left: 4px solid #4c8c91;
+        border-radius: 10px;
+        color: #466066;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    .text-danger {
+        font-size: 13px;
+        margin-top: 6px;
+        display: block;
+    }
+</style>
+
+<div class="container mt-4">
+
+   
+    <div class="mar-header">
+        <h2>Medication Administration Record</h2>
+        <p>
+            Use this form each time medication is administered to a patient. Accurate recording supports patient safety,
+            medication compliance, clinical auditing, and continuity of care across all nursing shifts.
+        </p>
+    </div>
+
+    <div class="mar-panel">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            <h4 class="section-title">Administration Details</h4>
+
+            <div class="form-group row align-items-center">
+
+                @Html.LabelFor(model => model.PatientID, "Patient",
+                    htmlAttributes: new { @class = "control-label col-md-3" })
+
+                <div class="col-md-9">
+
+                    @Html.DropDownList(
+                        "PatientID",
+                        null,
+                        "-- Select Patient --",
+                        htmlAttributes: new { @class = "form-control" })
+
+                    @Html.ValidationMessageFor(model => model.PatientID, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+
+            <div class="form-group row align-items-center">
+
+                @Html.LabelFor(model => model.MedicineID, "Medication",
+                    htmlAttributes: new { @class = "control-label col-md-3" })
+
+                <div class="col-md-9">
+
+                    @Html.DropDownList(
+                        "MedicineID",
+                        null,
+                        "-- Select Medication --",
+                        htmlAttributes: new { @class = "form-control" })
+
+                    @Html.ValidationMessageFor(model => model.MedicineID, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+
+            <div class="form-group row align-items-center">
+
+                @Html.LabelFor(model => model.NurseID,
+                    htmlAttributes: new { @class = "control-label col-md-3" })
+
+                <div class="col-md-9">
+
+                    @Html.HiddenFor(model => model.NurseID)
+
+                    <input type="text"
+                           class="form-control readonly-box"
+                           value="@ViewBag.CurrentNurseName"
+                           readonly="readonly" />
+
+                    @Html.ValidationMessageFor(model => model.NurseID, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+
+            <div class="form-group row align-items-center">
+
+                @Html.LabelFor(model => model.Status,
+                    htmlAttributes: new { @class = "control-label col-md-3" })
+
+                <div class="col-md-9">
+
+                    @Html.TextAreaFor(
+                        model => model.Status,
+                        new
+                        {
+                            @class = "form-control",
+                            rows = "4",
+                            placeholder = "Record the administration status, dosage confirmation, patient response, missed dose explanation, refusal, side effects, or any observations related to the medication administration..."
+                        })
+
+                    @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+
+            <div class="form-group row align-items-center">
+
+                @Html.LabelFor(model => model.DateAdministered,
+                    htmlAttributes: new { @class = "control-label col-md-3" })
+
+                <div class="col-md-9">
+
+                    @Html.TextBoxFor(
+                        model => model.DateAdministered,
+                        "{0:yyyy-MM-ddTHH:mm}",
+                        new
+                        {
+                            @class = "form-control",
+                            type = "datetime-local"
+                        })
+
+                    @Html.ValidationMessageFor(model => model.DateAdministered, "", new { @class = "text-danger" })
+
+                </div>
+
+            </div>
+
+            <div class="submit-row">
+
+                <input type="submit" value="Record Medication Administration" class="btn btn-submit" />
+
+            </div>
+        }
+
+        <div class="mar-footer">
+            Verify the correct patient, medication, dosage, route, and administration time before saving this record.
+            Every medication administration entry forms part of the patient's permanent clinical history and may be used for
+            treatment review, pharmacy reconciliation, incident investigation, and regulatory compliance.
+        </div>
+
+    </div>
+   
+
+</div>

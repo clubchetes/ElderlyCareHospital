@@ -1,0 +1,538 @@
+﻿@model ElderlyCareHospital.Models.DoctorNotes
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<style>
+    /* =========================================================
+       DOCTOR NOTES THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f4f8fb;
+        --surface: #ffffff;
+        --surface-soft: #f8fbfd;
+        --text-main: #102a43;
+        --text-secondary: #486581;
+        --text-muted: #627d98;
+        --border: #d9e2ec;
+        --border-soft: #e8eef3;
+        --accent: #2f6f73;
+        --accent-dark: #25575a;
+        --accent-soft: #eef7f7;
+        --success: #2e7d5b;
+        --danger: #c94c4c;
+        --shadow-sm: 0 4px 14px rgba(16, 42, 67, 0.06);
+        --shadow-md: 0 8px 24px rgba(16, 42, 67, 0.08);
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+    }
+
+    /* =========================================================
+       PAGE WRAPPER
+       ========================================================= */
+
+    .edit-page {
+        padding-top: 28px;
+        padding-bottom: 35px;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .edit-header {
+        background: var(--surface);
+        border: 1px solid var(--border-soft);
+        border-radius: 18px;
+        padding: 26px 30px;
+        margin-bottom: 22px;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .edit-header::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: var(--accent);
+        }
+
+        .edit-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+
+        .edit-header p {
+            margin: 9px 0 0;
+            max-width: 900px;
+            font-size: 14px;
+            line-height: 1.65;
+            color: var(--text-secondary);
+        }
+
+    .header-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-left: 10px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        font-size: 11px;
+        font-weight: 700;
+        vertical-align: middle;
+        letter-spacing: 0.2px;
+    }
+
+    .header-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--success);
+    }
+
+    /* =========================================================
+       MAIN PANEL
+       ========================================================= */
+
+    .edit-panel {
+        background: var(--surface);
+        border: 1px solid var(--border-soft);
+        border-radius: 18px;
+        padding: 26px;
+        box-shadow: var(--shadow-sm);
+    }
+
+        .edit-panel h4 {
+            margin: 0 0 7px;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+    .edit-description {
+        margin: 0 0 22px;
+        font-size: 13px;
+        color: var(--text-muted);
+    }
+
+    /* =========================================================
+       FORM
+       ========================================================= */
+
+    .edit-form {
+        max-width: 900px;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-horizontal .control-label {
+        padding-top: 10px;
+        color: var(--text-secondary);
+        font-size: 13px;
+        font-weight: 700;
+        text-align: left;
+    }
+
+    .form-control {
+        height: 42px;
+        padding: 9px 12px;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        background: var(--surface);
+        color: var(--text-main);
+        font-size: 13px;
+        box-shadow: none;
+        transition: all 0.18s ease;
+    }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(47, 111, 115, 0.10);
+            outline: none;
+        }
+
+    textarea.form-control {
+        min-height: 120px;
+        height: auto;
+        resize: vertical;
+        line-height: 1.55;
+    }
+
+    select.form-control {
+        cursor: pointer;
+    }
+
+    /* =========================================================
+       VALIDATION
+       ========================================================= */
+
+    .text-danger {
+        display: block;
+        margin-top: 6px;
+        color: var(--danger) !important;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .validation-summary-errors {
+        background: #fff8f8;
+        border: 1px solid #e6b8b8;
+        border-radius: 9px;
+        padding: 12px 15px;
+        margin-bottom: 20px;
+        color: var(--danger);
+        font-size: 13px;
+    }
+
+        .validation-summary-errors ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+    /* =========================================================
+       SAVE BUTTON
+       ========================================================= */
+
+    .btn-save {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 7px;
+        padding: 10px 19px;
+        min-height: 42px;
+        background: var(--accent);
+        border: 1px solid var(--accent);
+        border-radius: 10px;
+        color: #ffffff !important;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 3px 10px rgba(47, 111, 115, 0.15);
+        transition: all 0.2s ease;
+    }
+
+        .btn-save:hover {
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
+
+    /* =========================================================
+       FOOTER / BACK LINK
+       ========================================================= */
+
+    .footer-row {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        margin-top: 20px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 15px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text-secondary) !important;
+        border-radius: 9px;
+        text-decoration: none !important;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.18s ease;
+    }
+
+        .back-link:hover {
+            background: var(--surface-soft);
+            border-color: #bcccdc;
+            color: var(--accent) !important;
+            text-decoration: none !important;
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .edit-page {
+            padding-top: 18px;
+        }
+
+        .edit-header {
+            padding: 22px;
+            border-radius: 15px;
+        }
+
+            .edit-header h2 {
+                font-size: 24px;
+            }
+
+        .header-label {
+            display: flex;
+            width: fit-content;
+            margin: 10px 0 0;
+        }
+
+        .edit-panel {
+            padding: 20px 15px;
+            border-radius: 15px;
+        }
+
+        .form-horizontal .control-label {
+            padding-top: 0;
+            margin-bottom: 7px;
+        }
+
+        .form-horizontal .form-group {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .form-horizontal .col-md-2,
+        .form-horizontal .col-md-10,
+        .form-horizontal .col-md-offset-2 {
+            width: 100%;
+            margin-left: 0;
+        }
+
+        .btn-save {
+            width: 100%;
+        }
+
+        .footer-row {
+            justify-content: center;
+        }
+    }
+</style>
+
+
+<div class="container edit-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="edit-header">
+
+        <h2>
+            Edit Doctor's Note
+
+            <span class="header-label">
+                <span class="header-dot"></span>
+                Clinical Record
+            </span>
+        </h2>
+
+        <p>
+            Update the clinical note and patient information recorded by the doctor.
+            Make sure all information is accurate before saving the changes.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         EDIT PANEL
+         ===================================================== -->
+
+    <div class="edit-panel">
+
+        <h4>Doctor Note Details</h4>
+
+        <p class="edit-description">
+            Edit the information below and save your changes.
+        </p>
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal edit-form">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                @Html.HiddenFor(model => model.NoteID)
+
+
+                <!-- =================================================
+                     PATIENT
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    @Html.LabelFor(
+                        model => model.PatientID,
+                        "PatientID",
+                        htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    <div class="col-md-10">
+
+                        @Html.DropDownList(
+                            "PatientID",
+                            null,
+                            htmlAttributes: new { @class = "form-control" })
+
+                        @Html.ValidationMessageFor(
+                            model => model.PatientID,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DOCTOR
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    @Html.LabelFor(
+                        model => model.DoctorID,
+                        htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    <div class="col-md-10">
+
+                        @Html.EditorFor(
+                            model => model.DoctorID,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.DoctorID,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     NOTE
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    @Html.LabelFor(
+                        model => model.NoteText,
+                        htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    <div class="col-md-10">
+
+                        @Html.EditorFor(
+                            model => model.NoteText,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.NoteText,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DATE CREATED
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    @Html.LabelFor(
+                        model => model.DateCreated,
+                        htmlAttributes: new { @class = "control-label col-md-2" })
+
+                    <div class="col-md-10">
+
+                        @Html.EditorFor(
+                            model => model.DateCreated,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.DateCreated,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SAVE
+                     ================================================= -->
+
+                <div class="form-group">
+
+                    <div class="col-md-offset-2 col-md-10">
+
+                        <input type="submit"
+                               value="Save"
+                               class="btn-save" />
+
+                    </div>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK TO LIST
+         ===================================================== -->
+
+    <div class="footer-row">
+
+        @Html.ActionLink(
+            "←  Back to List",
+            "Index",
+            null,
+            new { @class = "back-link" })
+
+    </div>
+
+</div>
+

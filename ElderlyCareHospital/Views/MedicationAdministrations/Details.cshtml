@@ -1,0 +1,398 @@
+﻿@model ElderlyCareHospital.Models.MedicationAdministration
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<style>
+    /* =========================================================
+       NURSE DASHBOARD THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f4f8fb;
+        --surface: #ffffff;
+        --surface-soft: #f8fbfd;
+        --text-main: #102a43;
+        --text-muted: #627d98;
+        --border: #e3ebf1;
+        --teal: #2f6f73;
+        --teal-dark: #25575a;
+        --teal-soft: #edf7f7;
+        --blue: #3567a3;
+        --blue-soft: #edf3fb;
+        --green: #2e7d5b;
+        --green-soft: #edf8f2;
+        --red: #b52b2b;
+        --red-soft: #fdeeee;
+        --shadow: 0 8px 24px rgba(16, 42, 67, 0.07);
+        --shadow-hover: 0 12px 28px rgba(16, 42, 67, 0.10);
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+    }
+
+    /* =========================================================
+       PAGE CONTAINER
+       ========================================================= */
+
+    .med-page-container {
+        max-width: 900px;
+        margin: 32px auto;
+        padding: 0 20px 30px;
+    }
+
+    /* =========================================================
+       PAGE HEADER
+       ========================================================= */
+
+    .med-header {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text-main);
+        padding: 28px 32px;
+        border-radius: 18px;
+        margin-bottom: 22px;
+        box-shadow: var(--shadow);
+    }
+
+        .med-header h2 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.4px;
+        }
+
+        .med-header p {
+            margin: 10px 0 0;
+            color: var(--text-muted);
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+    /* =========================================================
+       MAIN PANEL
+       ========================================================= */
+
+    .med-panel {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: var(--shadow);
+    }
+
+        .med-panel h4 {
+            margin: 0 0 8px;
+            color: var(--text-main);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+    .panel-divider {
+        height: 1px;
+        background: var(--border);
+        margin: 0 0 24px;
+    }
+
+    /* =========================================================
+       DETAILS
+       ========================================================= */
+
+    .details-list {
+        margin: 0;
+        display: grid;
+        grid-template-columns: 220px 1fr;
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+        .details-list dt,
+        .details-list dd {
+            margin: 0;
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .details-list dt {
+            background: #f1f6f8;
+            color: #486581;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.45px;
+        }
+
+        .details-list dd {
+            background: var(--surface);
+            color: #334e68;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+            .details-list dt:last-of-type,
+            .details-list dd:last-of-type {
+                border-bottom: none;
+            }
+
+    /* =========================================================
+       VALUE STYLING
+       ========================================================= */
+
+    .medicine-value {
+        color: var(--teal) !important;
+        font-weight: 700 !important;
+    }
+
+    .patient-value {
+        color: var(--text-main) !important;
+        font-weight: 600 !important;
+    }
+
+    .nurse-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 5px 10px;
+        background: var(--teal-soft);
+        color: var(--teal);
+        border: 1px solid #d9eeee;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 86px;
+        padding: 6px 12px;
+        background: var(--green-soft);
+        color: var(--green);
+        border: 1px solid #d8eee2;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .date-text {
+        color: var(--text-muted);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .action-row {
+        margin-top: 24px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .action-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 18px;
+        border-radius: 10px;
+        text-decoration: none !important;
+        font-size: 14px;
+        font-weight: 600;
+        transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .edit-link {
+        color: white !important;
+        background: var(--teal);
+        border: 1px solid var(--teal);
+        box-shadow: 0 4px 10px rgba(47, 111, 115, 0.14);
+    }
+
+        .edit-link:hover {
+            background: var(--teal-dark);
+            border-color: var(--teal-dark);
+            color: white !important;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(47, 111, 115, 0.18);
+        }
+
+    .back-link {
+        color: white !important;
+        background: #455a64;
+        border: 1px solid #455a64;
+    }
+
+        .back-link:hover {
+            background: #263238;
+            border-color: #263238;
+            color: white !important;
+            transform: translateY(-1px);
+        }
+
+    .action-link:hover {
+        text-decoration: none !important;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .med-page-container {
+            margin-top: 20px;
+            padding: 0 14px 25px;
+        }
+
+        .med-header {
+            padding: 22px;
+        }
+
+            .med-header h2 {
+                font-size: 25px;
+            }
+
+        .med-panel {
+            padding: 18px;
+        }
+
+        .details-list {
+            display: block;
+        }
+
+            .details-list dt {
+                border-bottom: none;
+                padding-bottom: 7px;
+            }
+
+            .details-list dd {
+                padding-top: 7px;
+                padding-bottom: 16px;
+            }
+
+        .action-row {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .action-link {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="med-page-container">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="med-header">
+
+        <h2>Medication Administration Details</h2>
+
+        <p>
+            View the details of this patient medication administration
+            and review the recorded treatment information.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         DETAILS PANEL
+         ===================================================== -->
+
+    <div class="med-panel">
+
+        <h4>Medication Administration</h4>
+
+        <div class="panel-divider"></div>
+
+        <dl class="details-list">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Medicine.MedicineName)
+            </dt>
+
+            <dd class="medicine-value">
+                @Html.DisplayFor(model => model.Medicine.MedicineName)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Patient.FirstName)
+            </dt>
+
+            <dd class="patient-value">
+                @Html.DisplayFor(model => model.Patient.FirstName)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NurseID)
+            </dt>
+
+            <dd>
+                <span class="nurse-badge">
+                    @Html.DisplayFor(model => model.NurseID)
+                </span>
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Status)
+            </dt>
+
+            <dd>
+                <span class="status-badge">
+                    @Html.DisplayFor(model => model.Status)
+                </span>
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DateAdministered)
+            </dt>
+
+            <dd class="date-text">
+                @Html.DisplayFor(model => model.DateAdministered)
+            </dd>
+
+        </dl>
+
+
+        <!-- =================================================
+             ACTIONS
+             ================================================= -->
+
+        <div class="action-row">
+
+            @Html.ActionLink(
+                "Edit",
+                "Edit",
+                new { id = Model.AdministrationID },
+                new { @class = "action-link edit-link" })
+
+            @Html.ActionLink(
+                "Back to List",
+                "Index",
+                null,
+                new { @class = "action-link back-link" })
+
+        </div>
+
+    </div>
+
+</div>
+

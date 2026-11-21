@@ -1,0 +1,2292 @@
+﻿@{
+    ViewBag.Title = "Pharmacist Dashboard";
+}
+
+<style>
+
+    /* =========================================================
+       ROOT / ELDERLYCARE ADMIN THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f8fafc;
+        --sidebar-bg: #ffffff;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --border-color: #e2e8f0;
+        --green: #059669;
+        --orange: #d97706;
+        --red: #dc2626;
+        --cyan: #0d9488;
+        --blue: #0284c7;
+        --purple: #7c3aed;
+    }
+
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+       BACKGROUND EFFECTS
+       ========================================================= */
+
+    .bg-shape {
+        position: fixed;
+        border-radius: 50%;
+        background: rgba(79, 70, 229, 0.035);
+        pointer-events: none;
+        transition: transform 0.15s linear;
+        z-index: 0;
+        filter: blur(5px);
+    }
+
+    .shape1 {
+        width: 300px;
+        height: 300px;
+        top: 5%;
+        left: 5%;
+    }
+
+    .shape2 {
+        width: 220px;
+        height: 220px;
+        bottom: 10%;
+        right: 5%;
+        background: rgba(14, 165, 233, 0.04);
+    }
+
+    .shape3 {
+        width: 160px;
+        height: 160px;
+        top: 50%;
+        left: 40%;
+        background: rgba(79, 70, 229, 0.02);
+    }
+
+
+    /* =========================================================
+       DASHBOARD WRAPPER
+       ========================================================= */
+
+    .dashboard-wrapper {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        min-height: calc(100vh - 64px);
+        width: 100%;
+    }
+
+
+    /* =========================================================
+       SIDEBAR
+       ========================================================= */
+
+    .dashboard-sidebar {
+        width: 270px;
+        background: #ffffff;
+        border-right: 1px solid var(--border-color);
+        display: flex;
+        flex-direction: column;
+        padding: 24px 18px;
+        position: fixed;
+        top: 64px;
+        bottom: 0;
+        left: -310px;
+        z-index: 1200;
+        box-shadow: 8px 0 30px rgba(15, 23, 42, 0.08);
+        transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+
+        .dashboard-sidebar.open {
+            left: 0;
+        }
+
+
+    /* =========================================================
+       SIDEBAR BRAND
+       ========================================================= */
+
+    .sidebar-brand {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 28px;
+        padding: 0 6px;
+    }
+
+    .sidebar-brand-left {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        color: var(--text-main);
+        font-size: 17px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+    .sidebar-logo {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #4f46e5, #0ea5e9);
+        color: white;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 700;
+        box-shadow: 0 5px 14px rgba(79, 70, 229, 0.22);
+    }
+
+
+    /* =========================================================
+       CLOSE BUTTON
+       ========================================================= */
+
+    .sidebar-close-btn {
+        width: 34px;
+        height: 34px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        font-size: 22px;
+        line-height: 1;
+        cursor: pointer;
+        border-radius: 8px;
+        transition: all 0.2s ease;
+    }
+
+        .sidebar-close-btn:hover {
+            background: #f1f5f9;
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+
+    /* =========================================================
+       SIDEBAR SECTION LABEL
+       ========================================================= */
+
+    .sidebar-section-label {
+        color: #94a3b8;
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        padding: 0 12px;
+        margin: 0 0 10px 0;
+    }
+
+
+    /* =========================================================
+       SIDEBAR MENU
+       ========================================================= */
+
+    .sidebar-menu {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+        .sidebar-menu li {
+            width: 100%;
+        }
+
+            .sidebar-menu li a {
+                width: 100%;
+                box-sizing: border-box;
+                display: flex;
+                align-items: center;
+                min-height: 44px;
+                padding: 11px 13px;
+                color: var(--text-muted);
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 14px;
+                border-radius: 10px;
+                transition: all 0.2s ease;
+                gap: 11px;
+            }
+
+                .sidebar-menu li a:hover {
+                    background: #f8fafc;
+                    color: var(--primary);
+                    transform: translateX(3px);
+                }
+
+                .sidebar-menu li a.active {
+                    background: linear-gradient( 135deg, rgba(79, 70, 229, 0.10), rgba(14, 165, 233, 0.08) );
+                    color: var(--primary);
+                    font-weight: 600;
+                }
+
+
+    /* =========================================================
+       SIDEBAR ICON
+       ========================================================= */
+
+    .sidebar-icon {
+        width: 30px;
+        height: 30px;
+        flex: 0 0 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: #f8fafc;
+        color: currentColor;
+    }
+
+    .sidebar-menu a.active .sidebar-icon {
+        background: #ffffff;
+    }
+
+
+    /* =========================================================
+       FLOATING MENU BUTTON
+       ========================================================= */
+
+    .sidebar-toggle-btn {
+        position: fixed;
+        top: 82px;
+        left: 22px;
+        z-index: 1100;
+        width: 46px;
+        height: 46px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        border-radius: 12px;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+        transition: all 0.2s ease;
+    }
+
+        .sidebar-toggle-btn:hover {
+            transform: translateY(-2px);
+            color: var(--primary);
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.12);
+        }
+
+        .sidebar-toggle-btn:focus {
+            outline: none;
+        }
+
+
+    /* =========================================================
+       MAIN CONTENT
+       ========================================================= */
+
+    .dashboard-main {
+        flex: 1;
+        width: 100%;
+        box-sizing: border-box;
+        margin: 0 auto;
+        padding: 36px 40px 45px 40px;
+        max-width: 1400px;
+    }
+
+
+    /* =========================================================
+       DASHBOARD HEADER
+       ========================================================= */
+
+    .dashboard-header {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 28px 34px;
+        border-radius: 18px;
+        margin-bottom: 26px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .dashboard-header-content {
+        width: 100%;
+    }
+
+        .dashboard-header-content h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+
+        .dashboard-header-content p {
+            margin: 8px 0 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 900px;
+        }
+
+
+    /* =========================================================
+       DASHBOARD STATUS
+       ========================================================= */
+
+    .dashboard-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 18px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: #f0fdf4;
+        border: 1px solid #dcfce7;
+        color: #15803d;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .dashboard-status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #22c55e;
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.10);
+    }
+
+
+    /* =========================================================
+       ACTION ROW
+       ========================================================= */
+
+    .dashboard-actions {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 16px;
+        margin-bottom: 28px;
+        width: 100%;
+    }
+
+
+    /* =========================================================
+       ACTION CARDS
+       ========================================================= */
+
+    .action-card {
+        background: var(--card-bg);
+        border-radius: 16px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 18px 12px;
+        height: 126px;
+        width: 100%;
+    }
+
+        .action-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 22px rgba(0, 0, 0, 0.07);
+            border-color: #cbd5e1;
+        }
+
+        .action-card a {
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            color: var(--text-main);
+            font-weight: 600;
+            font-size: 13px;
+            gap: 9px;
+        }
+
+            .action-card a:hover {
+                color: var(--text-main);
+                text-decoration: none;
+            }
+
+            .action-card a span {
+                display: block;
+                line-height: 1.3;
+            }
+
+
+    /* =========================================================
+       ACTION ICONS
+       ========================================================= */
+
+    .action-icon {
+        width: 42px;
+        height: 42px;
+        flex: 0 0 42px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    }
+
+    .icon-primary {
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+    }
+
+    .icon-green {
+        background: linear-gradient(135deg, #059669, #10b981);
+    }
+
+    .icon-orange {
+        background: linear-gradient(135deg, #d97706, #f59e0b);
+    }
+
+    .icon-purple {
+        background: linear-gradient(135deg, #7c3aed, #8b5cf6);
+    }
+
+    .icon-cyan {
+        background: linear-gradient(135deg, #0d9488, #14b8a6);
+    }
+
+
+    /* =========================================================
+       SECTION HEADER
+       ========================================================= */
+
+    .section-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 28px 0 14px;
+    }
+
+        .section-header h3 {
+            margin: 0;
+            color: var(--text-main);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .section-header span {
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+
+
+    /* =========================================================
+       PHARMACY LIVE METRICS
+       ========================================================= */
+
+    #pharmacistStatsContainer {
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+        #pharmacistStatsContainer > .row {
+            display: grid !important;
+            grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+            gap: 16px !important;
+            width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+
+            /* =========================================================
+       REMOVE BOOTSTRAP COLUMN SPACING
+       ========================================================= */
+
+            #pharmacistStatsContainer > .row > *,
+            #pharmacistStatsContainer .col,
+            #pharmacistStatsContainer .col-6,
+            #pharmacistStatsContainer .col-sm-6,
+            #pharmacistStatsContainer .col-md-3,
+            #pharmacistStatsContainer .col-lg-3 {
+                width: 100% !important;
+                max-width: none !important;
+                flex: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+
+
+        /* =========================================================
+       METRIC CARDS
+       ========================================================= */
+
+        #pharmacistStatsContainer .stats-card,
+        #pharmacistStatsContainer .card {
+            position: relative;
+            width: 100% !important;
+            min-width: 0;
+            min-height: 150px;
+            height: 150px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            box-sizing: border-box;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        }
+
+            #pharmacistStatsContainer .stats-card:hover,
+            #pharmacistStatsContainer .card:hover {
+                transform: translateY(-3px);
+                border-color: #cbd5e1;
+                box-shadow: 0 10px 22px rgba(15, 23, 42, 0.07);
+            }
+
+
+            /* =========================================================
+       TOP ACCENTS
+       ========================================================= */
+
+            #pharmacistStatsContainer .stats-card::before,
+            #pharmacistStatsContainer .card::before {
+                content: "";
+                position: absolute;
+                top: 0;
+                left: 0;
+                right: 0;
+                height: 3px;
+                background: var(--primary);
+            }
+
+            #pharmacistStatsContainer .stats-card:nth-child(2)::before,
+            #pharmacistStatsContainer .card:nth-child(2)::before {
+                background: var(--orange);
+            }
+
+            #pharmacistStatsContainer .stats-card:nth-child(3)::before,
+            #pharmacistStatsContainer .card:nth-child(3)::before {
+                background: var(--red);
+            }
+
+            #pharmacistStatsContainer .stats-card:nth-child(4)::before,
+            #pharmacistStatsContainer .card:nth-child(4)::before {
+                background: var(--cyan);
+            }
+
+
+        /* =========================================================
+       METRIC TEXT
+       ========================================================= */
+
+        #pharmacistStatsContainer h4,
+        #pharmacistStatsContainer h3 {
+            margin: 0 0 9px 0;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+        #pharmacistStatsContainer h1,
+        #pharmacistStatsContainer h2 {
+            margin: 0;
+            color: var(--text-main);
+            font-size: 30px;
+            font-weight: 700;
+            line-height: 1.15;
+            text-align: center;
+        }
+
+        #pharmacistStatsContainer p {
+            margin: 6px 0 0 0;
+            color: var(--text-muted);
+            font-size: 11px;
+            line-height: 1.4;
+            text-align: center;
+        }
+
+
+    /* =========================================================
+       LOWER INFORMATION
+       ========================================================= */
+
+    .dashboard-information {
+        margin-top: 30px;
+        display: grid;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 16px;
+    }
+
+    .information-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 22px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+        .information-card h3 {
+            margin: 0 0 8px;
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .information-card p {
+            margin: 0;
+            color: var(--text-muted);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+
+    /* =========================================================
+       WORKFLOW
+       ========================================================= */
+
+    .workflow-list {
+        margin-top: 18px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+    }
+
+    .workflow-item {
+        padding: 14px;
+        background: #f8fafc;
+        border: 1px solid #edf1f5;
+        border-radius: 12px;
+    }
+
+        .workflow-item strong {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+            color: var(--text-main);
+        }
+
+        .workflow-item span {
+            color: var(--text-muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+
+    /* =========================================================
+       SYSTEM STATUS
+       ========================================================= */
+
+    .status-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .status-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 11px 12px;
+        background: #f8fafc;
+        border-radius: 10px;
+    }
+
+    .status-left {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    .dot-green {
+        background: #22c55e;
+    }
+
+    .dot-blue {
+        background: #3b82f6;
+    }
+
+    .dot-orange {
+        background: #f97316;
+    }
+
+    .status-text {
+        font-size: 10px;
+        font-weight: 700;
+        color: #64748b;
+    }
+
+
+    /* =========================================================
+       QUICK LINKS
+       ========================================================= */
+
+    .quick-links {
+        margin-top: 30px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        justify-content: flex-start;
+        align-items: center;
+    }
+
+        .quick-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 10px 22px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 13.5px;
+            min-width: 190px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            transition: all 0.2s ease;
+        }
+
+            .quick-links a:hover {
+                transform: translateY(-2px);
+                text-decoration: none;
+            }
+
+    .inventory-link {
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white;
+    }
+
+        .inventory-link:hover {
+            color: white;
+        }
+
+    .logout-link {
+        background: linear-gradient(135deg, #475569, #64748b);
+        color: white;
+    }
+
+        .logout-link:hover {
+            color: white;
+        }
+
+
+    /* =========================================================
+       CURSOR CANVAS
+       ========================================================= */
+
+    #cursorCanvas {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        pointer-events: none;
+        z-index: 999;
+    }
+
+
+    /* =========================================================
+       LARGE TABLET
+       ========================================================= */
+
+    @@media (max-width: 1200px) {
+
+        .dashboard-main {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+
+        .dashboard-actions {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        #pharmacistStatsContainer > .row {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        }
+
+        .dashboard-information {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @@media (max-width: 900px) {
+
+        .dashboard-main {
+            padding: 30px 24px 40px;
+        }
+
+        .dashboard-header {
+            padding: 25px;
+        }
+
+        .dashboard-actions {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        #pharmacistStatsContainer > .row {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .workflow-list {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .dashboard-sidebar {
+            width: 280px;
+            top: 64px;
+            left: -300px;
+        }
+
+        .sidebar-toggle-btn {
+            top: 78px;
+            left: 16px;
+            width: 44px;
+            height: 44px;
+        }
+
+        .dashboard-main {
+            padding: 95px 18px 30px 18px;
+        }
+
+        .dashboard-header {
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 22px;
+        }
+
+        .dashboard-header-content h2 {
+            font-size: 20px;
+        }
+
+        .dashboard-header-content p {
+            font-size: 13px;
+        }
+
+        .dashboard-actions {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .action-card {
+            height: 118px;
+        }
+
+        #pharmacistStatsContainer > .row {
+            grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+            gap: 10px !important;
+        }
+
+        #pharmacistStatsContainer .stats-card,
+        #pharmacistStatsContainer .card {
+            height: 125px;
+            min-height: 125px;
+        }
+
+        #pharmacistStatsContainer h2,
+        #pharmacistStatsContainer h1 {
+            font-size: 24px;
+        }
+
+        .dashboard-information {
+            grid-template-columns: 1fr;
+        }
+
+        .quick-links {
+            flex-direction: column;
+            width: 100%;
+            margin-top: 24px;
+        }
+
+            .quick-links a {
+                width: 100%;
+                min-width: 0;
+            }
+    }
+
+
+    /* =========================================================
+       SMALL PHONE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .dashboard-main {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .dashboard-header {
+            padding: 19px;
+        }
+
+        .dashboard-header-content h2 {
+            font-size: 18px;
+        }
+
+        .dashboard-header-content p {
+            font-size: 12.5px;
+        }
+
+        .dashboard-actions {
+            gap: 10px;
+        }
+
+        .action-card {
+            height: 112px;
+            min-height: 112px;
+            padding: 14px 8px;
+        }
+
+            .action-card a {
+                font-size: 11.5px;
+                gap: 7px;
+            }
+
+        .action-icon {
+            width: 38px;
+            height: 38px;
+            flex-basis: 38px;
+        }
+
+        #pharmacistStatsContainer > .row {
+            gap: 10px;
+        }
+
+        #pharmacistStatsContainer .stats-card,
+        #pharmacistStatsContainer .card {
+            min-height: 115px;
+        }
+
+        #pharmacistStatsContainer h2,
+        #pharmacistStatsContainer h1 {
+            font-size: 22px;
+        }
+    }
+</style>
+
+
+<!-- =========================================================
+     BACKGROUND SHAPES
+     ========================================================= -->
+
+<div class="bg-shape shape1"></div>
+<div class="bg-shape shape2"></div>
+<div class="bg-shape shape3"></div>
+
+
+<!-- =========================================================
+     MENU BUTTON
+     ========================================================= -->
+
+<button type="button"
+        class="sidebar-toggle-btn"
+        onclick="toggleSidebar()"
+        aria-label="Open navigation menu">
+
+    <svg width="20"
+         height="20"
+         fill="none"
+         stroke="currentColor"
+         stroke-width="2"
+         viewBox="0 0 24 24">
+
+        <path stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16">
+        </path>
+
+    </svg>
+
+</button>
+
+
+<!-- =========================================================
+     DASHBOARD
+     ========================================================= -->
+
+<div class="dashboard-wrapper">
+
+
+    <!-- =====================================================
+         SIDEBAR
+         ===================================================== -->
+
+    <div id="dashboardSidebar"
+         class="dashboard-sidebar">
+
+
+        <!-- =================================================
+             BRAND
+             ================================================= -->
+
+        <div class="sidebar-brand">
+
+            <div class="sidebar-brand-left">
+
+                <span class="sidebar-logo">
+                    EC
+                </span>
+
+                <span>
+                    ElderlyCare
+                </span>
+
+            </div>
+
+            <button type="button"
+                    class="sidebar-close-btn"
+                    onclick="toggleSidebar()"
+                    aria-label="Close Sidebar">
+
+                &times;
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             SECTION
+             ================================================= -->
+
+        <div class="sidebar-section-label">
+            Pharmacy
+        </div>
+
+
+        <!-- =================================================
+             MENU
+             ================================================= -->
+
+        <ul class="sidebar-menu">
+
+
+            <!-- DASHBOARD -->
+
+            <li>
+
+                <a href="@Url.Action("Dashboard", "Pharmacist")"
+                   class="active">
+
+                    <span class="sidebar-icon">
+
+                        <svg width="16"
+                             height="16"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <rect x="3"
+                                  y="3"
+                                  width="7"
+                                  height="7">
+                            </rect>
+
+                            <rect x="14"
+                                  y="3"
+                                  width="7"
+                                  height="7">
+                            </rect>
+
+                            <rect x="3"
+                                  y="14"
+                                  width="7"
+                                  height="7">
+                            </rect>
+
+                            <rect x="14"
+                                  y="14"
+                                  width="7"
+                                  height="7">
+                            </rect>
+
+                        </svg>
+
+                    </span>
+
+                    Dashboard
+
+                </a>
+
+            </li>
+
+
+            <!-- MEDICINES -->
+
+            <li>
+
+                <a href="@Url.Action("Index", "Medicines")">
+
+                    <span class="sidebar-icon">
+
+                        <svg width="16"
+                             height="16"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M4 7h16M4 12h16M4 17h16">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    Medicines
+
+                </a>
+
+            </li>
+
+
+            <!-- LOW MEDICINE STOCK -->
+
+            <li>
+
+                <a href="@Url.Action("LowStock", "Medicines")">
+
+                    <span class="sidebar-icon">
+
+                        <svg width="16"
+                             height="16"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M12 3v12">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M7 10l5 5 5-5">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M5 21h14">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    Low Medicine Stock
+
+                </a>
+
+            </li>
+
+
+            <!-- EXPIRING SOON -->
+
+            <li>
+
+                <a href="@Url.Action("ExpiringSoon", "Medicines")">
+
+                    <span class="sidebar-icon">
+
+                        <svg width="16"
+                             height="16"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="9">
+                            </circle>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M12 7v5l3 2">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    Expiring Soon
+
+                </a>
+
+            </li>
+
+
+            <!-- EQUIPMENT -->
+
+            <li>
+
+                <a href="@Url.Action("Index", "Equipments")">
+
+                    <span class="sidebar-icon">
+
+                        <svg width="16"
+                             height="16"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M12 3v18">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M3 12h18">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    Equipment
+
+                </a>
+
+            </li>
+
+
+            <!-- LOW STOCK EQUIPMENT -->
+
+            <li>
+
+                <a href="@Url.Action("LowStock", "Equipments")">
+
+                    <span class="sidebar-icon">
+
+                        <svg width="16"
+                             height="16"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M12 3v12">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M7 10l5 5 5-5">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M5 21h14">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    Low Stock Equipment
+
+                </a>
+
+            </li>
+
+
+            <!-- MAINTENANCE DUE -->
+
+            <li>
+
+                <a href="@Url.Action("MaintenanceDue", "Equipments")">
+
+                    <span class="sidebar-icon">
+
+                        <svg width="16"
+                             height="16"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="9">
+                            </circle>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M12 7v5l3 2">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    Maintenance Due
+
+                </a>
+
+            </li>
+
+
+            <!-- INVENTORY REQUESTS -->
+
+            <li>
+
+                <a href="@Url.Action("Index", "InventoryRequests")">
+
+                    <span class="sidebar-icon">
+
+                        <svg width="16"
+                             height="16"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M4 6h16v12H4z">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M8 10h8M8 14h5">
+                            </path>
+
+                        </svg>
+
+                    </span>
+
+                    Inventory Requests
+
+                </a>
+
+            </li>
+
+        </ul>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN CONTENT
+         ===================================================== -->
+
+    <div class="dashboard-main">
+
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <div class="dashboard-header">
+
+            <div class="dashboard-header-content">
+
+                <h2>
+                    ElderlyCare Hospital – Pharmacist Dashboard
+                </h2>
+
+                <p>
+                    Welcome back, Pharmacist. Manage medicines,
+                    monitor stock levels, identify expiring medication,
+                    review equipment, monitor equipment stock,
+                    track maintenance requirements, and oversee
+                    pharmacy inventory operations from one secure dashboard.
+                </p>
+
+                <div class="dashboard-status">
+
+                    <span class="dashboard-status-dot"></span>
+
+                    Pharmacy System Live
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             ACTION CARDS
+             ================================================= -->
+
+        <div class="dashboard-actions">
+
+
+            <!-- =================================================
+                 MEDICINES
+                 ================================================= -->
+
+            <div class="action-card">
+
+                <a href="@Url.Action("Index", "Medicines")">
+
+                    <div class="action-icon icon-primary">
+
+                        <svg width="18"
+                             height="18"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M4 7h16M4 12h16M4 17h16">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+                    <span>
+                        Medicines
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 LOW MEDICINE STOCK
+                 ================================================= -->
+
+            <div class="action-card">
+
+                <a href="@Url.Action("LowStock", "Medicines")">
+
+                    <div class="action-icon icon-orange">
+
+                        <svg width="18"
+                             height="18"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M12 3v12">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M7 10l5 5 5-5">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M5 21h14">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+                    <span>
+                        Low Medicine Stock
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 EXPIRING SOON
+                 ================================================= -->
+
+            <div class="action-card">
+
+                <a href="@Url.Action("ExpiringSoon", "Medicines")">
+
+                    <div class="action-icon icon-purple">
+
+                        <svg width="18"
+                             height="18"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="9">
+                            </circle>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M12 7v5l3 2">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+                    <span>
+                        Expiring Soon
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 EQUIPMENT
+                 ================================================= -->
+
+            <div class="action-card">
+
+                <a href="@Url.Action("Index", "Equipments")">
+
+                    <div class="action-icon icon-cyan">
+
+                        <svg width="18"
+                             height="18"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M12 3v18">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M3 12h18">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+                    <span>
+                        Equipment
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 LOW STOCK EQUIPMENT
+                 ================================================= -->
+
+            <div class="action-card">
+
+                <a href="@Url.Action("LowStock", "Equipments")">
+
+                    <div class="action-icon icon-orange">
+
+                        <svg width="18"
+                             height="18"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M12 3v12">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M7 10l5 5 5-5">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M5 21h14">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+                    <span>
+                        Low Stock Equipment
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 MAINTENANCE DUE
+                 ================================================= -->
+
+            <div class="action-card">
+
+                <a href="@Url.Action("MaintenanceDue", "Equipments")">
+
+                    <div class="action-icon icon-purple">
+
+                        <svg width="18"
+                             height="18"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <circle cx="12"
+                                    cy="12"
+                                    r="9">
+                            </circle>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M12 7v5l3 2">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+                    <span>
+                        Maintenance Due
+                    </span>
+
+                </a>
+
+            </div>
+
+
+            <!-- =================================================
+                 INVENTORY REQUESTS
+                 ================================================= -->
+
+            <div class="action-card">
+
+                <a href="@Url.Action("Index", "InventoryRequests")">
+
+                    <div class="action-icon icon-green">
+
+                        <svg width="18"
+                             height="18"
+                             fill="none"
+                             stroke="currentColor"
+                             stroke-width="2"
+                             viewBox="0 0 24 24">
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M4 6h16v12H4z">
+                            </path>
+
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  d="M8 10h8M8 14h5">
+                            </path>
+
+                        </svg>
+
+                    </div>
+
+                    <span>
+                        Inventory Requests
+                    </span>
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             STATISTICS HEADER
+             ================================================= -->
+
+        <div class="section-header">
+
+            <h3>
+                Pharmacy Live Metrics
+            </h3>
+
+            <span>
+                Live inventory overview
+            </span>
+
+        </div>
+
+
+        <!-- =================================================
+             LIVE STATISTICS
+             ================================================= -->
+
+        <div id="pharmacistStatsContainer">
+
+            @Html.Partial("_PharmacistStats")
+
+        </div>
+
+
+        <!-- =================================================
+             INFORMATION
+             ================================================= -->
+
+        <div class="dashboard-information">
+
+
+            <!-- =================================================
+                 WORKFLOW
+                 ================================================= -->
+
+            <div class="information-card">
+
+                <h3>
+                    Pharmacy Workflow
+                </h3>
+
+                <p>
+                    Keep pharmacy operations organized by monitoring
+                    inventory, medicine safety, equipment availability,
+                    maintenance requirements, and hospital supply requests.
+                </p>
+
+
+                <div class="workflow-list">
+
+
+                    <div class="workflow-item">
+
+                        <strong>
+                            Inventory
+                        </strong>
+
+                        <span>
+                            Monitor medicine quantities and maintain
+                            accurate stock levels.
+                        </span>
+
+                    </div>
+
+
+                    <div class="workflow-item">
+
+                        <strong>
+                            Medicine Safety
+                        </strong>
+
+                        <span>
+                            Identify medicines approaching expiry
+                            before they become a risk.
+                        </span>
+
+                    </div>
+
+
+                    <div class="workflow-item">
+
+                        <strong>
+                            Equipment
+                        </strong>
+
+                        <span>
+                            Monitor equipment availability, low stock,
+                            and upcoming maintenance requirements.
+                        </span>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 SYSTEM STATUS
+                 ================================================= -->
+
+            <div class="information-card">
+
+                <h3>
+                    System Status
+                </h3>
+
+                <p>
+                    Current pharmacy service status.
+                </p>
+
+
+                <div class="status-list">
+
+
+                    <div class="status-item">
+
+                        <div class="status-left">
+
+                            <span class="status-dot dot-green"></span>
+
+                            Pharmacy system
+
+                        </div>
+
+                        <span class="status-text">
+                            ONLINE
+                        </span>
+
+                    </div>
+
+
+                    <div class="status-item">
+
+                        <div class="status-left">
+
+                            <span class="status-dot dot-blue"></span>
+
+                            Inventory sync
+
+                        </div>
+
+                        <span class="status-text">
+                            ACTIVE
+                        </span>
+
+                    </div>
+
+
+                    <div class="status-item">
+
+                        <div class="status-left">
+
+                            <span class="status-dot dot-orange"></span>
+
+                            Live statistics
+
+                        </div>
+
+                        <span class="status-text">
+                            3 SEC
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             QUICK LINKS
+             ================================================= -->
+
+        <div class="quick-links">
+
+            <a href="@Url.Action("Index", "InventoryRequests")"
+               class="inventory-link">
+
+                View Inventory Requests
+
+            </a>
+
+
+            <a href="@Url.Action("Login", "Account")"
+               class="logout-link">
+
+                Log Out
+
+            </a>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =========================================================
+     CURSOR GLOW
+     ========================================================= -->
+
+<canvas id="cursorCanvas"></canvas>
+
+
+@section Scripts {
+
+    <script>
+
+        /* =====================================================
+           SIDEBAR
+           ===================================================== */
+
+        function toggleSidebar() {
+
+            const sidebar =
+                document.getElementById('dashboardSidebar');
+
+            if (!sidebar) {
+                return;
+            }
+
+            sidebar.classList.toggle('open');
+        }
+
+
+        /* =====================================================
+           ESCAPE CLOSE
+           ===================================================== */
+
+        document.addEventListener(
+            'keydown',
+            function (event) {
+
+                if (event.key === 'Escape') {
+
+                    const sidebar =
+                        document.getElementById(
+                            'dashboardSidebar'
+                        );
+
+                    if (sidebar) {
+
+                        sidebar.classList.remove(
+                            'open'
+                        );
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        /* =====================================================
+           BACKGROUND PARALLAX
+           ===================================================== */
+
+        const shapes =
+            document.querySelectorAll('.bg-shape');
+
+
+        document.addEventListener(
+            'mousemove',
+            function (e) {
+
+                const x =
+                    (window.innerWidth / 2 -
+                        e.clientX) / 30;
+
+                const y =
+                    (window.innerHeight / 2 -
+                        e.clientY) / 30;
+
+
+                shapes.forEach(
+                    function (shape, index) {
+
+                        const speed =
+                            (index + 1) * 0.6;
+
+                        shape.style.transform =
+                            `translate(
+                                ${x * speed}px,
+                                ${y * speed}px
+                            )`;
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =====================================================
+           CURSOR GLOW
+           ===================================================== */
+
+        const canvas =
+            document.getElementById(
+                'cursorCanvas'
+            );
+
+
+        if (canvas) {
+
+            const ctx =
+                canvas.getContext('2d');
+
+
+            let w =
+                canvas.width =
+                window.innerWidth;
+
+            let h =
+                canvas.height =
+                window.innerHeight;
+
+
+            let mouse = {
+                x: w / 2,
+                y: h / 2
+            };
+
+
+            window.addEventListener(
+                'resize',
+                function () {
+
+                    w =
+                        canvas.width =
+                        window.innerWidth;
+
+                    h =
+                        canvas.height =
+                        window.innerHeight;
+
+                }
+            );
+
+
+            document.addEventListener(
+                'mousemove',
+                function (e) {
+
+                    mouse.x =
+                        e.clientX;
+
+                    mouse.y =
+                        e.clientY;
+
+                }
+            );
+
+
+            function drawGlow(
+                x,
+                y,
+                radius,
+                color
+            ) {
+
+                const gradient =
+                    ctx.createRadialGradient(
+                        x,
+                        y,
+                        0,
+                        x,
+                        y,
+                        radius
+                    );
+
+
+                gradient.addColorStop(
+                    0,
+                    color
+                );
+
+
+                gradient.addColorStop(
+                    1,
+                    'transparent'
+                );
+
+
+                ctx.fillStyle =
+                    gradient;
+
+
+                ctx.beginPath();
+
+
+                ctx.arc(
+                    x,
+                    y,
+                    radius,
+                    0,
+                    Math.PI * 2
+                );
+
+
+                ctx.fill();
+
+            }
+
+
+            function animate() {
+
+                ctx.clearRect(
+                    0,
+                    0,
+                    w,
+                    h
+                );
+
+
+                drawGlow(
+                    mouse.x,
+                    mouse.y,
+                    45,
+                    'rgba(79, 70, 229, 0.10)'
+                );
+
+
+                requestAnimationFrame(
+                    animate
+                );
+
+            }
+
+
+            animate();
+
+        }
+
+
+        /* =====================================================
+           PHARMACIST STATISTICS
+           ===================================================== */
+
+        $(function () {
+
+            function updatePharmacistStats() {
+
+                $.ajax({
+
+                    url:
+                        '@Url.Action(
+                            "GetPharmacistStatsJson",
+                            "Pharmacist"
+                        )',
+
+                    type: 'GET',
+
+                    cache: false,
+
+                    success:
+                        function (result) {
+
+                            if (result) {
+
+                                $(
+                                    "#pharmacistStatsContainer"
+                                ).html(result);
+
+                            }
+
+                        },
+
+                    error:
+                        function (
+                            xhr,
+                            status,
+                            error
+                        ) {
+
+                            console.error(
+                                "Pharmacist dashboard polling error:",
+                                error
+                            );
+
+                        }
+
+                });
+
+            }
+
+
+            /* Initial load */
+
+            updatePharmacistStats();
+
+
+            /* Refresh every 3 seconds */
+
+            setInterval(
+                updatePharmacistStats,
+                3000
+            );
+
+        });
+
+    </script>
+
+}

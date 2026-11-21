@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Equipment>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.EquipmentName
+            </td>
+
+            <td>
+                <span class="category-badge">
+                    @item.Category
+                </span>
+            </td>
+
+            <td>
+                <span class="quantity-badge">
+                    @item.Quantity
+                </span>
+            </td>
+
+            <td>
+                <span class="condition-badge">
+                    @item.Condition
+                </span>
+            </td>
+
+            <td>
+                <span class="location-text">
+                    @item.Location
+                </span>
+            </td>
+
+            <td class="actions">
+                @Html.ActionLink("Update Stock", "Edit", new { id = item.EquipmentID }, new { @class = "action-link edit-link" })
+                @Html.ActionLink("Details", "Details", new { id = item.EquipmentID }, new { @class = "action-link details-link" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.EquipmentID }, new { @class = "action-link delete-link" })
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="6">
+            <div class="empty-state">
+                <h4>No Equipment Recorded</h4>
+                <p>
+                    There is currently no equipment in the inventory.
+                    Use <strong>Add Equipment</strong> to create the first record.
+                </p>
+            </div>
+        </td>
+    </tr>
+}

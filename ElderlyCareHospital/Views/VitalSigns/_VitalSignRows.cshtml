@@ -1,0 +1,74 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.VitalSign>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td class="patient-name">
+                @if (item.Patient != null)
+                {
+                    @item.Patient.FirstName @item.Patient.LastName
+                }
+                else
+                {
+                    <span>Unknown Patient</span>
+                }
+            </td>
+
+            <td>
+                <span class="metric-badge">
+                    @item.Temperature
+                </span>
+            </td>
+
+            <td>
+                <span class="metric-badge bp">
+                    @item.BloodPressure
+                </span>
+            </td>
+
+            <td>
+                <span class="metric-badge">
+                    @item.PulseRate
+                </span>
+            </td>
+
+            <td>
+                <span class="metric-badge">
+                    @item.OxygenLevel
+                </span>
+            </td>
+
+            <td>
+                <span class="metric-badge">
+                    @item.SugarLevel
+                </span>
+            </td>
+
+            <td>
+                <span class="metric-badge">
+                    @item.Weight
+                </span>
+            </td>
+
+            <td class="date-text">
+                @item.DateRecorded.ToString("dd MMM yyyy")
+            </td>
+
+            <td class="action-links">
+                @Html.ActionLink("Edit", "Edit", new { id = item.VitalID }) |
+                @Html.ActionLink("Details", "Details", new { id = item.VitalID }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.VitalID })
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="9" class="text-center text-muted" style="padding: 30px;">
+            No vital signs records found.
+        </td>
+    </tr>
+}

@@ -1,0 +1,182 @@
+﻿<!-- =========================================================
+     MEDICINE INVENTORY OVERVIEW
+     ========================================================= -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        <h3>
+            Medicine Inventory Overview
+        </h3>
+
+        <span class="section-badge">
+            Pharmacy Live Metrics
+        </span>
+
+    </div>
+
+
+    <div class="row">
+
+        <!-- TOTAL MEDICINES -->
+
+        <div class="col-md-6 col-lg-3 mb-4">
+
+            <div class="stats-card">
+
+                <h4>
+                    Total Medicines
+                </h4>
+
+                <h2>
+                    @ViewBag.TotalMedicines
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOW STOCK -->
+
+        <div class="col-md-6 col-lg-3 mb-4">
+
+            <div class="stats-card">
+
+                <h4>
+                    Low Stock
+                </h4>
+
+                <h2>
+                    @ViewBag.LowStock
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- EXPIRING SOON -->
+
+        <div class="col-md-6 col-lg-3 mb-4">
+
+            <div class="stats-card">
+
+                <h4>
+                    Expiring Soon
+                </h4>
+
+                <h2>
+                    @ViewBag.ExpiringSoon
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- PENDING REQUESTS -->
+
+        <div class="col-md-6 col-lg-3 mb-4">
+
+            <div class="stats-card">
+
+                <h4>
+                    Pending Requests
+                </h4>
+
+                <h2>
+                    @ViewBag.PendingRequests
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================================================
+     EQUIPMENT & MAINTENANCE OVERVIEW
+     ========================================================= -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        <h3>
+            Equipment & Maintenance Overview
+        </h3>
+
+        <span class="section-badge">
+            Clinical Equipment Status
+        </span>
+
+    </div>
+
+
+    <div class="row">
+
+        <!-- TOTAL EQUIPMENT -->
+
+        <div class="col-md-4 mb-4">
+
+            <div class="stats-card">
+
+                <h4>
+                    Total Equipment
+                </h4>
+
+                <h2>
+                    @ViewBag.TotalEquipment
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- LOW EQUIPMENT -->
+
+        <div class="col-md-4 mb-4">
+
+            <div class="stats-card">
+
+                <h4>
+                    Low Equipment
+                </h4>
+
+                <h2>
+                    @ViewBag.LowEquipment
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <!-- MAINTENANCE DUE -->
+
+        <div class="col-md-4 mb-4">
+
+            <div class="stats-card">
+
+                <h4>
+                    Maintenance Due
+                </h4>
+
+                <h2>
+                    @ViewBag.MaintenanceDue
+                </h2>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

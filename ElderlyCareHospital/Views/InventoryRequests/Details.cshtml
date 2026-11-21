@@ -1,0 +1,214 @@
+﻿@model ElderlyCareHospital.Models.InventoryRequest
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<style>
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .details-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 28px 32px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 20px rgba(47, 111, 115, 0.15);
+    }
+
+        .details-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 30px;
+        }
+
+        .details-header p {
+            margin-top: 8px;
+            opacity: 0.95;
+            font-size: 15px;
+        }
+
+    .details-panel {
+        background: white;
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    }
+
+        .details-panel h4 {
+            color: #2f6f73;
+            font-weight: 700;
+            margin-bottom: 18px;
+        }
+
+    .details-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 14px 0;
+        border-bottom: 1px solid #edf2f5;
+        gap: 20px;
+    }
+
+        .details-row:last-child {
+            border-bottom: none;
+        }
+
+    .details-label {
+        color: #455a64;
+        font-weight: 700;
+        min-width: 180px;
+    }
+
+    .details-value {
+        color: #1f2d3d;
+        font-weight: 500;
+        text-align: right;
+        flex: 1;
+    }
+
+    .status-badge {
+        display: inline-block;
+        padding: 6px 12px;
+        background: #e8f6f6;
+        color: #2f6f73;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .action-bar {
+        margin-top: 24px;
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+    }
+
+    .btn-action {
+        display: inline-block;
+        padding: 10px 18px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+    .btn-edit {
+        background: #2f6f73;
+        color: white !important;
+    }
+
+        .btn-edit:hover {
+            background: #25575a;
+            text-decoration: none;
+        }
+
+    .btn-back {
+        background: #455a64;
+        color: white !important;
+    }
+
+        .btn-back:hover {
+            background: #263238;
+            text-decoration: none;
+        }
+</style>
+
+<div class="container mt-4">
+
+    <div class="details-header">
+        <h2>Inventory Request Details</h2>
+        <p>
+            Review the complete information for this inventory request, including quantities, requester details, approval status, and administrative notes.
+        </p>
+    </div>
+
+    <div class="details-panel">
+
+        <h4>Inventory Request</h4>
+
+        <div class="details-row">
+            <div class="details-label">
+                @Html.DisplayNameFor(model => model.ItemName)
+            </div>
+
+            <div class="details-value">
+                @Html.DisplayFor(model => model.ItemName)
+            </div>
+        </div>
+
+        <div class="details-row">
+            <div class="details-label">
+                @Html.DisplayNameFor(model => model.QuantityRequested)
+            </div>
+
+            <div class="details-value">
+                @Html.DisplayFor(model => model.QuantityRequested)
+            </div>
+        </div>
+
+        <div class="details-row">
+            <div class="details-label">
+                @Html.DisplayNameFor(model => model.RequestedBy)
+            </div>
+
+            <div class="details-value">
+                @Html.DisplayFor(model => model.RequestedBy)
+            </div>
+        </div>
+
+        <div class="details-row">
+            <div class="details-label">
+                @Html.DisplayNameFor(model => model.RequestDate)
+            </div>
+
+            <div class="details-value">
+                @Html.DisplayFor(model => model.RequestDate)
+            </div>
+        </div>
+
+        <div class="details-row">
+            <div class="details-label">
+                @Html.DisplayNameFor(model => model.Status)
+            </div>
+
+            <div class="details-value">
+                <span class="status-badge">
+                    @Html.DisplayFor(model => model.Status)
+                </span>
+            </div>
+        </div>
+
+        <div class="details-row">
+            <div class="details-label">
+                @Html.DisplayNameFor(model => model.ApprovalNotes)
+            </div>
+
+            <div class="details-value">
+                @Html.DisplayFor(model => model.ApprovalNotes)
+            </div>
+        </div>
+
+        <div class="action-bar">
+
+            @Html.ActionLink(
+                "Edit",
+                "Edit",
+                new { id = Model.RequestID },
+                new { @class = "btn-action btn-edit" })
+
+            @Html.ActionLink(
+                "Back to List",
+                "Index",
+                null,
+                new { @class = "btn-action btn-back" })
+
+        </div>
+
+    </div>
+  
+
+</div>

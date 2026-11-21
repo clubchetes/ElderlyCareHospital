@@ -1,0 +1,459 @@
+﻿@model ElderlyCareHospital.Models.CarePlan
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<style>
+
+    :root {
+        --app-bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --border-color: #e2e8f0;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --doctor-accent: #0f766e;
+        --doctor-accent-light: #14b8a6;
+        --danger: #dc2626;
+        --danger-hover: #b91c1c;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+    /* =========================================================
+       CONTAINER
+       ========================================================= */
+
+    .careplan-container {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        box-sizing: border-box;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .careplan-header {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 30px 36px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .careplan-header::after {
+            content: "";
+            position: absolute;
+            width: 190px;
+            height: 190px;
+            right: -70px;
+            top: -85px;
+            border-radius: 50%;
+            background: rgba(20, 184, 166, 0.045);
+            pointer-events: none;
+        }
+
+        .careplan-header h2 {
+            margin: 0;
+            color: var(--text-main);
+            font-size: 24px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+            position: relative;
+            z-index: 1;
+        }
+
+        .careplan-header p {
+            margin: 10px 0 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+    /* =========================================================
+       DELETE CARD
+       ========================================================= */
+
+    .delete-card {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    /* =========================================================
+       WARNING
+       ========================================================= */
+
+    .delete-warning {
+        background: rgba(220, 38, 38, 0.06);
+        border: 1px solid rgba(220, 38, 38, 0.15);
+        border-radius: 12px;
+        padding: 16px 18px;
+        margin-bottom: 25px;
+        color: #991b1b;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+        .delete-warning strong {
+            color: var(--danger);
+        }
+
+    /* =========================================================
+       SECTION TITLE
+       ========================================================= */
+
+    .careplan-section-title {
+        margin: 0 0 18px 0;
+        color: var(--text-main);
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    /* =========================================================
+       DETAILS
+       ========================================================= */
+
+    .careplan-details {
+        margin: 0;
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+    }
+
+        .careplan-details dt,
+        .careplan-details dd {
+            margin: 0;
+            padding: 15px 18px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .careplan-details dt {
+            width: 30%;
+            float: left;
+            clear: left;
+            box-sizing: border-box;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.35px;
+        }
+
+        .careplan-details dd {
+            margin-left: 30%;
+            min-height: 48px;
+            box-sizing: border-box;
+            color: #475569;
+            font-size: 14px;
+            line-height: 1.6;
+            word-break: break-word;
+            background: #ffffff;
+        }
+
+            .careplan-details dt:last-of-type,
+            .careplan-details dd:last-of-type {
+                border-bottom: none;
+            }
+
+    .patient-name {
+        color: var(--doctor-accent) !important;
+        font-weight: 700;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 28px;
+        padding-top: 22px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    .btn-delete {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 20px;
+        border-radius: 10px;
+        background: var(--danger);
+        color: white !important;
+        border: none;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 5px 14px rgba(220, 38, 38, 0.16);
+    }
+
+        .btn-delete:hover {
+            background: var(--danger-hover);
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(220, 38, 38, 0.22);
+        }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 20px;
+        border-radius: 10px;
+        background: #475569;
+        color: white !important;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #334155;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .careplan-container {
+            padding: 25px 15px;
+        }
+
+        .careplan-header {
+            padding: 24px;
+            border-radius: 16px;
+        }
+
+            .careplan-header h2 {
+                font-size: 21px;
+            }
+
+        .delete-card {
+            padding: 22px;
+            border-radius: 16px;
+        }
+
+        .careplan-details dt {
+            width: 100%;
+            float: none;
+            border-bottom: none;
+            padding-bottom: 8px;
+        }
+
+        .careplan-details dd {
+            margin-left: 0;
+            min-height: auto;
+            padding-top: 8px;
+        }
+
+        .careplan-details dt:last-of-type {
+            border-bottom: none;
+        }
+
+        .form-actions {
+            justify-content: center;
+        }
+    }
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .careplan-container {
+            padding: 20px 10px;
+        }
+
+        .careplan-header {
+            padding: 20px;
+        }
+
+            .careplan-header h2 {
+                font-size: 19px;
+            }
+
+            .careplan-header p {
+                font-size: 13px;
+            }
+
+        .delete-card {
+            padding: 16px;
+        }
+
+        .delete-warning {
+            font-size: 13px;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-delete,
+        .back-link {
+            width: 100%;
+            box-sizing: border-box;
+        }
+    }
+</style>
+
+<div class="careplan-container">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="careplan-header">
+
+        <h2>
+            Delete Care Plan
+        </h2>
+
+        <p>
+            Review the care plan details below before permanently deleting this record.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         DELETE CARD
+         ===================================================== -->
+
+    <div class="delete-card">
+
+        <div class="delete-warning">
+            <strong>⚠ Warning:</strong>
+            Are you sure you want to delete this care plan?
+            This action cannot be undone.
+        </div>
+
+        <h4 class="careplan-section-title">
+            Care Plan Details
+        </h4>
+
+        <dl class="careplan-details">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Patient.FirstName)
+            </dt>
+
+            <dd class="patient-name">
+                @Html.DisplayFor(model => model.Patient.FirstName)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.MedicationRoutine)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.MedicationRoutine)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DietInstructions)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.DietInstructions)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.MobilitySupport)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.MobilitySupport)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.TherapySchedule)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.TherapySchedule)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.MemoryCareNotes)
+            </dt>
+
+            <dd>
+                @Html.DisplayFor(model => model.MemoryCareNotes)
+            </dd>
+
+        </dl>
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions">
+
+                <input type="submit"
+                       value="Delete"
+                       class="btn-delete" />
+
+                @Html.ActionLink(
+                    "Back to List",
+                    "Index",
+                    null,
+                    new
+                    {
+                        @class = "back-link"
+                    })
+
+            </div>
+        }
+
+    </div>
+
+
+</div>

@@ -1,0 +1,700 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Medicine>
+
+@{
+    ViewBag.Title = "Medicine Inventory";
+}
+
+<style>
+
+    /* =========================================================
+       ROOT / ELDERLYCARE DASHBOARD THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --border-color: #e2e8f0;
+        --green: #059669;
+        --orange: #d97706;
+        --red: #dc2626;
+        --cyan: #0d9488;
+        --blue: #0284c7;
+        --purple: #7c3aed;
+    }
+
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+       BACKGROUND EFFECTS
+       ========================================================= */
+
+    .bg-shape {
+        position: fixed;
+        border-radius: 50%;
+        background: rgba(79, 70, 229, 0.035);
+        pointer-events: none;
+        z-index: 0;
+        filter: blur(5px);
+    }
+
+    .shape1 {
+        width: 300px;
+        height: 300px;
+        top: 5%;
+        left: 5%;
+    }
+
+    .shape2 {
+        width: 220px;
+        height: 220px;
+        bottom: 10%;
+        right: 5%;
+        background: rgba(14, 165, 233, 0.04);
+    }
+
+
+    /* =========================================================
+       INVENTORY WRAPPER
+       ========================================================= */
+
+    .inventory-wrapper {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 36px 40px 45px;
+    }
+
+
+    /* =========================================================
+       PAGE HEADER
+       ========================================================= */
+
+    .inventory-header {
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        color: var(--text-main);
+        padding: 28px 34px;
+        border-radius: 18px;
+        margin-bottom: 26px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+    .inventory-header-content {
+        width: 100%;
+    }
+
+    .inventory-header h2 {
+        margin: 0;
+        font-weight: 700;
+        font-size: 24px;
+        color: var(--text-main);
+        letter-spacing: -0.3px;
+        line-height: 1.3;
+    }
+
+    .inventory-header p {
+        margin: 8px 0 0;
+        color: var(--text-muted);
+        font-size: 14px;
+        line-height: 1.6;
+        max-width: 900px;
+    }
+
+
+    /* =========================================================
+       LIVE STATUS
+       ========================================================= */
+
+    .inventory-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 18px;
+        padding: 7px 12px;
+        border-radius: 999px;
+        background: #f0fdf4;
+        border: 1px solid #dcfce7;
+        color: #15803d;
+        font-size: 11px;
+        font-weight: 700;
+    }
+
+    .inventory-status-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #22c55e;
+        box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.10);
+    }
+
+
+    /* =========================================================
+       TOOLBAR
+       ========================================================= */
+
+    .inventory-toolbar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .btn-add {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 10px 20px;
+        border-radius: 12px;
+        text-decoration: none !important;
+        font-weight: 600;
+        font-size: 13px;
+        color: #ffffff !important;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.18);
+        transition: all 0.2s ease;
+    }
+
+        .btn-add:hover {
+            color: #ffffff !important;
+            text-decoration: none !important;
+            transform: translateY(-2px);
+            box-shadow: 0 9px 20px rgba(79, 70, 229, 0.24);
+            background: linear-gradient(135deg, #4338ca, #4f46e5);
+        }
+
+
+    /* =========================================================
+       INVENTORY CARD
+       ========================================================= */
+
+    .inventory-card {
+        position: relative;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 22px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        overflow: hidden;
+    }
+
+        .inventory-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+        }
+
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .table-responsive {
+        width: 100%;
+        overflow-x: auto;
+    }
+
+    .medicine-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 0;
+        min-width: 850px;
+    }
+
+        .medicine-table thead th {
+            background: #f8fafc;
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            padding: 14px 14px;
+            border-bottom: 1px solid var(--border-color);
+            white-space: nowrap;
+            text-align: left;
+        }
+
+            .medicine-table thead th:first-child {
+                border-top-left-radius: 10px;
+            }
+
+            .medicine-table thead th:last-child {
+                border-top-right-radius: 10px;
+            }
+
+        .medicine-table tbody td {
+            padding: 15px 14px;
+            border-bottom: 1px solid #edf1f5;
+            vertical-align: middle;
+            color: var(--text-muted);
+            font-size: 13px;
+            background: #ffffff;
+        }
+
+        .medicine-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+            .medicine-table tbody tr:hover td {
+                background: #f8fafc;
+            }
+
+            .medicine-table tbody tr:last-child td {
+                border-bottom: none;
+            }
+
+
+    /* =========================================================
+       TABLE CONTENT
+       ========================================================= */
+
+    .medicine-name {
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .stock-value {
+        font-weight: 700;
+        color: var(--primary);
+    }
+
+    .minimum-stock {
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    .expiry-date {
+        color: var(--text-muted);
+        white-space: nowrap;
+    }
+
+    .supplier-name {
+        color: var(--text-muted);
+    }
+
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .actions {
+        white-space: nowrap;
+    }
+
+        .actions a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 7px 11px;
+            border-radius: 8px;
+            text-decoration: none !important;
+            font-size: 12px;
+            font-weight: 600;
+            margin-right: 4px;
+            transition: all 0.2s ease;
+        }
+
+    .edit-link {
+        color: var(--primary) !important;
+        background: rgba(79, 70, 229, 0.08);
+    }
+
+        .edit-link:hover {
+            color: var(--primary-hover) !important;
+            background: rgba(79, 70, 229, 0.14);
+            transform: translateY(-1px);
+        }
+
+    .details-link {
+        color: var(--blue) !important;
+        background: rgba(2, 132, 199, 0.08);
+    }
+
+        .details-link:hover {
+            color: #0369a1 !important;
+            background: rgba(2, 132, 199, 0.14);
+            transform: translateY(-1px);
+        }
+
+    .delete-link {
+        color: var(--red) !important;
+        background: rgba(220, 38, 38, 0.08);
+    }
+
+        .delete-link:hover {
+            color: #b91c1c !important;
+            background: rgba(220, 38, 38, 0.14);
+            transform: translateY(-1px);
+        }
+
+
+    /* =========================================================
+       EMPTY STATE
+       ========================================================= */
+
+    .empty-state {
+        text-align: center;
+        padding: 45px 20px;
+        color: var(--text-muted);
+    }
+
+        .empty-state h4 {
+            margin: 0 0 8px;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+
+    /* =========================================================
+       FOOTER
+       ========================================================= */
+
+    .dashboard-footer {
+        margin-top: 22px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        min-height: 44px;
+        padding: 10px 18px;
+        border-radius: 12px;
+        color: var(--text-muted);
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        font-weight: 600;
+        font-size: 13px;
+        text-decoration: none !important;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            color: var(--primary);
+            border-color: #cbd5e1;
+            text-decoration: none !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+        }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 1200px) {
+
+        .inventory-wrapper {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+    }
+
+
+    @@media (max-width: 900px) {
+
+        .inventory-wrapper {
+            padding: 30px 24px 40px;
+        }
+
+        .inventory-header {
+            padding: 25px;
+        }
+    }
+
+
+    @@media (max-width: 768px) {
+
+        .inventory-wrapper {
+            padding: 95px 18px 30px;
+        }
+
+        .inventory-header {
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 22px;
+        }
+
+            .inventory-header h2 {
+                font-size: 20px;
+            }
+
+            .inventory-header p {
+                font-size: 13px;
+            }
+
+        .inventory-toolbar {
+            justify-content: stretch;
+        }
+
+        .btn-add {
+            width: 100%;
+        }
+
+        .inventory-card {
+            padding: 14px;
+        }
+
+        .medicine-table {
+            min-width: 850px;
+        }
+
+            .medicine-table thead th,
+            .medicine-table tbody td {
+                padding: 12px 10px;
+            }
+
+        .dashboard-footer {
+            margin-top: 18px;
+        }
+
+        .back-link {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+
+    @@media (max-width: 480px) {
+
+        .inventory-wrapper {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .inventory-header {
+            padding: 19px;
+        }
+
+            .inventory-header h2 {
+                font-size: 18px;
+            }
+
+            .inventory-header p {
+                font-size: 12.5px;
+            }
+
+        .inventory-status {
+            font-size: 10px;
+        }
+
+        .inventory-card {
+            padding: 10px;
+        }
+    }
+</style>
+
+
+<!-- =========================================================
+     BACKGROUND SHAPES
+     ========================================================= -->
+
+<div class="bg-shape shape1"></div>
+<div class="bg-shape shape2"></div>
+
+
+<!-- =========================================================
+     INVENTORY PAGE
+     ========================================================= -->
+
+<div class="inventory-wrapper">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="inventory-header">
+
+        <div class="inventory-header-content">
+
+            <h2>
+                Medicine Inventory
+            </h2>
+
+            <p>
+                Manage available medicines, monitor stock levels,
+                review expiry dates, and maintain accurate
+                pharmaceutical inventory records in real time.
+            </p>
+
+            <div class="inventory-status">
+
+                <span class="inventory-status-dot"></span>
+
+                Live Sync Active
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         TOOLBAR
+         ===================================================== -->
+
+    <div class="inventory-toolbar">
+
+        @Html.ActionLink(
+            "Add Medicine",
+            "Create",
+            null,
+            new { @class = "btn-add" }
+        )
+
+    </div>
+
+
+    <!-- =====================================================
+         INVENTORY TABLE
+         ===================================================== -->
+
+    <div class="inventory-card">
+
+        <div class="table-responsive">
+
+            <table class="medicine-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Medicine Name
+                        </th>
+
+                        <th>
+                            Stock
+                        </th>
+
+                        <th>
+                            Minimum Stock
+                        </th>
+
+                        <th>
+                            Expiry Date
+                        </th>
+
+                        <th>
+                            Supplier
+                        </th>
+
+                        <th>
+                            Actions
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="liveMedicineBody">
+
+                    @Html.Partial(
+                        "_MedicineInventoryRows",
+                        Model
+                    )
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK TO DASHBOARD
+         ===================================================== -->
+
+    <div class="dashboard-footer">
+
+        @Html.ActionLink(
+            "Back to Dashboard",
+            "Dashboard",
+            "Pharmacist",
+            null,
+            new { @class = "back-link" }
+        )
+
+    </div>
+
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+        function refreshMedicines() {
+
+            $.ajax({
+
+                url:
+                    '@Url.Action(
+                        "GetLiveMedicines",
+                        "Medicines"
+                    )',
+
+                type: 'GET',
+
+                success: function (data) {
+
+                    $('#liveMedicineBody').html(data);
+
+                }
+
+            });
+
+        }
+
+
+        // Polls the database every 5 seconds
+        // for inventory background changes
+
+        setInterval(
+            refreshMedicines,
+            5000
+        );
+
+    </script>
+
+}

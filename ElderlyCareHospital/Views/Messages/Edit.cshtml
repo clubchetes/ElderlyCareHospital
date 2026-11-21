@@ -1,0 +1,349 @@
+﻿@model ElderlyCareHospital.Models.Message
+
+@{
+    ViewBag.Title = "Edit Message";
+}
+
+<style>
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .edit-message-container {
+        max-width: 750px;
+        margin: 40px auto;
+    }
+
+    .edit-message-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 28px 32px;
+        border-radius: 18px 18px 0 0;
+        box-shadow: 0 6px 18px rgba(47, 111, 115, 0.15);
+    }
+
+        .edit-message-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 30px;
+        }
+
+        .edit-message-header p {
+            margin: 8px 0 0;
+            opacity: 0.95;
+            font-size: 15px;
+        }
+
+    .edit-message-card {
+        background: white;
+        padding: 30px;
+        border-radius: 0 0 18px 18px;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
+    .section-title {
+        color: #2f6f73;
+        font-weight: 700;
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .section-description {
+        color: #78909c;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .form-divider {
+        border-top: 1px solid #e5ecef;
+        margin: 18px 0 28px;
+    }
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .control-label {
+        font-weight: 600;
+        color: #2f3e46;
+        margin-bottom: 8px;
+        display: block;
+    }
+
+    .form-control {
+        width: 100%;
+        border-radius: 10px;
+        border: 1px solid #cfd8dc;
+        padding: 11px 14px;
+        min-height: 44px;
+        box-shadow: none;
+        font-size: 14px;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: #4c8c91;
+            box-shadow: 0 0 0 3px rgba(76, 140, 145, 0.15);
+            outline: none;
+        }
+
+    textarea.form-control {
+        min-height: 170px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    .readonly-field {
+        background: #f5f8f9;
+        color: #607d8b;
+        cursor: not-allowed;
+    }
+
+    .field-hint {
+        display: block;
+        margin-top: 6px;
+        color: #90a4ae;
+        font-size: 12px;
+    }
+
+    .message-label {
+        color: #2f6f73;
+    }
+
+    .button-row {
+        display: flex;
+        gap: 12px;
+        align-items: center;
+        margin-top: 28px;
+        flex-wrap: wrap;
+    }
+
+    .btn-save {
+        background: #2f6f73;
+        border: none;
+        color: white;
+        padding: 11px 24px;
+        border-radius: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: 0.2s ease;
+    }
+
+        .btn-save:hover {
+            background: #25575a;
+            color: white;
+        }
+
+    .btn-cancel {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: #6c757d;
+        color: white !important;
+        padding: 11px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+        .btn-cancel:hover {
+            background: #5a6268;
+            text-decoration: none;
+        }
+
+    .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #2f6f73;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .back-link:hover {
+            color: #25575a;
+            text-decoration: none;
+        }
+
+    .text-danger {
+        display: block;
+        margin-top: 6px;
+        font-size: 13px;
+    }
+
+    .message-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        margin-bottom: 22px;
+    }
+
+    @@media (max-width: 600px) {
+        .edit-message-container {
+            margin: 20px 15px;
+        }
+
+        .edit-message-header {
+            padding: 24px;
+        }
+
+            .edit-message-header h2 {
+                font-size: 25px;
+            }
+
+        .edit-message-card {
+            padding: 22px;
+        }
+
+        .message-meta {
+            grid-template-columns: 1fr;
+            gap: 0;
+        }
+    }
+</style>
+
+<div class="edit-message-container">
+
+    <div class="edit-message-header">
+        <h2>Edit Message</h2>
+        <p>
+            Update the message content while keeping the original sender,
+            recipient, and sent date information protected.
+        </p>
+    </div>
+
+    <div class="edit-message-card">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "text-danger" })
+
+            @Html.HiddenFor(model => model.MessageID)
+            @Html.HiddenFor(model => model.SenderID)
+            @Html.HiddenFor(model => model.ReceiverID)
+            @Html.HiddenFor(model => model.SentDate)
+
+            <div class="section-title">
+                Message Information
+            </div>
+
+            <div class="section-description">
+                Review the message details and update the message below.
+            </div>
+
+            <div class="form-divider"></div>
+
+            <div class="message-meta">
+
+                <div class="form-group">
+
+                    <label class="control-label">
+                        Sender
+                    </label>
+
+                    <input type="text"
+                           class="form-control readonly-field"
+                           value="@Model.SenderID"
+                           readonly />
+
+                    <span class="field-hint">
+                        Sender information cannot be changed.
+                    </span>
+
+                </div>
+
+                <div class="form-group">
+
+                    <label class="control-label">
+                        Recipient
+                    </label>
+
+                    <input type="text"
+                           class="form-control readonly-field"
+                           value="@Model.ReceiverID"
+                           readonly />
+
+                    <span class="field-hint">
+                        Recipient information cannot be changed.
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <label class="control-label">
+                    Sent Date
+                </label>
+
+                <input type="text"
+                       class="form-control readonly-field"
+                       value="@(Model.SentDate?.ToString("dd MMM yyyy HH:mm"))"
+                       readonly />
+
+                <span class="field-hint">
+                    Original sent date is preserved.
+                </span>
+
+            </div>
+
+            <div class="form-group">
+
+                @Html.LabelFor(
+                    model => model.MessageText,
+                    new
+                    {
+                        @class = "control-label message-label"
+                    })
+
+                @Html.TextAreaFor(
+                    model => model.MessageText,
+                    new
+                    {
+                        @class = "form-control",
+                        rows = "7",
+                        placeholder = "Enter your message here..."
+                    })
+
+                @Html.ValidationMessageFor(
+                    model => model.MessageText,
+                    "",
+                    new { @class = "text-danger" })
+
+            </div>
+
+            <div class="button-row">
+
+                <input type="submit"
+                       value="Save Changes"
+                       class="btn-save" />
+
+                @Html.ActionLink(
+                    "Cancel",
+                    "Details",
+                    new { id = Model.MessageID },
+                    new { @class = "btn-cancel" })
+
+            </div>
+        }
+
+        @Html.ActionLink(
+            "← Back to Inbox",
+            "Inbox",
+            null,
+            new { @class = "back-link" })
+
+    </div>
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

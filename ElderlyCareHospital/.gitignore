@@ -1,0 +1,48 @@
+
+# Visual Studio files
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Build folders
+bin/
+obj/
+Debug/
+Release/
+
+# Visual Studio cache
+.vscode/
+
+# Temporary files
+*.tmp
+*.log
+
+# Local database files - review before uploading
+*.mdf
+*.ldf
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Sensitive configuration
+Web.config
+Web.*.config
+*.csproj.user
+
+# Visual Studio
+.vs/
+bin/
+obj/
+
+# Database files
+*.mdf
+*.ldf
+
+
+
+# Publish output
+publish/

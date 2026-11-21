@@ -1,0 +1,1000 @@
+﻿@model ElderlyCareHospital.Models.Medicine
+
+@{
+    ViewBag.Title = "Add Medicine";
+}
+
+<style>
+
+    /* =========================================================
+       ROOT / ELDERLYCARE DASHBOARD THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --border-color: #e2e8f0;
+        --green: #059669;
+        --orange: #d97706;
+        --red: #dc2626;
+        --cyan: #0d9488;
+        --blue: #0284c7;
+        --purple: #7c3aed;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    /* =========================================================
+       BACKGROUND EFFECTS
+       ========================================================= */
+
+    .bg-shape {
+        position: fixed;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+        filter: blur(5px);
+    }
+
+    .shape1 {
+        width: 300px;
+        height: 300px;
+        top: 5%;
+        left: 5%;
+        background: rgba(79, 70, 229, 0.035);
+    }
+
+    .shape2 {
+        width: 220px;
+        height: 220px;
+        bottom: 10%;
+        right: 5%;
+        background: rgba(14, 165, 233, 0.04);
+    }
+
+    /* =========================================================
+       PAGE WRAPPER
+       ========================================================= */
+
+    .medicine-page {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 950px;
+        margin: 0 auto;
+        padding: 36px 40px 45px;
+    }
+
+    /* =========================================================
+       MAIN CARD
+       ========================================================= */
+
+    .medicine-card {
+        position: relative;
+        background: var(--card-bg);
+        border: 1px solid var(--border-color);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.02);
+    }
+
+        .medicine-card::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--primary);
+            z-index: 2;
+        }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .medicine-header {
+        background: #ffffff;
+        color: var(--text-main);
+        padding: 28px 34px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+        .medicine-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 24px;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+
+        .medicine-header p {
+            margin: 8px 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 800px;
+        }
+
+    /* =========================================================
+       FORM
+       ========================================================= */
+
+    .medicine-form {
+        padding: 32px 34px 34px;
+    }
+
+    .section-title {
+        color: var(--text-main);
+        font-size: 17px;
+        font-weight: 700;
+        margin: 0 0 22px;
+        padding-bottom: 13px;
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    /* =========================================================
+       INFORMATION BOX
+       ========================================================= */
+
+    .medicine-info {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-left: 3px solid var(--primary);
+        border-radius: 12px;
+        padding: 14px 16px;
+        margin-bottom: 28px;
+        color: var(--text-muted);
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+        .medicine-info strong {
+            color: var(--primary);
+        }
+
+    /* =========================================================
+       FORM GROUP
+       ========================================================= */
+
+    .form-group {
+        margin-bottom: 21px;
+    }
+
+    .control-label {
+        color: var(--text-main);
+        font-size: 13px;
+        font-weight: 600;
+        padding-top: 11px;
+    }
+
+    /* =========================================================
+       FORM CONTROLS
+       ========================================================= */
+
+    .form-control {
+        width: 100%;
+        height: 44px;
+        border: 1px solid var(--border-color);
+        border-radius: 10px;
+        padding: 10px 13px;
+        font-family: inherit;
+        font-size: 13px;
+        color: var(--text-main);
+        background: #ffffff;
+        box-shadow: none;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+    textarea.form-control {
+        height: auto;
+        min-height: 105px;
+        resize: vertical;
+        line-height: 1.5;
+    }
+
+    .form-control:hover {
+        border-color: #cbd5e1;
+    }
+
+    .form-control:focus {
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.10);
+        background: #ffffff;
+    }
+
+    .form-control::placeholder {
+        color: #94a3b8;
+    }
+
+    /* =========================================================
+       INVALID CONTROLS
+       ========================================================= */
+
+    .input-validation-error {
+        border-color: var(--red) !important;
+        background-color: #fffafa;
+    }
+
+        .input-validation-error:focus {
+            border-color: var(--red) !important;
+            box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.10) !important;
+        }
+
+    /* =========================================================
+       VALIDATION
+       ========================================================= */
+
+    .text-danger {
+        display: block;
+        margin-top: 5px;
+        color: var(--red);
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .validation-summary-errors {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 10px;
+        padding: 12px 15px;
+        margin-bottom: 20px;
+        color: var(--red);
+        font-size: 13px;
+    }
+
+        .validation-summary-errors ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+
+    /* =========================================================
+       SUBMIT ROW
+       ========================================================= */
+
+    .submit-row {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-top: 28px;
+        padding-top: 22px;
+        border-top: 1px solid var(--border-color);
+    }
+
+    /* =========================================================
+       CREATE BUTTON
+       ========================================================= */
+
+    .btn-create {
+        border: none;
+        border-radius: 12px;
+        min-height: 44px;
+        padding: 10px 24px;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: #ffffff;
+        font-family: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.18);
+        transition: all 0.2s ease;
+    }
+
+        .btn-create:hover {
+            background: linear-gradient(135deg, #4338ca, #4f46e5);
+            color: #ffffff;
+            transform: translateY(-2px);
+            box-shadow: 0 9px 20px rgba(79, 70, 229, 0.24);
+        }
+
+        .btn-create:focus {
+            outline: none;
+        }
+
+    /* =========================================================
+       BACK LINK
+       ========================================================= */
+
+    .back-container {
+        margin-top: 20px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 10px 18px;
+        border-radius: 12px;
+        color: var(--text-muted) !important;
+        background: #ffffff;
+        border: 1px solid var(--border-color);
+        text-decoration: none !important;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            color: var(--primary) !important;
+            border-color: #cbd5e1;
+            background: #ffffff;
+            text-decoration: none !important;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+        }
+
+    /* =========================================================
+       LARGE TABLET
+       ========================================================= */
+
+    @@media (max-width: 900px) {
+
+        .medicine-page {
+            max-width: 850px;
+            padding: 30px 24px 40px;
+        }
+
+        .medicine-header {
+            padding: 25px;
+        }
+
+        .medicine-form {
+            padding: 28px 25px;
+        }
+    }
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .medicine-page {
+            padding: 95px 18px 30px;
+        }
+
+        .medicine-card {
+            border-radius: 15px;
+        }
+
+        .medicine-header {
+            padding: 22px;
+        }
+
+            .medicine-header h2 {
+                font-size: 20px;
+            }
+
+            .medicine-header p {
+                font-size: 13px;
+            }
+
+        .medicine-form {
+            padding: 25px 20px;
+        }
+
+        .control-label {
+            padding-top: 0;
+            margin-bottom: 7px;
+            display: block;
+        }
+
+        .col-md-3,
+        .col-md-9,
+        .col-md-2,
+        .col-md-10 {
+            width: 100%;
+        }
+
+        .form-group.row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+        .medicine-info {
+            font-size: 12px;
+        }
+
+        .submit-row {
+            justify-content: stretch;
+        }
+
+        .btn-create {
+            width: 100%;
+        }
+
+        .back-container {
+            margin-top: 16px;
+        }
+
+        .back-link {
+            width: 100%;
+        }
+    }
+
+    /* =========================================================
+       SMALL PHONE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .medicine-page {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .medicine-header {
+            padding: 19px;
+        }
+
+            .medicine-header h2 {
+                font-size: 18px;
+            }
+
+            .medicine-header p {
+                font-size: 12.5px;
+            }
+
+        .medicine-form {
+            padding: 22px 16px;
+        }
+
+        .section-title {
+            font-size: 16px;
+        }
+    }
+</style>
+
+
+<!-- =========================================================
+     BACKGROUND SHAPES
+     ========================================================= -->
+
+<div class="bg-shape shape1"></div>
+<div class="bg-shape shape2"></div>
+
+
+<!-- =========================================================
+     MEDICINE PAGE
+     ========================================================= -->
+
+<div class="medicine-page">
+
+    <div class="medicine-card">
+
+        <!-- =====================================================
+             HEADER
+             ===================================================== -->
+
+        <div class="medicine-header">
+
+            <h2>
+                Add New Medicine
+            </h2>
+
+            <p>
+                Add a medicine to the hospital pharmacy inventory.
+                Enter accurate medication, stock, expiry, and supplier
+                information to support safe and efficient medication management.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             FORM
+             ===================================================== -->
+
+        <div class="medicine-form">
+
+            @using (Html.BeginForm(null, null, FormMethod.Post, new
+            {
+                id = "medicineForm",
+                novalidate = "novalidate"
+            }))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(
+                    true,
+                    "",
+                    new { @class = "text-danger" })
+
+
+                <h4 class="section-title">
+                    Medicine Information
+                </h4>
+
+
+                <!-- =================================================
+                     INFORMATION
+                     ================================================= -->
+
+                <div class="medicine-info">
+
+                    <div>
+
+                        <strong>
+                            Pharmacy Reminder:
+                        </strong>
+
+                        All fields are required. Make sure the medicine
+                        name, description, quantity, minimum stock,
+                        expiry date, and supplier information are correct
+                        before saving.
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     MEDICINE NAME
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.MedicineName,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.MedicineName,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter medicine name",
+                                    required = "required",
+                                    maxlength = "100"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.MedicineName,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DESCRIPTION
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Description,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.TextAreaFor(
+                            model => model.Description,
+                            new
+                            {
+                                @class = "form-control",
+                                rows = "4",
+                                placeholder = "Enter medicine description",
+                                required = "required",
+                                maxlength = "500"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.Description,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     QUANTITY
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Quantity,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.Quantity,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter current quantity",
+                                    required = "required",
+                                    min = "0",
+                                    step = "1"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.Quantity,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     EXPIRY DATE
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.ExpiryDate,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.TextBoxFor(
+                            model => model.ExpiryDate,
+                            "{0:yyyy-MM-ddTHH:mm}",
+                            new
+                            {
+                                @class = "form-control",
+                                type = "datetime-local",
+                                required = "required"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.ExpiryDate,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     MINIMUM STOCK
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.MinimumStock,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.MinimumStock,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter minimum stock level",
+                                    required = "required",
+                                    min = "0",
+                                    step = "1"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.MinimumStock,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SUPPLIER
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Supplier,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.Supplier,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter supplier name",
+                                    required = "required",
+                                    maxlength = "150"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.Supplier,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SUBMIT
+                     ================================================= -->
+
+                <div class="submit-row">
+
+                    <input type="submit"
+                           value="Add Medicine"
+                           class="btn-create" />
+
+                </div>
+
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         BACK
+         ========================================================= -->
+
+    <div class="back-container">
+
+        @Html.ActionLink(
+            "Back to Medicine List",
+            "Index",
+            null,
+            new
+            {
+                @class = "back-link"
+            })
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $(document).ready(function () {
+
+            $("#medicineForm").on("submit", function (e) {
+
+                var form = this;
+                var isValid = true;
+
+                /*
+                 * Check all required text inputs and textareas.
+                 * This also prevents values containing only spaces.
+                 */
+
+                $(form).find("input[required], textarea[required], select[required]").each(function () {
+
+                    var value = $(this).val();
+
+                    if (value === null || $.trim(value) === "") {
+
+                        $(this).addClass("input-validation-error");
+
+                        isValid = false;
+
+                    } else {
+
+                        $(this).removeClass("input-validation-error");
+
+                    }
+
+                });
+
+
+                /*
+                 * Quantity must be a whole number and cannot be negative.
+                 */
+
+                var quantityInput = $("#Quantity");
+
+                if (quantityInput.length) {
+
+                    var quantity = quantityInput.val();
+
+                    if (quantity === "" ||
+                        quantity === null ||
+                        isNaN(quantity) ||
+                        Number(quantity) < 0 ||
+                        !Number.isInteger(Number(quantity))) {
+
+                        quantityInput.addClass("input-validation-error");
+
+                        isValid = false;
+
+                    } else {
+
+                        quantityInput.removeClass("input-validation-error");
+
+                    }
+                }
+
+
+                /*
+                 * Minimum stock must be a whole number and cannot be negative.
+                 */
+
+                var minimumStockInput = $("#MinimumStock");
+
+                if (minimumStockInput.length) {
+
+                    var minimumStock = minimumStockInput.val();
+
+                    if (minimumStock === "" ||
+                        minimumStock === null ||
+                        isNaN(minimumStock) ||
+                        Number(minimumStock) < 0 ||
+                        !Number.isInteger(Number(minimumStock))) {
+
+                        minimumStockInput.addClass("input-validation-error");
+
+                        isValid = false;
+
+                    } else {
+
+                        minimumStockInput.removeClass("input-validation-error");
+
+                    }
+                }
+
+
+                /*
+                 * Expiry date is required and must be a valid date.
+                 */
+
+                var expiryInput = $("#ExpiryDate");
+
+                if (expiryInput.length) {
+
+                    var expiryValue = expiryInput.val();
+
+                    if (expiryValue === null || $.trim(expiryValue) === "") {
+
+                        expiryInput.addClass("input-validation-error");
+
+                        isValid = false;
+
+                    } else {
+
+                        expiryInput.removeClass("input-validation-error");
+
+                    }
+                }
+
+
+                /*
+                 * Stop submission if any validation failed.
+                 */
+
+                if (!isValid) {
+
+                    e.preventDefault();
+
+                    var firstInvalid = $(form).find(".input-validation-error").first();
+
+                    if (firstInvalid.length) {
+
+                        firstInvalid.focus();
+
+                    }
+
+                    return false;
+                }
+
+                return true;
+
+            });
+
+
+            /*
+             * Remove invalid styling once the user starts correcting
+             * the field.
+             */
+
+            $("#medicineForm").on("input change", "input, textarea, select", function () {
+
+                if ($.trim($(this).val()) !== "") {
+
+                    $(this).removeClass("input-validation-error");
+
+                }
+
+            });
+
+        });
+
+    </script>
+}
+

@@ -1,0 +1,350 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Equipment>
+
+@{
+    ViewBag.Title = "Low Stock Equipment";
+}
+
+<style>
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .low-stock-page {
+        max-width: 1100px;
+        margin: 45px auto;
+        padding: 0 20px;
+    }
+
+    /* Header */
+    .low-stock-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 30px 35px;
+        border-radius: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 10px 28px rgba(47, 111, 115, 0.18);
+    }
+
+        .low-stock-header h2 {
+            margin: 0;
+            font-size: 29px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .low-stock-header p {
+            margin: 9px 0 0;
+            max-width: 850px;
+            font-size: 15px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+    /* Warning message */
+    .stock-warning {
+        background: white;
+        border-left: 5px solid #e0a11b;
+        border-radius: 14px;
+        padding: 18px 22px;
+        margin-bottom: 25px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+        color: #59686a;
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+        .stock-warning strong {
+            color: #2f6f73;
+        }
+
+    /* Card */
+    .stock-card {
+        background: white;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        overflow: hidden;
+    }
+
+    /* Table */
+    .stock-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin: 0;
+    }
+
+        .stock-table thead th {
+            background: #2f6f73;
+            color: white;
+            padding: 16px 18px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+        }
+
+            .stock-table thead th:first-child {
+                text-align: left;
+                border-radius: 12px 0 0 0;
+            }
+
+            .stock-table thead th:last-child {
+                border-radius: 0 12px 0 0;
+            }
+
+        .stock-table tbody td {
+            padding: 17px 18px;
+            text-align: center;
+            vertical-align: middle;
+            border-bottom: 1px solid #e7eeee;
+            color: #465557;
+            background: white;
+            font-size: 14px;
+        }
+
+            .stock-table tbody td:first-child {
+                text-align: left;
+                font-weight: 700;
+                color: #2f6f73;
+            }
+
+        .stock-table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+            .stock-table tbody tr:hover td {
+                background: #f4fafb;
+            }
+
+    /* Quantity badge */
+    .quantity-badge {
+        display: inline-block;
+        min-width: 55px;
+        padding: 7px 13px;
+        border-radius: 20px;
+        background: #fff3cd;
+        color: #856404;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    /* Minimum badge */
+    .minimum-badge {
+        display: inline-block;
+        min-width: 55px;
+        padding: 7px 13px;
+        border-radius: 20px;
+        background: #eef5f6;
+        color: #2f6f73;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    /* Warning */
+    .warning-label {
+        display: inline-block;
+        margin-left: 7px;
+        color: #c47b00;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* Empty state */
+    .empty-state {
+        text-align: center;
+        padding: 45px 20px;
+        color: #718083;
+    }
+
+        .empty-state h4 {
+            margin: 0 0 8px;
+            color: #2f6f73;
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .empty-state p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+    /* Footer */
+    .page-footer {
+        text-align: center;
+        margin-top: 25px;
+    }
+
+    .back-link {
+        display: inline-block;
+        padding: 11px 22px;
+        background: #2f6f73;
+        color: white !important;
+        text-decoration: none !important;
+        border-radius: 10px;
+        font-weight: 600;
+        box-shadow: 0 6px 15px rgba(47, 111, 115, 0.18);
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #25575a;
+            transform: translateY(-2px);
+            box-shadow: 0 9px 20px rgba(47, 111, 115, 0.25);
+        }
+
+    /* Responsive */
+    @@media (max-width: 768px) {
+
+        .low-stock-page {
+            margin: 25px auto;
+            padding: 0 12px;
+        }
+
+        .low-stock-header {
+            padding: 25px;
+        }
+
+            .low-stock-header h2 {
+                font-size: 23px;
+            }
+
+        .stock-warning {
+            padding: 16px;
+        }
+
+        .stock-card {
+            padding: 15px;
+        }
+
+        .table-responsive {
+            overflow-x: auto;
+        }
+
+        .stock-table {
+            min-width: 650px;
+        }
+    }
+</style>
+
+
+<div class="low-stock-page">
+
+    <!-- Header -->
+    <div class="low-stock-header">
+
+        <h2>Low Stock Equipment</h2>
+
+        <p>
+            Monitor hospital equipment that has reached or fallen below
+            its minimum quantity and ensure essential equipment remains
+            available for patient care.
+        </p>
+
+    </div>
+
+
+    <!-- Information -->
+    <div class="stock-warning">
+
+        <strong>Stock Monitoring:</strong>
+        The equipment listed below requires attention because its current
+        quantity is at or below the minimum quantity level.
+        Consider replenishing these items to maintain adequate hospital resources.
+
+    </div>
+
+
+    <!-- Table Card -->
+    <div class="stock-card">
+
+        <div class="table-responsive">
+
+            <table class="stock-table">
+
+                <thead>
+                    <tr>
+                        <th>Equipment Name</th>
+                        <th>Current Quantity</th>
+                        <th>Minimum Quantity</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+
+                                <td>
+                                    @item.EquipmentName
+                                </td>
+
+                                <td>
+                                    <span class="quantity-badge">
+                                        @item.Quantity
+                                    </span>
+
+                                    <span class="warning-label">
+                                        Low Stock
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="minimum-badge">
+                                        @item.MinimumQuantity
+                                    </span>
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="3">
+
+                                <div class="empty-state">
+
+                                    <h4>✓ Equipment Stock Levels Look Good</h4>
+
+                                    <p>
+                                        There are currently no equipment items
+                                        requiring low-stock attention.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- Footer -->
+    <div class="page-footer">
+
+        @Html.ActionLink(
+            "Back to Dashboard",
+            "Dashboard",
+            "Pharmacist",
+            null,
+            new { @class = "back-link" })
+
+    </div>
+
+</div>

@@ -1,0 +1,687 @@
+﻿@model ElderlyCareHospital.Models.VitalSign
+
+@{
+    ViewBag.Title = "Edit Vital Signs";
+}
+
+<style>
+    /* =========================================================
+       ELDERLYCARE HOSPITAL - VITAL SIGNS EDIT
+       Clean clinical theme - teal accent, neutral surfaces
+       ========================================================= */
+
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .edit-page {
+        padding-bottom: 35px;
+    }
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    .vital-header {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 28px 32px;
+        margin-bottom: 24px;
+        border: 1px solid #e4ebef;
+        box-shadow: 0 6px 20px rgba(31, 52, 64, 0.06);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .vital-header::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: #3f7f82;
+        }
+
+        .vital-header h2 {
+            margin: 0;
+            color: #183642;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .vital-header p {
+            margin: 9px 0 0;
+            color: #6b7d86;
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 850px;
+        }
+
+    .header-badge {
+        position: absolute;
+        right: 30px;
+        top: 30px;
+        background: #f0f6f6;
+        color: #3f7f82;
+        border: 1px solid #d9e8e9;
+        border-radius: 20px;
+        padding: 7px 13px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    /* =========================
+       MAIN PANEL
+       ========================= */
+
+    .edit-panel {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 32px;
+        border: 1px solid #e4ebef;
+        box-shadow: 0 6px 20px rgba(31, 52, 64, 0.06);
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 17px;
+        margin-bottom: 28px;
+        border-bottom: 1px solid #e7edf0;
+    }
+
+    .section-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: #eef6f6;
+        color: #3f7f82;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        font-weight: 700;
+    }
+
+    .section-heading h4 {
+        margin: 0;
+        color: #263f49;
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    .section-heading span {
+        display: block;
+        margin-top: 3px;
+        color: #83939b;
+        font-size: 12px;
+    }
+
+    /* =========================
+       FORM
+       ========================= */
+
+    .edit-form {
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    .form-label {
+        color: #344b55;
+        font-weight: 600;
+        font-size: 14px;
+        padding-top: 12px;
+    }
+
+    .form-control {
+        min-height: 46px;
+        border-radius: 10px;
+        border: 1px solid #d3dde2;
+        background: #ffffff;
+        color: #263f49;
+        padding: 10px 14px;
+        box-shadow: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+        .form-control:hover {
+            border-color: #b9c9cf;
+        }
+
+        .form-control:focus {
+            border-color: #4d898c;
+            box-shadow: 0 0 0 3px rgba(77, 137, 140, 0.10);
+            outline: none;
+        }
+
+    select.form-control {
+        cursor: pointer;
+    }
+
+    .field-hint {
+        display: block;
+        margin-top: 5px;
+        color: #8a999f;
+        font-size: 11px;
+    }
+
+    .text-danger {
+        display: block;
+        margin-top: 5px;
+        font-size: 12px;
+        color: #c54b4b !important;
+    }
+
+    /* =========================
+       VALIDATION SUMMARY
+       ========================= */
+
+    .validation-summary {
+        background: #fff5f5;
+        border: 1px solid #f0d4d4;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 24px;
+        color: #a94442;
+        font-size: 13px;
+    }
+
+    /* =========================
+       ACTIONS
+       ========================= */
+
+    .form-actions {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 12px;
+        border-top: 1px solid #e8edef;
+        margin-top: 30px;
+        padding-top: 24px;
+    }
+
+    .btn-save {
+        border: 1px solid #3f7f82;
+        background: #3f7f82;
+        color: #ffffff !important;
+        border-radius: 10px;
+        padding: 11px 25px;
+        min-width: 145px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s ease;
+        box-shadow: 0 4px 10px rgba(63, 127, 130, 0.15);
+    }
+
+        .btn-save:hover {
+            background: #32696c;
+            border-color: #32696c;
+            color: #ffffff !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    .btn-cancel {
+        border: 1px solid #cfd9de;
+        background: #ffffff;
+        color: #52666f !important;
+        border-radius: 10px;
+        padding: 11px 22px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: 0.2s ease;
+    }
+
+        .btn-cancel:hover {
+            background: #f5f8f9;
+            border-color: #b9c7cc;
+            color: #344b55 !important;
+            text-decoration: none;
+        }
+
+    /* =========================
+       INFORMATION NOTE
+       ========================= */
+
+    .info-note {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        margin-top: 25px;
+        padding: 15px 17px;
+        background: #f7fafb;
+        border: 1px solid #e4ecef;
+        border-radius: 10px;
+        color: #667a83;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .info-icon {
+        flex-shrink: 0;
+        width: 25px;
+        height: 25px;
+        border-radius: 50%;
+        background: #eaf3f4;
+        color: #3f7f82;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 12px;
+    }
+
+    /* =========================
+       RESPONSIVE
+       ========================= */
+
+    @@media (max-width: 768px) {
+
+        .vital-header,
+        .edit-panel {
+            padding: 22px;
+        }
+
+            .vital-header h2 {
+                font-size: 25px;
+            }
+
+        .header-badge {
+            position: static;
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .form-label {
+            padding-top: 0;
+            margin-bottom: 7px;
+        }
+
+        .form-actions {
+            justify-content: stretch;
+            flex-direction: column-reverse;
+        }
+
+        .btn-save,
+        .btn-cancel {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+<div class="container mt-4 edit-page">
+
+    <!-- =========================
+         PAGE HEADER
+         ========================= -->
+
+    <div class="vital-header">
+
+        <span class="header-badge">
+            ✎ Updating Record
+        </span>
+
+        <h2>Edit Vital Signs</h2>
+
+        <p>
+            Update the patient's recorded vital signs below. Please review each
+            measurement carefully before saving the changes.
+        </p>
+
+    </div>
+
+
+    <!-- =========================
+         EDIT PANEL
+         ========================= -->
+
+    <div class="edit-panel">
+
+        <div class="section-heading">
+
+            <div class="section-icon">
+                ♥
+            </div>
+
+            <div>
+                <h4>Vital Sign Details</h4>
+                <span>Update the clinical observation information</span>
+            </div>
+
+        </div>
+
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "validation-summary" })
+
+            @Html.HiddenFor(model => model.VitalID)
+
+
+            <div class="edit-form">
+
+                <!-- PATIENT -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.PatientID,
+                        "Patient Name",
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3 form-label"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.DropDownList(
+                            "PatientID",
+                            null,
+                            "-- Select Patient --",
+                            htmlAttributes: new
+                            {
+                                @class = "form-control"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.PatientID,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- TEMPERATURE -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Temperature,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3 form-label"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.Temperature,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "e.g. 36.8 °C"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.Temperature,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- BLOOD PRESSURE -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.BloodPressure,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3 form-label"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.BloodPressure,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "e.g. 120/80 mmHg"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.BloodPressure,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- PULSE -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.PulseRate,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3 form-label"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.PulseRate,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "e.g. 72 bpm"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.PulseRate,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- OXYGEN -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.OxygenLevel,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3 form-label"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.OxygenLevel,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "e.g. 98%"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.OxygenLevel,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUGAR -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.SugarLevel,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3 form-label"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.SugarLevel,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "e.g. 5.6 mmol/L"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.SugarLevel,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- WEIGHT -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Weight,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3 form-label"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.Weight,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "e.g. 72 kg"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.Weight,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.DateRecorded,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3 form-label"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.TextBoxFor(
+                            model => model.DateRecorded,
+                            "{0:yyyy-MM-ddTHH:mm}",
+                            new
+                            {
+                                @class = "form-control",
+                                type = "datetime-local",
+                                @readonly = "readonly"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.DateRecorded,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACTIONS -->
+
+                <div class="form-actions">
+
+                    @Html.ActionLink(
+                        "Cancel",
+                        "Index",
+                        "VitalSigns",
+                        null,
+                        new { @class = "btn-cancel" })
+
+                    <input type="submit"
+                           value="Save Changes"
+                           class="btn-save" />
+
+                </div>
+
+            </div>
+        }
+
+
+        <!-- INFORMATION -->
+
+        <div class="info-note">
+
+            <div class="info-icon">
+                i
+            </div>
+
+            <div>
+                <strong>Clinical documentation reminder</strong><br />
+
+                Make sure all updated readings accurately reflect the patient's
+                current clinical observations before saving the record.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

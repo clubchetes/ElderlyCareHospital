@@ -1,0 +1,969 @@
+﻿@model ElderlyCareHospital.Models.InventoryRequest
+
+@{
+    ViewBag.Title = "Create Inventory Request";
+}
+
+<style>
+
+    /* =========================================================
+       INVENTORY REQUEST PAGE
+       ========================================================= */
+
+    .inventory-request-page {
+        max-width: 850px;
+        margin: 40px auto;
+        padding: 0 20px 50px;
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #0f172a;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .request-header {
+        margin-bottom: 25px;
+    }
+
+        .request-header h2 {
+            margin: 0;
+            font-size: 26px;
+            font-weight: 700;
+            color: #0f172a;
+        }
+
+        .request-header p {
+            margin: 8px 0 0;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+
+    /* =========================================================
+       CARD
+       ========================================================= */
+
+    .request-card {
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 18px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(15, 23, 42, 0.05);
+    }
+
+
+    /* =========================================================
+       FORM GROUP
+       ========================================================= */
+
+    .request-field {
+        margin-bottom: 22px;
+    }
+
+        .request-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #334155;
+        }
+
+
+    /* =========================================================
+       INPUTS
+       ========================================================= */
+
+    .request-input,
+    .request-select {
+        width: 100%;
+        height: 46px;
+        padding: 10px 13px;
+        border: 1px solid #dbe2ea;
+        border-radius: 10px;
+        background: #ffffff;
+        color: #0f172a;
+        font-size: 14px;
+        outline: none;
+        transition: all 0.2s ease;
+    }
+
+        .request-input:focus,
+        .request-select:focus {
+            border-color: #94a3b8;
+            box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.10);
+        }
+
+
+    /* =========================================================
+       INVENTORY TYPE
+       ========================================================= */
+
+    .inventory-type-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 14px;
+        margin-bottom: 25px;
+    }
+
+    .inventory-type-option {
+        position: relative;
+    }
+
+        .inventory-type-option input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+    .inventory-type-label {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        min-height: 70px;
+        padding: 15px 17px;
+        border: 1px solid #e2e8f0;
+        border-radius: 13px;
+        background: #ffffff;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+        .inventory-type-label:hover {
+            border-color: #cbd5e1;
+            background: #f8fafc;
+        }
+
+    .inventory-type-option input:checked + .inventory-type-label {
+        border-color: #94a3b8;
+        background: #f8fafc;
+        box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05);
+    }
+
+    .inventory-type-icon {
+        width: 42px;
+        height: 42px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f1f5f9;
+        color: #475569;
+        flex: 0 0 42px;
+    }
+
+    .inventory-type-text strong {
+        display: block;
+        color: #0f172a;
+        font-size: 14px;
+        margin-bottom: 3px;
+    }
+
+    .inventory-type-text span {
+        display: block;
+        color: #64748b;
+        font-size: 11px;
+    }
+
+
+    /* =========================================================
+       ITEM SECTIONS
+       ========================================================= */
+
+    .item-select-section {
+        display: none;
+        margin-bottom: 22px;
+    }
+
+        .item-select-section.visible {
+            display: block;
+        }
+
+
+    /* =========================================================
+       STOCK INFORMATION
+       ========================================================= */
+
+    .stock-information {
+        display: none;
+        margin-top: 9px;
+        padding: 9px 12px;
+        border-radius: 8px;
+        background: #f8fafc;
+        color: #64748b;
+        font-size: 11px;
+    }
+
+        .stock-information.visible {
+            display: block;
+        }
+
+    .stock-number {
+        font-weight: 700;
+        color: #334155;
+    }
+
+
+    /* =========================================================
+       VALIDATION
+       ========================================================= */
+
+    .validation-message {
+        display: block;
+        margin-top: 6px;
+        color: #dc2626;
+        font-size: 12px;
+    }
+
+    .validation-summary {
+        margin-bottom: 22px;
+        padding: 12px 15px;
+        border-radius: 10px;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #b91c1c;
+        font-size: 13px;
+    }
+
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .request-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 28px;
+        padding-top: 22px;
+        border-top: 1px solid #eef2f7;
+    }
+
+    .submit-request-btn,
+    .back-request-btn {
+        min-height: 44px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+
+    .submit-request-btn {
+        background: #0f172a;
+        color: #ffffff;
+    }
+
+        .submit-request-btn:hover {
+            background: #1e293b;
+            color: #ffffff;
+            transform: translateY(-1px);
+        }
+
+    .back-request-btn {
+        background: #f1f5f9;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+    }
+
+        .back-request-btn:hover {
+            background: #e2e8f0;
+            color: #334155;
+            text-decoration: none;
+        }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 650px) {
+
+        .inventory-request-page {
+            margin: 25px auto;
+            padding: 0 14px 40px;
+        }
+
+        .request-card {
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .inventory-type-wrapper {
+            grid-template-columns: 1fr;
+        }
+
+        .request-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .submit-request-btn,
+        .back-request-btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="inventory-request-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="request-header">
+
+        <h2>
+            Request Inventory Item
+        </h2>
+
+        <p>
+            Select whether you need a medicine or equipment,
+            choose the item from the hospital inventory, and
+            enter the quantity required.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         CARD
+         ===================================================== -->
+
+    <div class="request-card">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+
+            <!-- =================================================
+                 VALIDATION
+                 ================================================= -->
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "validation-summary" }
+            )
+
+
+            <!-- =================================================
+                 INVENTORY TYPE
+                 ================================================= -->
+
+            <div class="request-field">
+
+                <label>
+                    Inventory Type
+                </label>
+
+                <div class="inventory-type-wrapper">
+
+
+                    <!-- MEDICINE -->
+                    @if (User.IsInRole("Nurse") || User.IsInRole("Doctor"))
+                    {
+
+                        <div class="inventory-type-option">
+
+                            <input type="radio"
+                                   id="typeMedicine"
+                                   name="inventoryType"
+                                   value="medicine" />
+
+                            <label for="typeMedicine"
+                                   class="inventory-type-label">
+
+                                <span class="inventory-type-icon">
+
+                                    <svg width="19"
+                                         height="19"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              d="M10.5 3.5h3a2 2 0 0 1 2 2v2a4 4 0 0 1 2 3.5V15a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5v-4a4 4 0 0 1 2-3.5v-2a2 2 0 0 1 2-2z">
+                                        </path>
+
+                                        <path stroke-linecap="round"
+                                              d="M9 11h6">
+                                        </path>
+
+                                    </svg>
+
+                                </span>
+
+                                <span class="inventory-type-text">
+
+                                    <strong>
+                                        Medicine
+                                    </strong>
+
+                                    <span>
+                                        Select from medicines
+                                    </span>
+
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    }
+                        <!-- EQUIPMENT -->
+
+                        <div class="inventory-type-option">
+
+                            <input type="radio"
+                                   id="typeEquipment"
+                                   name="inventoryType"
+                                   value="equipment" />
+
+                            <label for="typeEquipment"
+                                   class="inventory-type-label">
+
+                                <span class="inventory-type-icon">
+
+                                    <svg width="19"
+                                         height="19"
+                                         fill="none"
+                                         stroke="currentColor"
+                                         stroke-width="2"
+                                         viewBox="0 0 24 24">
+
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              d="M12 3v18">
+                                        </path>
+
+                                        <path stroke-linecap="round"
+                                              stroke-linejoin="round"
+                                              d="M3 12h18">
+                                        </path>
+
+                                    </svg>
+
+                                </span>
+
+                                <span class="inventory-type-text">
+
+                                    <strong>
+                                        Equipment
+                                    </strong>
+
+                                    <span>
+                                        Select from equipment
+                                    </span>
+
+                                </span>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 MEDICINE DROPDOWN
+                 ================================================= -->
+
+            <div id="medicineSection"
+                 class="item-select-section">
+
+                <div class="request-field">
+
+                    <label for="medicineSelect">
+                        Select Medicine
+                    </label>
+
+                    @Html.DropDownList(
+                        "medicineSelect",
+                        ViewBag.Medicines as SelectList,
+                        "-- Select Medicine --",
+                        new
+                        {
+                            @class = "request-select",
+                            id = "medicineSelect"
+                        }
+                    )
+
+                    <div id="medicineStock"
+                         class="stock-information">
+
+                        Available stock:
+                        <span class="stock-number"
+                              id="medicineStockNumber">
+                            -
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 EQUIPMENT DROPDOWN
+                 ================================================= -->
+
+            <div id="equipmentSection"
+                 class="item-select-section">
+
+                <div class="request-field">
+
+                    <label for="equipmentSelect">
+                        Select Equipment
+                    </label>
+
+                    @Html.DropDownList(
+                        "equipmentSelect",
+                        ViewBag.Equipment as SelectList,
+                        "-- Select Equipment --",
+                        new
+                        {
+                            @class = "request-select",
+                            id = "equipmentSelect"
+                        }
+                    )
+
+                    <div id="equipmentStock"
+                         class="stock-information">
+
+                        Available quantity:
+                        <span class="stock-number"
+                              id="equipmentStockNumber">
+                            -
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 HIDDEN ITEM NAME
+                 ================================================= -->
+
+            @Html.HiddenFor(
+                model => model.ItemName,
+                new
+                {
+                    id = "ItemName"
+                }
+            )
+
+
+            @Html.ValidationMessageFor(
+                model => model.ItemName,
+                "",
+                new
+                {
+                    @class = "validation-message"
+                }
+            )
+
+
+            <!-- =================================================
+                 QUANTITY
+                 ================================================= -->
+
+            <div class="request-field">
+
+                <label for="QuantityRequested">
+                    Quantity Requested
+                </label>
+
+                @Html.TextBoxFor(
+                    model => model.QuantityRequested,
+                    new
+                    {
+                        @class = "request-input",
+                        type = "number",
+                        min = "1",
+                        placeholder = "Enter quantity"
+                    }
+                )
+
+                @Html.ValidationMessageFor(
+                    model => model.QuantityRequested,
+                    "",
+                    new
+                    {
+                        @class = "validation-message"
+                    }
+                )
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIONS
+                 ================================================= -->
+
+            <div class="request-actions">
+
+                <button type="submit"
+                        class="submit-request-btn">
+
+                    Submit Request
+
+                </button>
+
+
+                <a href="@Url.Action("Index", "InventoryRequests")"
+                   class="back-request-btn">
+
+                    Back to Requests
+
+                </a>
+
+            </div>
+
+        }
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script>
+
+        $(document).ready(function () {
+
+
+            /* =================================================
+               DATA FROM DATABASE
+               ================================================= */
+
+            var medicines = [
+
+                @if (ViewBag.Medicines != null)
+                {
+                    var medicineList =
+                        ((IEnumerable<SelectListItem>)ViewBag.Medicines).ToList();
+
+                    for (int i = 0; i < medicineList.Count; i++)
+                    {
+                        var medicine = medicineList[i];
+
+                        <text>
+                        {
+                            id: "@medicine.Value",
+                            name: "@Html.Raw(HttpUtility.JavaScriptStringEncode(medicine.Text))"
+                        }
+                        @(i < medicineList.Count - 1 ? "," : "")
+                        </text>
+                    }
+                }
+
+            ];
+
+
+            var equipment = [
+
+                @if (ViewBag.Equipment != null)
+                {
+                    var equipmentList =
+                        ((IEnumerable<SelectListItem>)ViewBag.Equipment).ToList();
+
+                    for (int i = 0; i < equipmentList.Count; i++)
+                    {
+                        var item = equipmentList[i];
+
+                        <text>
+                        {
+                            id: "@item.Value",
+                            name: "@Html.Raw(HttpUtility.JavaScriptStringEncode(item.Text))"
+                        }
+                        @(i < equipmentList.Count - 1 ? "," : "")
+                        </text>
+                    }
+                }
+
+            ];
+
+
+            /* =================================================
+               ELEMENTS
+               ================================================= */
+
+            var medicineSection =
+                $("#medicineSection");
+
+            var equipmentSection =
+                $("#equipmentSection");
+
+            var medicineSelect =
+                $("#medicineSelect");
+
+            var equipmentSelect =
+                $("#equipmentSelect");
+
+            var itemName =
+                $("#ItemName");
+
+            var medicineStock =
+                $("#medicineStock");
+
+            var equipmentStock =
+                $("#equipmentStock");
+
+
+            /* =================================================
+               TYPE SELECTION
+               ================================================= */
+
+            $("input[name='inventoryType']").on(
+                "change",
+                function () {
+
+                    var type =
+                        $(this).val();
+
+
+                    /* -----------------------------------------
+                       MEDICINE
+                       ----------------------------------------- */
+
+                    if (type === "medicine") {
+
+                        medicineSection.addClass(
+                            "visible"
+                        );
+
+                        equipmentSection.removeClass(
+                            "visible"
+                        );
+
+                        equipmentSelect.val("");
+
+                        itemName.val("");
+
+                        medicineStock.removeClass(
+                            "visible"
+                        );
+
+                        equipmentStock.removeClass(
+                            "visible"
+                        );
+
+                    }
+
+
+                    /* -----------------------------------------
+                       EQUIPMENT
+                       ----------------------------------------- */
+
+                    else if (type === "equipment") {
+
+                        equipmentSection.addClass(
+                            "visible"
+                        );
+
+                        medicineSection.removeClass(
+                            "visible"
+                        );
+
+                        medicineSelect.val("");
+
+                        itemName.val("");
+
+                        medicineStock.removeClass(
+                            "visible"
+                        );
+
+                        equipmentStock.removeClass(
+                            "visible"
+                        );
+
+                    }
+
+                }
+            );
+
+
+            /* =================================================
+               MEDICINE SELECTED
+               ================================================= */
+
+            medicineSelect.on(
+                "change",
+                function () {
+
+                    var selectedId =
+                        $(this).val();
+
+
+                    if (!selectedId) {
+
+                        itemName.val("");
+
+                        medicineStock.removeClass(
+                            "visible"
+                        );
+
+                        return;
+                    }
+
+
+                    var selectedMedicine =
+                        medicines.find(
+                            function (medicine) {
+
+                                return medicine.id ===
+                                    selectedId;
+
+                            }
+                        );
+
+
+                    if (selectedMedicine) {
+
+                        itemName.val(
+                            selectedMedicine.name
+                        );
+
+                        /*
+                         * Stock information can be loaded
+                         * from the database later through AJAX.
+                         */
+                    }
+
+                }
+            );
+
+
+            /* =================================================
+               EQUIPMENT SELECTED
+               ================================================= */
+
+            equipmentSelect.on(
+                "change",
+                function () {
+
+                    var selectedId =
+                        $(this).val();
+
+
+                    if (!selectedId) {
+
+                        itemName.val("");
+
+                        equipmentStock.removeClass(
+                            "visible"
+                        );
+
+                        return;
+                    }
+
+
+                    var selectedEquipment =
+                        equipment.find(
+                            function (item) {
+
+                                return item.id ===
+                                    selectedId;
+
+                            }
+                        );
+
+
+                    if (selectedEquipment) {
+
+                        itemName.val(
+                            selectedEquipment.name
+                        );
+
+                    }
+
+                }
+            );
+
+
+            /* =================================================
+               PREVENT SUBMISSION WITHOUT TYPE
+               ================================================= */
+
+            $("form").on(
+                "submit",
+                function (event) {
+
+                    var selectedType =
+                        $("input[name='inventoryType']:checked")
+                        .val();
+
+                    var selectedItem =
+                        itemName.val();
+
+
+                    if (!selectedType) {
+
+                        event.preventDefault();
+
+                        alert(
+                            "Please select Medicine or Equipment."
+                        );
+
+                        return false;
+                    }
+
+
+                    if (!selectedItem) {
+
+                        event.preventDefault();
+
+                        alert(
+                            "Please select an inventory item."
+                        );
+
+                        return false;
+                    }
+
+
+                    var quantity =
+                        parseInt(
+                            $("#QuantityRequested").val()
+                        );
+
+
+                    if (
+                        isNaN(quantity) ||
+                        quantity <= 0
+                    ) {
+
+                        event.preventDefault();
+
+                        alert(
+                            "Please enter a valid quantity."
+                        );
+
+                        return false;
+                    }
+
+                }
+            );
+
+        });
+
+    </script>
+
+}

@@ -1,0 +1,708 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Message>
+
+@{
+    ViewBag.Title = "Messages";
+
+    var sentMessages =
+        ViewBag.SentMessages as IEnumerable<ElderlyCareHospital.Models.Message>
+        ?? new List<ElderlyCareHospital.Models.Message>();
+}
+
+<style>
+
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .inbox-container {
+        margin-top: 30px;
+        margin-bottom: 45px;
+    }
+
+    /* =====================================================
+       HEADER
+       ===================================================== */
+
+    .inbox-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 30px 34px;
+        border-radius: 20px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 22px rgba(47, 111, 115, 0.16);
+    }
+
+        .inbox-header h2 {
+            margin: 0;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .inbox-header p {
+            margin: 9px 0 0;
+            opacity: 0.95;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+    .live-badge {
+        float: right;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        background: rgba(255,255,255,0.16);
+        border: 1px solid rgba(255,255,255,0.22);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    /* =====================================================
+       PANEL
+       ===================================================== */
+
+    .inbox-panel {
+        background: white;
+        border-radius: 20px;
+        padding: 26px;
+        box-shadow: 0 7px 22px rgba(0,0,0,0.07);
+        margin-bottom: 25px;
+    }
+
+    /* =====================================================
+       TOOLBAR
+       ===================================================== */
+
+    .toolbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 20px;
+    }
+
+    .toolbar-title {
+        color: #2f3e46;
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0;
+    }
+
+    .toolbar-subtitle {
+        color: #78909c;
+        font-size: 13px;
+        margin-top: 3px;
+    }
+
+    .btn-compose {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white !important;
+        padding: 11px 20px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        white-space: nowrap;
+        box-shadow: 0 4px 12px rgba(47,111,115,0.18);
+        transition: 0.2s ease;
+    }
+
+        .btn-compose:hover {
+            background: linear-gradient(135deg, #25575a, #3b7a7f);
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    /* =====================================================
+       TABLE
+       ===================================================== */
+
+    .table-wrapper {
+        border: 1px solid #e4edef;
+        border-radius: 15px;
+        overflow-x: auto;
+    }
+
+    .table {
+        width: 100%;
+        min-width: 760px;
+        margin-bottom: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+    }
+
+        .table thead {
+            background: #2f6f73;
+            color: white;
+        }
+
+            .table thead th {
+                border: none !important;
+                padding: 15px 14px;
+                font-size: 12px;
+                font-weight: 700;
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+                white-space: nowrap;
+                vertical-align: middle;
+            }
+
+        .table tbody td {
+            padding: 15px 14px;
+            vertical-align: middle;
+            border-top: 1px solid #edf2f4;
+            font-size: 14px;
+            color: #37474f;
+        }
+
+        .table tbody tr:hover {
+            background: #f8fbfc;
+        }
+
+    /* =====================================================
+       MESSAGE CONTENT
+       ===================================================== */
+
+    .person-name {
+        font-weight: 700;
+        color: #2f6f73;
+        white-space: nowrap;
+    }
+
+    .message-preview {
+        max-width: 420px;
+        color: #455a64;
+        line-height: 1.5;
+    }
+
+    .date-sent {
+        color: #607d8b;
+        font-weight: 600;
+        white-space: nowrap;
+    }
+
+    /* =====================================================
+       ACTIONS
+       ===================================================== */
+
+    .action-links {
+        white-space: nowrap;
+    }
+
+        .action-links a {
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 600;
+            margin-right: 10px;
+            transition: 0.2s ease;
+        }
+
+            .action-links a:hover {
+                text-decoration: underline;
+            }
+
+            .action-links a:nth-child(1) {
+                color: #2f6f73;
+            }
+
+            .action-links a:nth-child(2) {
+                color: #c62828;
+            }
+
+    /* =====================================================
+       SUCCESS
+       ===================================================== */
+
+    .alert-success {
+        border-radius: 12px;
+        padding: 14px 18px;
+        margin-bottom: 20px;
+        background: #e8f5e9;
+        color: #2e7d32;
+        border: 1px solid #c8e6c9;
+        font-weight: 600;
+    }
+
+    /* =====================================================
+       EMPTY
+       ===================================================== */
+
+    .empty-inbox {
+        text-align: center;
+        padding: 40px 20px;
+        color: #78909c;
+    }
+
+    .empty-inbox-icon {
+        font-size: 42px;
+        margin-bottom: 12px;
+    }
+
+    .empty-inbox h4 {
+        margin: 0 0 8px;
+        color: #455a64;
+        font-weight: 700;
+    }
+
+    .empty-inbox p {
+        margin: 0;
+        font-size: 14px;
+    }
+
+    /* =====================================================
+       SECTION BADGE
+       ===================================================== */
+
+    .section-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 18px;
+    }
+
+        .section-title h3 {
+            margin: 0;
+            color: #2f3e46;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+    .section-count {
+        background: #e8f5f6;
+        color: #2f6f73;
+        border-radius: 20px;
+        padding: 5px 12px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    /* =====================================================
+       SENT SECTION
+       ===================================================== */
+
+    .sent-panel {
+        border-top: 4px solid #4c8c91;
+    }
+
+    /* =====================================================
+       FOOTER
+       ===================================================== */
+
+    .footer-row {
+        margin-top: 22px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 18px;
+        background: #455a64;
+        color: white !important;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #263238;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    /* =====================================================
+       RESPONSIVE
+       ===================================================== */
+
+    @@media (max-width: 768px) {
+
+        .inbox-container {
+            margin-top: 20px;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .inbox-header {
+            padding: 24px;
+        }
+
+            .inbox-header h2 {
+                font-size: 25px;
+            }
+
+        .live-badge {
+            float: none;
+            margin-top: 14px;
+        }
+
+        .inbox-panel {
+            padding: 18px;
+        }
+
+        .toolbar {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-compose {
+            width: 100%;
+        }
+
+        .footer-row {
+            text-align: center;
+        }
+
+        .back-link {
+            width: 100%;
+        }
+
+        .section-title {
+            align-items: flex-start;
+            gap: 10px;
+        }
+    }
+</style>
+
+
+<div class="container inbox-container">
+
+    <!-- =====================================================
+         HEADER
+         ====================================================== -->
+
+    <div class="inbox-header">
+
+        <h2>
+
+            Messages
+
+            <span class="live-badge">
+                🟢 Live Sync Active
+            </span>
+
+        </h2>
+
+        <p>
+            View messages you have received and messages you have sent
+            within the Elderly Care Hospital communication system.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         SUCCESS MESSAGE
+         ====================================================== -->
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert-success">
+            ✓ @TempData["Success"]
+        </div>
+    }
+
+
+    <!-- =====================================================
+         RECEIVED MESSAGES
+         ====================================================== -->
+
+    <div class="inbox-panel">
+
+        <div class="toolbar">
+
+            <div>
+
+                <div class="toolbar-title">
+                    📥 Received Messages
+                </div>
+
+                <div class="toolbar-subtitle">
+                    Messages you received from Doctors.
+                </div>
+
+            </div>
+
+            @Html.ActionLink(
+                "✉ Compose Message",
+                "Create",
+                "Messages",
+                null,
+                new { @class = "btn-compose" }
+            )
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table class="table">
+
+                <thead>
+
+                    <tr>
+                        <th>From</th>
+                        <th>Message</th>
+                        <th>Date Received</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="liveInboxBody">
+
+                    @if (Model != null && Model.Any())
+                    {
+                        @Html.Partial(
+                            "_InboxMessageRows",
+                            Model
+                        )
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="4">
+
+                                <div class="empty-inbox">
+
+                                    <div class="empty-inbox-icon">
+                                        📥
+                                    </div>
+
+                                    <h4>
+                                        No Received Messages
+                                    </h4>
+
+                                    <p>
+                                        You currently have no received messages.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         SENT MESSAGES
+         ====================================================== -->
+
+    <div class="inbox-panel sent-panel">
+
+        <div class="section-title">
+
+            <div>
+
+                <h3>
+                    📤 Sent Messages
+                </h3>
+
+                <div class="toolbar-subtitle">
+                    Messages you have sent to the Doctors.
+                </div>
+
+            </div>
+
+            <span class="section-count">
+                @sentMessages.Count() Sent
+            </span>
+
+        </div>
+
+
+        <div class="table-wrapper">
+
+            <table class="table">
+
+                <thead>
+
+                    <tr>
+                        <th>To</th>
+                        <th>Message</th>
+                        <th>Date Sent</th>
+                        <th>Actions</th>
+                    </tr>
+
+                </thead>
+
+                <tbody id="liveSentBody">
+
+                    @if (sentMessages.Any())
+                    {
+                        @Html.Partial(
+                            "_SentMessageRows",
+                            sentMessages
+                        )
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="4">
+
+                                <div class="empty-inbox">
+
+                                    <div class="empty-inbox-icon">
+                                        📤
+                                    </div>
+
+                                    <h4>
+                                        No Sent Messages
+                                    </h4>
+
+                                    <p>
+                                        You have not sent any messages yet.
+                                    </p>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK TO DASHBOARD
+         ====================================================== -->
+
+    <div class="footer-row">
+
+        @if (User.IsInRole("FamilyMember"))
+        {
+            @Html.ActionLink(
+                "← Back to Dashboard",
+                "Dashboard",
+                "Family",
+                null,
+                new { @class = "back-link" }
+            )
+        }
+        else if (User.IsInRole("Doctor"))
+        {
+            @Html.ActionLink(
+                "← Back to Dashboard",
+                "Dashboard",
+                "Doctor",
+                null,
+                new { @class = "back-link" }
+            )
+        }
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+        // =====================================================
+        // REFRESH RECEIVED MESSAGES
+        // =====================================================
+
+        function refreshInbox() {
+
+            $.ajax({
+
+                url: '@Url.Action("GetLiveInbox", "Messages")',
+
+                type: 'GET',
+
+                cache: false,
+
+                success: function (data) {
+
+                    $('#liveInboxBody').html(data);
+
+                },
+
+                error: function () {
+
+                    console.log(
+                        "Unable to refresh received messages."
+                    );
+
+                }
+
+            });
+
+        }
+
+
+        // =====================================================
+        // REFRESH SENT MESSAGES
+        // =====================================================
+
+        function refreshSentMessages() {
+
+            $.ajax({
+
+                url: '@Url.Action("GetLiveSentMessages", "Messages")',
+
+                type: 'GET',
+
+                cache: false,
+
+                success: function (data) {
+
+                    $('#liveSentBody').html(data);
+
+                },
+
+                error: function () {
+
+                    console.log(
+                        "Unable to refresh sent messages."
+                    );
+
+                }
+
+            });
+
+        }
+
+
+        // =====================================================
+        // LIVE REFRESH EVERY 5 SECONDS
+        // =====================================================
+
+        setInterval(function () {
+
+            refreshInbox();
+
+            refreshSentMessages();
+
+        }, 5000);
+
+    </script>
+
+}

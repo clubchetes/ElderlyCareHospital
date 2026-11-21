@@ -1,0 +1,752 @@
+﻿@using ElderlyCareHospital.Models
+@model LoginViewModel
+
+@{
+    ViewBag.Title = "Log in";
+}
+
+<style>
+    :root {
+        --app-bg: #f8fafc;
+        --card-bg: #ffffff;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --border-color: #e2e8f0;
+    }
+
+    /* ==============================
+       PAGE
+    ============================== */
+
+    body {
+        background: linear-gradient( rgba(248, 250, 252, 0.96), rgba(248, 250, 252, 0.96) ), url('https://images.unsplash.com/photo-1584515933487-779824d29309?auto=format&fit=crop&w=1350&q=80');
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+    }
+
+    /* ==============================
+       LOGIN CONTAINER
+    ============================== */
+
+    .elderly-login-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 35px auto 45px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
+        .elderly-login-container > .row {
+            margin-left: -10px;
+            margin-right: -10px;
+        }
+
+            .elderly-login-container > .row > [class*="col-"] {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+
+    /* ==============================
+       WELCOME PANEL
+    ============================== */
+
+    .welcome-panel {
+        background: linear-gradient( 135deg, #4f46e5, #6366f1 );
+        color: white;
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 10px 25px rgba(79, 70, 229, 0.15);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        width: 100%;
+        min-height: 100%;
+    }
+
+        .welcome-panel h2 {
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 1.3;
+            margin-top: 0;
+            margin-bottom: 16px;
+            letter-spacing: -0.3px;
+            color: white;
+        }
+
+        .welcome-panel p {
+            line-height: 1.7;
+            font-size: 14.5px;
+            opacity: 0.95;
+            margin-bottom: 16px;
+        }
+
+            .welcome-panel p:last-child {
+                margin-bottom: 0;
+            }
+
+    /* ==============================
+       CONTACT BOX
+    ============================== */
+
+    .contact-box {
+        margin-top: 28px;
+        background: rgba(255, 255, 255, 0.10);
+        backdrop-filter: blur(8px);
+        padding: 22px;
+        border-radius: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+        .contact-box h4 {
+            margin-top: 0;
+            margin-bottom: 14px;
+            font-weight: 600;
+            font-size: 16px;
+            color: white;
+        }
+
+        .contact-box p {
+            margin-bottom: 8px;
+            font-size: 13.5px;
+            line-height: 1.5;
+        }
+
+            .contact-box p:last-of-type {
+                margin-bottom: 0;
+            }
+
+    /* ==============================
+       MAP
+    ============================== */
+
+    .location-map {
+        width: 100%;
+        margin-top: 12px;
+    }
+
+        .location-map iframe {
+            display: block;
+            width: 100%;
+            min-height: 160px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
+            background: #fff;
+            border: 0;
+            border-radius: 10px;
+        }
+
+    /* ==============================
+       LOGIN PANEL
+    ============================== */
+
+    .login-panel {
+        background: var(--card-bg);
+        border-radius: 16px;
+        padding: 40px;
+        box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
+        border: 1px solid var(--border-color);
+        width: 100%;
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+        .login-panel h2 {
+            color: var(--text-main);
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 1.3;
+            margin-top: 0;
+            margin-bottom: 8px;
+            letter-spacing: -0.3px;
+        }
+
+        .login-panel h4 {
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-top: 0;
+            margin-bottom: 24px;
+            font-weight: 400;
+        }
+
+        /* ==============================
+       FORM
+    ============================== */
+
+        .login-panel form {
+            width: 100%;
+        }
+
+        .login-panel hr {
+            border-top: 1px solid var(--border-color);
+            margin: 20px 0 25px;
+        }
+
+        .login-panel .row {
+            margin-left: -8px;
+            margin-right: -8px;
+        }
+
+            .login-panel .row > [class*="col-"] {
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+
+        .form-group,
+        .login-panel .form-control {
+            width: 100%;
+        }
+
+    .form-control {
+        height: auto;
+        border-radius: 10px;
+        padding: 12px 16px;
+        border: 1px solid var(--border-color);
+        font-size: 14px;
+        color: var(--text-main);
+        background-color: #f8fafc;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+    }
+
+        .form-control:focus {
+            background-color: #ffffff;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.10);
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #94a3b8;
+        }
+
+    .col-form-label {
+        font-weight: 600;
+        font-size: 13.5px;
+        color: var(--text-main);
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    /* ==============================
+       VALIDATION
+    ============================== */
+
+    .text-danger {
+        font-size: 12px;
+    }
+
+    .validation-summary-errors {
+        padding: 10px 14px;
+        border-radius: 8px;
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+    }
+
+    /* ==============================
+       REMEMBER ME
+    ============================== */
+
+    .checkbox {
+        min-height: 20px;
+    }
+
+        .checkbox input[type="checkbox"] {
+            margin: 0 7px 0 0;
+            vertical-align: middle;
+        }
+
+        .checkbox label {
+            font-size: 13.5px;
+            color: var(--text-muted);
+            font-weight: 500;
+            margin: 0;
+            cursor: pointer;
+        }
+
+    /* ==============================
+       LOGIN BUTTON
+    ============================== */
+
+    .btn-outline-dark {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 46px;
+        border-radius: 10px;
+        padding: 12px 28px;
+        background: linear-gradient( 135deg, #4f46e5, #6366f1 );
+        border: none;
+        color: white;
+        font-weight: 600;
+        font-size: 14px;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.20);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+        width: 100%;
+        cursor: pointer;
+    }
+
+        .btn-outline-dark:hover {
+            opacity: 0.94;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 16px rgba(79, 70, 229, 0.25);
+            color: white;
+        }
+
+        .btn-outline-dark:focus,
+        .btn-outline-dark:active {
+            color: white;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
+        }
+
+    /* ==============================
+       HELP LINKS
+    ============================== */
+
+    .help-text {
+        margin-top: 18px;
+        font-size: 13.5px;
+        line-height: 1.6;
+        color: var(--text-muted);
+        text-align: center;
+    }
+
+        .help-text a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+            .help-text a:hover {
+                color: var(--primary-hover);
+                text-decoration: underline;
+            }
+
+    /* ==============================
+       SECURITY NOTICE
+    ============================== */
+
+    .security-notice {
+        margin-top: 25px !important;
+        font-size: 12px !important;
+        line-height: 1.6;
+        color: var(--text-muted);
+        text-align: center;
+        border-top: 1px solid var(--border-color);
+        padding-top: 15px;
+    }
+
+    /* ==============================
+       TABLET
+    ============================== */
+
+    @@media (max-width: 991px) {
+
+        .elderly-login-container {
+            margin-top: 25px;
+            margin-bottom: 35px;
+        }
+
+        .welcome-panel,
+        .login-panel {
+            padding: 30px;
+        }
+
+            .welcome-panel h2,
+            .login-panel h2 {
+                font-size: 22px;
+            }
+    }
+
+    /* ==============================
+       MOBILE
+    ============================== */
+
+    @@media (max-width: 767px) {
+
+        .elderly-login-container {
+            margin-top: 20px;
+            margin-bottom: 25px;
+            padding-left: 12px;
+            padding-right: 12px;
+        }
+
+        .welcome-panel,
+        .login-panel {
+            padding: 25px 22px;
+            border-radius: 14px;
+        }
+
+        .welcome-panel {
+            min-height: auto;
+        }
+
+        .login-panel {
+            min-height: auto;
+        }
+
+            .welcome-panel h2,
+            .login-panel h2 {
+                font-size: 21px;
+            }
+
+        .welcome-panel p {
+            font-size: 14px;
+        }
+
+        .contact-box {
+            margin-top: 22px;
+            padding: 18px;
+        }
+
+        .location-map iframe {
+            min-height: 180px;
+        }
+
+        .login-panel .row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+
+            .login-panel .row > [class*="col-"] {
+                padding-left: 0;
+                padding-right: 0;
+            }
+
+        .col-form-label {
+            padding-bottom: 6px;
+            padding-top: 0;
+        }
+
+        .login-panel .offset-md-3 {
+            margin-left: 0;
+        }
+    }
+
+    /* ==============================
+       SMALL MOBILE
+    ============================== */
+
+    @@media (max-width: 480px) {
+
+        .elderly-login-container {
+            margin-top: 15px;
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .welcome-panel,
+        .login-panel {
+            padding: 22px 18px;
+        }
+
+        .contact-box {
+            padding: 16px;
+        }
+
+            .contact-box p {
+                font-size: 13px;
+            }
+
+        .form-control {
+            font-size: 13.5px;
+            padding: 11px 14px;
+        }
+
+        .btn-outline-dark {
+            min-height: 44px;
+        }
+    }
+</style>
+
+
+<main aria-labelledby="title">
+
+    <div class="container elderly-login-container">
+
+        <div class="row align-items-stretch">
+
+            <!-- ==============================
+                 WELCOME & CONTACT PANEL
+            ============================== -->
+
+            <div class="col-lg-5 col-md-5 d-flex mb-4 mb-md-0">
+
+                <div class="welcome-panel w-100">
+
+                    <div>
+
+                        <h2>
+                            Welcome to Elderly Care Hospital
+                        </h2>
+
+                        <p>
+                            We are dedicated to providing compassionate, safe, and professional care
+                            for elderly patients and residents. Our system helps healthcare staff,
+                            caregivers, and authorized users securely access patient care services.
+                        </p>
+
+                        <p>
+                            <strong>
+                                Caring with dignity, respect, and compassion every day.
+                            </strong>
+                        </p>
+
+                    </div>
+
+
+                    <!-- CONTACT INFORMATION -->
+
+                    <div class="contact-box">
+
+                        <h4>
+                            Contact Us
+                        </h4>
+
+                        <p>
+                            <strong>Phone:</strong>
+                            +27 12 345 6789
+                        </p>
+
+                        <p>
+                            <strong>Emergency:</strong>
+                            +27 78 358 8239
+                        </p>
+
+                        <p>
+                            <strong>Email:</strong>
+                            support@elderlycarehospital.co.za
+                        </p>
+
+                        <p>
+                            <strong>Address:</strong>
+                            25 Care Avenue, Pretoria, South Africa
+                        </p>
+
+
+                        <!-- LOCATION MAP -->
+
+                        <div class="location-map">
+
+                            <iframe src="https://www.google.com/maps?q=Pretoria,South+Africa&output=embed"
+                                    width="100%"
+                                    height="160"
+                                    style="border:0; border-radius:10px;"
+                                    allowfullscreen=""
+                                    loading="lazy"
+                                    referrerpolicy="no-referrer-when-downgrade">
+                            </iframe>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ==============================
+                 LOGIN SECTION
+            ============================== -->
+
+            <div class="col-lg-7 col-md-7 d-flex">
+
+                <div class="login-panel">
+
+                    <h2 id="title">
+                        Secure Login
+                    </h2>
+
+                    <h4>
+                        Please sign in to continue to the Elderly Care Management System.
+                    </h4>
+
+
+                    @using (Html.BeginForm(
+                        "Login",
+                        "Account",
+                        new { ReturnUrl = ViewBag.ReturnUrl },
+                        FormMethod.Post,
+                        new { role = "form" }
+                    ))
+                    {
+                        @Html.AntiForgeryToken()
+
+
+                        <hr />
+
+
+                        @Html.ValidationSummary(
+                            true,
+                            "",
+                            new { @class = "text-danger mb-3" }
+                        )
+
+
+                        <!-- EMAIL -->
+
+                        <div class="row mb-3 align-items-center">
+
+                            @Html.LabelFor(
+                                m => m.Email,
+                                new { @class = "col-md-3 col-form-label" }
+                            )
+
+                            <div class="col-md-9">
+
+                                @Html.TextBoxFor(
+                                    m => m.Email,
+                                    new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "Enter your email address"
+                                    }
+                                )
+
+                                @Html.ValidationMessageFor(
+                                    m => m.Email,
+                                    "",
+                                    new
+                                    {
+                                        @class = "text-danger small mt-1 d-block"
+                                    }
+                                )
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- PASSWORD -->
+
+                        <div class="row mb-3 align-items-center">
+
+                            @Html.LabelFor(
+                                m => m.Password,
+                                new { @class = "col-md-3 col-form-label" }
+                            )
+
+                            <div class="col-md-9">
+
+                                @Html.PasswordFor(
+                                    m => m.Password,
+                                    new
+                                    {
+                                        @class = "form-control",
+                                        placeholder = "Enter your password"
+                                    }
+                                )
+
+                                @Html.ValidationMessageFor(
+                                    m => m.Password,
+                                    "",
+                                    new
+                                    {
+                                        @class = "text-danger small mt-1 d-block"
+                                    }
+                                )
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- REMEMBER ME -->
+
+                        <div class="row mb-4">
+
+                            <div class="offset-md-3 col-md-9">
+
+                                <div class="checkbox d-flex align-items-center">
+
+                                    @Html.CheckBoxFor(
+                                        m => m.RememberMe
+                                    )
+
+                                    @Html.LabelFor(
+                                        m => m.RememberMe
+                                    )
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- LOGIN BUTTON -->
+
+                        <div class="row">
+
+                            <div class="offset-md-3 col-md-9">
+
+                                <input type="submit"
+                                       value="Log in"
+                                       class="btn btn-outline-dark" />
+
+                            </div>
+
+                        </div>
+                    }
+
+
+                    <!-- REGISTER -->
+
+                    <div class="help-text mt-4">
+
+                        Need access to the system?
+
+                        @Html.ActionLink(
+                            "Register as a new user",
+                            "RegisterFamily"
+                        )
+
+                    </div>
+
+
+                    <!-- FORGOT PASSWORD -->
+
+                    <div class="help-text mt-2">
+
+                        Forgot your password?
+
+                        @Html.ActionLink(
+                            "Reset your password",
+                            "ForgotPassword"
+                        )
+
+                    </div>
+
+
+                    <!-- SECURITY NOTICE -->
+
+                    <div class="help-text security-notice">
+
+                        This system is intended for authorized healthcare personnel,
+                        caregivers and Family Members only.
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+}

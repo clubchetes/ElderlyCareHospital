@@ -1,0 +1,82 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Visit>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td class="family-cell">
+                @{
+                    var family = new ElderlyCareHospital.Models.MyDatabaseModels()
+                        .FamilyMembers
+                        .Include("Patient")
+                        .FirstOrDefault(f => f.FamilyMemberID == item.FamilyID);
+                }
+
+                <strong>Family:</strong>
+                @(family != null ? family.FullName : "Unknown")
+
+                <br />
+
+                <strong>Patient:</strong>
+                @(family != null && family.Patient != null
+                ? family.Patient.FirstName + " " + family.Patient.LastName
+                : "No patient assigned")
+            </td>
+
+            <td>
+                @(item.VisitDate?.ToString("dd MMM yyyy HH:mm"))
+            </td>
+
+            <td>
+                @item.ParkingSlot
+            </td>
+
+            <td>
+                @if (item.Status == "Approved")
+                {
+                    <span class="badge badge-success">
+                        Approved
+                    </span>
+                }
+                else if (item.Status == "Rejected")
+                {
+                    <span class="badge badge-danger">
+                        Rejected
+                    </span>
+                }
+                else
+                {
+                    <span class="badge badge-warning">
+                        Pending
+                    </span>
+                }
+            </td>
+
+            @if (User.IsInRole("Admin"))
+            {
+                <td>
+                    @Html.ActionLink(
+                        "Approve",
+                        "Approve",
+                        new { id = item.VisitID },
+                        new { @class = "btn btn-success btn-sm" })
+
+                    @Html.ActionLink(
+                        "Reject",
+                        "Reject",
+                        new { id = item.VisitID },
+                        new { @class = "btn btn-danger btn-sm ml-2" })
+                </td>
+            }
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="@(User.IsInRole("Admin") ? 5 : 4)" class="text-center text-muted" style="padding: 30px;">
+            No scheduled visits found.
+        </td>
+    </tr>
+}

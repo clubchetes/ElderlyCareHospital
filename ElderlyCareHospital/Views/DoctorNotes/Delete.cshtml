@@ -1,0 +1,456 @@
+﻿@model ElderlyCareHospital.Models.DoctorNotes
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<style>
+    /* =========================================================
+       DOCTOR NOTES THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f4f8fb;
+        --surface: #ffffff;
+        --surface-soft: #f8fbfd;
+        --text-main: #102a43;
+        --text-secondary: #486581;
+        --text-muted: #627d98;
+        --border: #d9e2ec;
+        --border-soft: #e8eef3;
+        --accent: #2f6f73;
+        --accent-dark: #25575a;
+        --accent-soft: #eef7f7;
+        --success: #2e7d5b;
+        --danger: #c94c4c;
+        --danger-dark: #a83d3d;
+        --shadow-sm: 0 4px 14px rgba(16, 42, 67, 0.06);
+        --shadow-md: 0 8px 24px rgba(16, 42, 67, 0.08);
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+    }
+
+    /* =========================================================
+       PAGE WRAPPER
+       ========================================================= */
+
+    .delete-page {
+        padding-top: 28px;
+        padding-bottom: 35px;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .delete-header {
+        background: var(--surface);
+        border: 1px solid var(--border-soft);
+        border-radius: 18px;
+        padding: 26px 30px;
+        margin-bottom: 22px;
+        box-shadow: var(--shadow-sm);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .delete-header::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: var(--danger);
+        }
+
+        .delete-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+
+        .delete-header p {
+            margin: 9px 0 0;
+            max-width: 900px;
+            font-size: 14px;
+            line-height: 1.65;
+            color: var(--text-secondary);
+        }
+
+    .header-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-left: 10px;
+        padding: 5px 10px;
+        border-radius: 20px;
+        background: #fff3f3;
+        color: var(--danger);
+        font-size: 11px;
+        font-weight: 700;
+        vertical-align: middle;
+        letter-spacing: 0.2px;
+    }
+
+    .header-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--danger);
+    }
+
+    /* =========================================================
+       MAIN PANEL
+       ========================================================= */
+
+    .delete-panel {
+        background: var(--surface);
+        border: 1px solid var(--border-soft);
+        border-radius: 18px;
+        padding: 26px;
+        box-shadow: var(--shadow-sm);
+    }
+
+        .delete-panel h4 {
+            margin: 0 0 7px;
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+    .warning-message {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 22px;
+        padding: 13px 15px;
+        background: #fff8f8;
+        border: 1px solid #e6b8b8;
+        border-radius: 10px;
+        color: var(--danger);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .warning-icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        border-radius: 8px;
+        background: #fdeaea;
+        color: var(--danger);
+        font-size: 14px;
+        font-weight: 700;
+    }
+
+    .details-description {
+        margin: 0 0 22px;
+        font-size: 13px;
+        color: var(--text-muted);
+    }
+
+    /* =========================================================
+       DETAILS LIST
+       ========================================================= */
+
+    .details-list {
+        margin: 0;
+        padding: 0;
+    }
+
+        .details-list dt {
+            width: 190px;
+            padding: 15px 18px;
+            margin-bottom: 1px;
+            background: #f7fafc;
+            border-bottom: 1px solid var(--border-soft);
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.45px;
+        }
+
+        .details-list dd {
+            margin-left: 210px;
+            padding: 15px 18px;
+            min-height: 49px;
+            margin-bottom: 1px;
+            border-bottom: 1px solid var(--border-soft);
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.55;
+        }
+
+            .details-list dt:last-of-type,
+            .details-list dd:last-of-type {
+                border-bottom: none;
+            }
+
+    .patient-value {
+        color: var(--text-main);
+        font-weight: 700;
+    }
+
+    .doctor-value {
+        color: var(--text-secondary);
+        font-weight: 600;
+    }
+
+    .note-value {
+        max-width: 700px;
+        color: var(--text-secondary);
+        line-height: 1.65;
+        white-space: normal;
+    }
+
+    .date-value {
+        color: var(--text-muted);
+        font-weight: 600;
+    }
+
+    /* =========================================================
+       FORM ACTIONS
+       ========================================================= */
+
+    .form-actions {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-top: 24px;
+    }
+
+    .btn-delete {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 18px;
+        min-height: 42px;
+        background: var(--danger);
+        border: 1px solid var(--danger);
+        border-radius: 10px;
+        color: #ffffff !important;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 3px 10px rgba(201, 76, 76, 0.15);
+        transition: all 0.2s ease;
+    }
+
+        .btn-delete:hover {
+            background: var(--danger-dark);
+            border-color: var(--danger-dark);
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 15px;
+        min-height: 42px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text-secondary) !important;
+        border-radius: 9px;
+        text-decoration: none !important;
+        font-size: 13px;
+        font-weight: 600;
+        transition: all 0.18s ease;
+    }
+
+        .back-link:hover {
+            background: var(--surface-soft);
+            border-color: #bcccdc;
+            color: var(--accent) !important;
+            text-decoration: none !important;
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .delete-page {
+            padding-top: 18px;
+        }
+
+        .delete-header {
+            padding: 22px;
+            border-radius: 15px;
+        }
+
+            .delete-header h2 {
+                font-size: 24px;
+            }
+
+        .header-label {
+            display: flex;
+            width: fit-content;
+            margin: 10px 0 0;
+        }
+
+        .delete-panel {
+            padding: 20px 15px;
+            border-radius: 15px;
+        }
+
+        .details-list dt {
+            width: 100%;
+            padding: 11px 12px 6px;
+            border-bottom: none;
+        }
+
+        .details-list dd {
+            margin-left: 0;
+            padding: 5px 12px 13px;
+        }
+
+        .warning-message {
+            align-items: flex-start;
+        }
+
+        .form-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .btn-delete,
+        .back-link {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="container delete-page">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="delete-header">
+
+        <h2>
+            Delete Doctor's Note
+
+            <span class="header-label">
+                <span class="header-dot"></span>
+                Permanent Action
+            </span>
+        </h2>
+
+        <p>
+            Review the clinical note below before confirming deletion.
+            This action will remove the selected doctor note.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         DELETE PANEL
+         ===================================================== -->
+
+    <div class="delete-panel">
+
+        <div class="warning-message">
+
+            <span class="warning-icon">
+                !
+            </span>
+
+            <span>
+                Are you sure you want to delete this doctor note?
+            </span>
+
+        </div>
+
+
+        <h4>Doctor Note Information</h4>
+
+        <p class="details-description">
+            Review the information below before confirming the deletion.
+        </p>
+
+
+        <dl class="dl-horizontal details-list">
+
+            <dt>
+                @Html.DisplayNameFor(model => model.Patient.FirstName)
+            </dt>
+
+            <dd class="patient-value">
+                @Html.DisplayFor(model => model.Patient.FirstName)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DoctorID)
+            </dt>
+
+            <dd class="doctor-value">
+                @Html.DisplayFor(model => model.DoctorID)
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.NoteText)
+            </dt>
+
+            <dd>
+                <div class="note-value">
+                    @Html.DisplayFor(model => model.NoteText)
+                </div>
+            </dd>
+
+
+            <dt>
+                @Html.DisplayNameFor(model => model.DateCreated)
+            </dt>
+
+            <dd class="date-value">
+                @Html.DisplayFor(model => model.DateCreated)
+            </dd>
+
+        </dl>
+
+
+        <!-- =================================================
+             DELETE FORM
+             ================================================= -->
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-actions no-color">
+
+                <input type="submit"
+                       value="Delete"
+                       class="btn-delete" />
+
+                @Html.ActionLink(
+                    "←  Back to List",
+                    "Index",
+                    null,
+                    new { @class = "back-link" })
+
+            </div>
+        }
+
+    </div>
+
+</div>
+

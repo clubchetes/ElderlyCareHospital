@@ -1,0 +1,645 @@
+﻿@model ElderlyCareHospital.Models.MedicationAdministration
+
+@{
+    ViewBag.Title = "Edit Medication Administration";
+}
+
+<style>
+    /* =========================================================
+       NURSE DASHBOARD THEME
+       ========================================================= */
+
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #263238;
+    }
+
+    .med-edit-page {
+        max-width: 1100px;
+        margin: 30px auto 45px;
+        padding: 0 20px;
+    }
+
+    /* =========================================================
+       PAGE HEADER
+       ========================================================= */
+
+    .page-header {
+        background: #ffffff;
+        border-radius: 20px;
+        padding: 28px 32px;
+        margin-bottom: 24px;
+        border: 1px solid #e3ebef;
+        box-shadow: 0 6px 20px rgba(16, 42, 67, 0.06);
+        position: relative;
+        overflow: hidden;
+    }
+
+        .page-header::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: #2f6f73;
+        }
+
+        .page-header h2 {
+            margin: 0;
+            color: #102a43;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .page-header p {
+            margin: 9px 0 0;
+            color: #627d98;
+            font-size: 14px;
+            line-height: 1.65;
+            max-width: 850px;
+        }
+
+    .header-badge {
+        position: absolute;
+        top: 28px;
+        right: 30px;
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 12px;
+        border-radius: 20px;
+        background: #edf7f5;
+        color: #2f6f73;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid #d9ece8;
+    }
+
+        .header-badge span {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #3a8f72;
+            display: inline-block;
+        }
+
+    /* =========================================================
+       FORM CARD
+       ========================================================= */
+
+    .form-card {
+        background: #ffffff;
+        border: 1px solid #e3ebef;
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 6px 20px rgba(16, 42, 67, 0.06);
+    }
+
+    .section-heading {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 28px;
+        padding-bottom: 16px;
+        border-bottom: 1px solid #e5edf1;
+    }
+
+    .section-icon {
+        width: 38px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        background: #edf7f5;
+        color: #2f6f73;
+        font-size: 18px;
+    }
+
+    .section-heading h4 {
+        margin: 0;
+        color: #102a43;
+        font-size: 19px;
+        font-weight: 700;
+    }
+
+    .section-heading p {
+        margin: 3px 0 0;
+        color: #829ab1;
+        font-size: 13px;
+    }
+
+    /* =========================================================
+       FORM FIELDS
+       ========================================================= */
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .control-label {
+        color: #334e68;
+        font-size: 14px;
+        font-weight: 600;
+        padding-top: 11px;
+    }
+
+    .form-control {
+        width: 100%;
+        min-height: 46px;
+        border: 1px solid #cfd9df;
+        border-radius: 11px;
+        background: #ffffff;
+        color: #243b53;
+        padding: 10px 14px;
+        box-shadow: none;
+        transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    }
+
+        .form-control:hover {
+            border-color: #aebfc8;
+        }
+
+        .form-control:focus {
+            border-color: #4c8c91;
+            outline: none;
+            background: #ffffff;
+            box-shadow: 0 0 0 3px rgba(76, 140, 145, 0.12);
+        }
+
+    select.form-control {
+        cursor: pointer;
+    }
+
+    textarea.form-control {
+        min-height: 120px;
+        resize: vertical;
+        line-height: 1.55;
+    }
+
+    .readonly-box {
+        background: #f5f8fa !important;
+        color: #52606d !important;
+        border-color: #dbe4e8 !important;
+        cursor: not-allowed;
+    }
+
+    .field-help {
+        margin-top: 6px;
+        color: #829ab1;
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    .text-danger {
+        display: block;
+        margin-top: 6px;
+        color: #c62828;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    /* =========================================================
+       VALIDATION
+       ========================================================= */
+
+    .validation-summary-errors {
+        background: #fff5f5;
+        border: 1px solid #f1c7c7;
+        border-left: 4px solid #c62828;
+        border-radius: 10px;
+        padding: 12px 16px;
+        margin-bottom: 24px;
+        color: #9b2525;
+        font-size: 13px;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .submit-area {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        gap: 12px;
+        margin-top: 32px;
+        padding-top: 24px;
+        border-top: 1px solid #e5edf1;
+    }
+
+    .btn-cancel {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        background: #f1f5f7;
+        color: #52606d !important;
+        border: 1px solid #dbe4e8;
+        text-decoration: none !important;
+        font-size: 14px;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+        .btn-cancel:hover {
+            background: #e7eef1;
+            color: #263238 !important;
+            text-decoration: none;
+        }
+
+    .btn-submit {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 44px;
+        padding: 10px 24px;
+        border-radius: 10px;
+        border: 1px solid #2f6f73;
+        background: #2f6f73;
+        color: #ffffff;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: 0.2s ease;
+        box-shadow: 0 4px 10px rgba(47, 111, 115, 0.14);
+    }
+
+        .btn-submit:hover {
+            background: #25575a;
+            border-color: #25575a;
+            color: #ffffff;
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(47, 111, 115, 0.18);
+        }
+
+    /* =========================================================
+       INFORMATION NOTE
+       ========================================================= */
+
+    .info-note {
+        display: flex;
+        gap: 13px;
+        margin-top: 24px;
+        padding: 16px 18px;
+        background: #f5f9fb;
+        border: 1px solid #dfe9ed;
+        border-left: 4px solid #4c8c91;
+        border-radius: 11px;
+        color: #52606d;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .info-icon {
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px;
+        background: #e8f3f4;
+        color: #2f6f73;
+        font-size: 14px;
+    }
+
+    .info-note strong {
+        display: block;
+        margin-bottom: 3px;
+        color: #334e68;
+    }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .med-edit-page {
+            margin-top: 20px;
+            padding: 0 12px;
+        }
+
+        .page-header {
+            padding: 24px 22px;
+        }
+
+            .page-header h2 {
+                font-size: 25px;
+            }
+
+        .header-badge {
+            position: static;
+            display: inline-flex;
+            margin-top: 16px;
+        }
+
+        .form-card {
+            padding: 22px;
+        }
+
+        .control-label {
+            padding-top: 0;
+            margin-bottom: 7px;
+        }
+
+        .submit-area {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+        .btn-submit,
+        .btn-cancel {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="med-edit-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <div class="page-header">
+
+        <div class="header-badge">
+            <span></span>
+            Edit Medication Record
+        </div>
+
+        <h2>Edit Medication Administration</h2>
+
+        <p>
+            Update the medication administration record carefully.
+            Changes should reflect the patient's actual treatment and
+            nursing documentation.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM
+         ===================================================== -->
+
+    <div class="form-card">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+            @Html.HiddenFor(model => model.AdministrationID)
+
+
+            <div class="section-heading">
+
+               
+
+                <div>
+                    <h4>Administration Details</h4>
+                    <p>Review and update the medication administration information.</p>
+                </div>
+
+            </div>
+
+
+            <!-- PATIENT -->
+
+            <div class="form-group row">
+
+                @Html.LabelFor(
+                    model => model.PatientID,
+                    "Patient",
+                    htmlAttributes: new
+                    {
+                        @class = "control-label col-md-3"
+                    })
+
+                <div class="col-md-9">
+
+                    @Html.DropDownList(
+                        "PatientID",
+                        null,
+                        "-- Select Patient --",
+                        htmlAttributes: new
+                        {
+                            @class = "form-control"
+                        })
+
+                    @Html.ValidationMessageFor(
+                        model => model.PatientID,
+                        "",
+                        new
+                        {
+                            @class = "text-danger"
+                        })
+
+                </div>
+
+            </div>
+
+
+            <!-- MEDICATION -->
+
+            <div class="form-group row">
+
+                @Html.LabelFor(
+                    model => model.MedicineID,
+                    "Medication",
+                    htmlAttributes: new
+                    {
+                        @class = "control-label col-md-3"
+                    })
+
+                <div class="col-md-9">
+
+                    @Html.DropDownList(
+                        "MedicineID",
+                        null,
+                        "-- Select Medication --",
+                        htmlAttributes: new
+                        {
+                            @class = "form-control"
+                        })
+
+                    @Html.ValidationMessageFor(
+                        model => model.MedicineID,
+                        "",
+                        new
+                        {
+                            @class = "text-danger"
+                        })
+
+                </div>
+
+            </div>
+
+
+            <!-- NURSE -->
+
+            <div class="form-group row">
+
+                @Html.LabelFor(
+                    model => model.NurseID,
+                    htmlAttributes: new
+                    {
+                        @class = "control-label col-md-3"
+                    })
+
+                <div class="col-md-9">
+
+                    @Html.EditorFor(
+                        model => model.NurseID,
+                        new
+                        {
+                            htmlAttributes = new
+                            {
+                                @class = "form-control readonly-box",
+                                @readonly = "readonly"
+                            }
+                        })
+
+                    <div class="field-help">
+                        The nurse assigned to this administration record.
+                    </div>
+
+                    @Html.ValidationMessageFor(
+                        model => model.NurseID,
+                        "",
+                        new
+                        {
+                            @class = "text-danger"
+                        })
+
+                </div>
+
+            </div>
+
+
+            <!-- STATUS -->
+
+            <div class="form-group row">
+
+                @Html.LabelFor(
+                    model => model.Status,
+                    htmlAttributes: new
+                    {
+                        @class = "control-label col-md-3"
+                    })
+
+                <div class="col-md-9">
+
+                    @Html.TextAreaFor(
+                        model => model.Status,
+                        new
+                        {
+                            @class = "form-control",
+                            rows = "5",
+                            placeholder = "Update administration status, dosage confirmation, patient response, missed dose explanation, refusal, side effects, or other relevant observations..."
+                        })
+
+                    @Html.ValidationMessageFor(
+                        model => model.Status,
+                        "",
+                        new
+                        {
+                            @class = "text-danger"
+                        })
+
+                </div>
+
+            </div>
+
+
+            <!-- DATE -->
+
+    <div class="form-group row">
+
+        @Html.LabelFor(
+            model => model.DateAdministered,
+            htmlAttributes: new
+            {
+                @class = "control-label col-md-3"
+            })
+
+        <div class="col-md-9">
+
+            @Html.TextBoxFor(
+                model => model.DateAdministered,
+                "{0:yyyy-MM-ddTHH:mm}",
+                new
+                {
+                    @class = "form-control",
+                    type = "datetime-local",
+                    @readonly = "readonly",
+                    tabindex = "-1",
+                    style = "background-color:#f1f5f7; cursor:not-allowed;"
+                })
+
+            @Html.ValidationMessageFor(
+                model => model.DateAdministered,
+                "",
+                new
+                {
+                    @class = "text-danger"
+                })
+
+        </div>
+
+    </div>
+
+
+            <!-- ACTION BUTTONS -->
+
+            <div class="submit-area">
+
+                @Html.ActionLink(
+                    "Cancel",
+                    "Index",
+                    "MedicationAdministrations",
+                    null,
+                    new
+                    {
+                        @class = "btn-cancel"
+                    })
+
+                <input type="submit"
+                       value="Save Changes"
+                       class="btn-submit" />
+
+            </div>
+        }
+
+
+        <!-- INFORMATION NOTE -->
+
+        <div class="info-note">
+
+            <div class="info-icon">
+                ✓
+            </div>
+
+            <div>
+                <strong>Documentation Reminder</strong>
+
+                Make sure any changes accurately reflect the medication
+                administration that occurred. Accurate records support
+                safe patient care, treatment review, and continuity
+                between nursing shifts.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>

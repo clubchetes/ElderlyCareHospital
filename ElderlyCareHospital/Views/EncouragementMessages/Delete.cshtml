@@ -1,0 +1,404 @@
+﻿@model ElderlyCareHospital.Models.EncouragementMessage
+
+@{
+    ViewBag.Title = "Delete Message";
+
+    var patient = ViewBag.Patient as ElderlyCareHospital.Models.Patient;
+    var familyMember = ViewBag.FamilyMember as ElderlyCareHospital.Models.FamilyMember;
+}
+
+<style>
+
+    .delete-page {
+        padding: 30px;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .delete-header {
+        margin-bottom: 25px;
+    }
+
+        .delete-header h2 {
+            margin: 0;
+            color: #23352f;
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .delete-header p {
+            margin: 6px 0 0;
+            color: #687b74;
+            font-size: 13px;
+        }
+
+    .delete-card {
+        background: #ffffff;
+        border: 1px solid #dce7e1;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 12px 35px rgba(35, 53, 47, .07);
+    }
+
+    .delete-card-header {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 22px 25px;
+        background: #fff7f8;
+        border-bottom: 1px solid #f0dadd;
+    }
+
+    .delete-icon {
+        width: 44px;
+        height: 44px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 13px;
+        background: linear-gradient(135deg, #bd5965, #d87983);
+        color: #ffffff;
+        font-size: 19px;
+        font-weight: 800;
+        box-shadow: 0 8px 18px rgba(189, 89, 101, .18);
+    }
+
+    .delete-card-header h3 {
+        margin: 0;
+        color: #23352f;
+        font-size: 18px;
+        font-weight: 800;
+    }
+
+    .delete-card-header span {
+        display: block;
+        margin-top: 3px;
+        color: #8b6b70;
+        font-size: 11px;
+    }
+
+    .delete-content {
+        padding: 28px 25px;
+    }
+
+    .warning-message {
+        margin-bottom: 22px;
+        padding: 15px 18px;
+        border-radius: 13px;
+        background: #fff7f8;
+        border: 1px solid #f0dadd;
+        color: #9d4f59;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.5;
+    }
+
+    .detail-grid {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 17px;
+    }
+
+    .detail-item {
+        padding: 18px;
+        background: #f8fbf9;
+        border: 1px solid #e4ece8;
+        border-radius: 14px;
+    }
+
+    .detail-label {
+        margin-bottom: 7px;
+        color: #7a8c85;
+        font-size: 10px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: .7px;
+    }
+
+    .detail-value {
+        color: #23352f;
+        font-size: 14px;
+        font-weight: 700;
+        line-height: 1.5;
+    }
+
+    .message-box {
+        grid-column: 1 / -1;
+        padding: 20px;
+        background: #eef7f3;
+        border: 1px solid #d6e9e0;
+        border-radius: 15px;
+    }
+
+        .message-box .detail-label {
+            color: #3f806b;
+        }
+
+    .message-content {
+        color: #33483f;
+        font-size: 14px;
+        line-height: 1.7;
+        white-space: pre-wrap;
+    }
+
+    .delete-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-top: 25px;
+        padding-top: 22px;
+        border-top: 1px solid #e4ece8;
+    }
+
+    .delete-btn {
+        border: 0;
+        padding: 11px 20px;
+        border-radius: 11px;
+        background: #bd5965;
+        color: #ffffff;
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: .2s ease;
+    }
+
+        .delete-btn:hover {
+            background: #a94b57;
+            transform: translateY(-1px);
+        }
+
+    .back-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 11px 18px;
+        border-radius: 11px;
+        background: #ffffff;
+        border: 1px solid #dce7e1;
+        color: #687b74;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        transition: .2s ease;
+    }
+
+        .back-btn:hover {
+            background: #f8fbf9;
+            color: #3f806b;
+            border-color: #c8dcd2;
+            text-decoration: none;
+        }
+
+    @@media (max-width: 700px) {
+
+        .delete-page {
+            padding: 20px 15px;
+        }
+
+        .detail-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .message-box {
+            grid-column: auto;
+        }
+
+        .delete-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .delete-btn,
+        .back-btn {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>
+
+
+<div class="delete-page">
+
+    <!-- HEADER -->
+
+    <div class="delete-header">
+
+        <h2>
+            Delete Encouragement Message
+        </h2>
+
+        <p>
+            Review the message before permanently deleting it.
+        </p>
+
+    </div>
+
+
+    <!-- CARD -->
+
+    <div class="delete-card">
+
+        <!-- CARD HEADER -->
+
+        <div class="delete-card-header">
+
+            <div class="delete-icon">
+                !
+            </div>
+
+            <div>
+
+                <h3>
+                    Confirm Deletion
+                </h3>
+
+                <span>
+                    This action cannot be undone.
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONTENT -->
+
+        <div class="delete-content">
+
+            <!-- WARNING -->
+
+            <div class="warning-message">
+
+                Are you sure you want to permanently delete this
+                encouragement message?
+
+            </div>
+
+
+            <!-- DETAILS -->
+
+            <div class="detail-grid">
+
+                <!-- PATIENT -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Patient
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (patient != null)
+                        {
+                            @patient.FirstName @patient.LastName
+                        }
+                        else
+                        {
+                            <span>
+                                Patient not found
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- FAMILY MEMBER -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Family Member
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (familyMember != null)
+                        {
+                            @familyMember.FullName
+                        }
+                        else
+                        {
+                            <span>
+                                Family member not found
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATE SENT -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Date Sent
+                    </div>
+
+                    <div class="detail-value">
+
+                        @Model.DateSent.ToString("dd MMM yyyy HH:mm")
+
+                    </div>
+
+                </div>
+
+
+                <!-- MESSAGE -->
+
+                <div class="message-box">
+
+                    <div class="detail-label">
+                        Encouragement Message
+                    </div>
+
+                    <div class="message-content">
+
+                        @Model.MessageText
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- ACTIONS -->
+
+            @using (Html.BeginForm(
+                "DeleteConfirmed",
+                "EncouragementMessages",
+                FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.HiddenFor(
+                    model => model.MessageID
+                )
+
+                <div class="delete-actions">
+
+                    <button type="submit" class="delete-btn">
+                        Delete Message
+                    </button>
+
+                    @Html.ActionLink(
+                        "← Cancel",
+                        "Index",
+                        null,
+                        new { @class = "back-btn" }
+                    )
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
+

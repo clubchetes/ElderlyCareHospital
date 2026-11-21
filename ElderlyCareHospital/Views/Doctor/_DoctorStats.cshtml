@@ -1,0 +1,326 @@
+﻿@model dynamic
+
+<style>
+
+    /* =========================================================
+       DOCTOR STATISTICS
+       ========================================================= */
+
+    .doctor-stats-grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 18px;
+        width: 100%;
+        margin: 0;
+    }
+
+
+    /* =========================================================
+       STAT CARD
+       ========================================================= */
+
+    .doctor-stat-card {
+        position: relative;
+        min-height: 145px;
+        padding: 24px 22px;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 17px;
+        box-shadow: 0 2px 8px rgba(15, 23, 42, .04);
+        overflow: hidden;
+        transition: all .25s ease;
+    }
+
+        .doctor-stat-card:hover {
+            transform: translateY(-5px);
+            border-color: #d4dbe6;
+            box-shadow: 0 14px 30px rgba(15, 23, 42, .08);
+        }
+
+
+        /* =========================================================
+       TOP ACCENT
+       ========================================================= */
+
+        .doctor-stat-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient( 90deg, #4f46e5, #0ea5e9 );
+        }
+
+
+        /* =========================================================
+       DECORATIVE CIRCLE
+       ========================================================= */
+
+        .doctor-stat-card::after {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            right: -35px;
+            bottom: -45px;
+            border-radius: 50%;
+            background: rgba(79, 70, 229, .045);
+            pointer-events: none;
+            transition: transform .3s ease;
+        }
+
+        .doctor-stat-card:hover::after {
+            transform: scale(1.15);
+        }
+
+
+    /* =========================================================
+       STAT CONTENT
+       ========================================================= */
+
+    .doctor-stat-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .doctor-stat-label {
+        margin: 0 0 14px;
+        color: #64748b;
+        font-size: 13px;
+        font-weight: 600;
+        letter-spacing: .1px;
+    }
+
+    .doctor-stat-value {
+        margin: 0;
+        color: #0f172a;
+        font-size: 32px;
+        line-height: 1;
+        font-weight: 750;
+        letter-spacing: -1px;
+    }
+
+
+    /* =========================================================
+       ICON
+       ========================================================= */
+
+    .doctor-stat-icon {
+        position: absolute;
+        right: 20px;
+        top: 22px;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 11px;
+        color: white;
+        background: linear-gradient( 135deg, #4f46e5, #6366f1 );
+        box-shadow: 0 6px 14px rgba(79, 70, 229, .18);
+    }
+
+    .stat-care .doctor-stat-icon {
+        background: linear-gradient( 135deg, #0d9488, #14b8a6 );
+        box-shadow: 0 6px 14px rgba(13, 148, 136, .18);
+    }
+
+    .stat-alert .doctor-stat-icon {
+        background: linear-gradient( 135deg, #dc2626, #ef4444 );
+        box-shadow: 0 6px 14px rgba(220, 38, 38, .18);
+    }
+
+    .stat-message .doctor-stat-icon {
+        background: linear-gradient( 135deg, #0284c7, #0ea5e9 );
+        box-shadow: 0 6px 14px rgba(2, 132, 199, .18);
+    }
+
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 1100px) {
+
+        .doctor-stats-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+    }
+
+
+    @@media (max-width: 600px) {
+
+        .doctor-stats-grid {
+            grid-template-columns: 1fr;
+            gap: 14px;
+        }
+
+        .doctor-stat-card {
+            min-height: 130px;
+            padding: 21px 20px;
+        }
+
+        .doctor-stat-value {
+            font-size: 28px;
+        }
+
+        .doctor-stat-icon {
+            right: 18px;
+            top: 19px;
+        }
+    }
+</style>
+
+
+<div class="doctor-stats-grid">
+
+
+    <!-- TOTAL PATIENTS -->
+
+    <div class="doctor-stat-card stat-patients">
+
+        <div class="doctor-stat-content">
+
+            <p class="doctor-stat-label">
+                Total Patients
+            </p>
+
+            <h2 class="doctor-stat-value">
+                @ViewBag.TotalPatients
+            </h2>
+
+        </div>
+
+        <div class="doctor-stat-icon">
+
+            <svg width="19"
+                 height="19"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 viewBox="0 0 24 24">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z">
+                </path>
+
+            </svg>
+
+        </div>
+
+    </div>
+
+
+    <!-- CARE PLANS -->
+
+    <div class="doctor-stat-card stat-care">
+
+        <div class="doctor-stat-content">
+
+            <p class="doctor-stat-label">
+                Care Plans
+            </p>
+
+            <h2 class="doctor-stat-value">
+                @ViewBag.CarePlans
+            </h2>
+
+        </div>
+
+        <div class="doctor-stat-icon">
+
+            <svg width="19"
+                 height="19"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 viewBox="0 0 24 24">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z">
+                </path>
+
+            </svg>
+
+        </div>
+
+    </div>
+
+
+    <!-- ACTIVE ALERTS -->
+
+    <div class="doctor-stat-card stat-alert">
+
+        <div class="doctor-stat-content">
+
+            <p class="doctor-stat-label">
+                Active Alerts
+            </p>
+
+            <h2 class="doctor-stat-value">
+                @ViewBag.ActiveAlerts
+            </h2>
+
+        </div>
+
+        <div class="doctor-stat-icon">
+
+            <svg width="19"
+                 height="19"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 viewBox="0 0 24 24">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M12 9v2m0 4h.01M10.29 3.86l-7.82 13a2 2 0 001.71 3h15.64a2 2 0 001.71-3l-7.82-13a2 2 0 00-3.42 0z">
+                </path>
+
+            </svg>
+
+        </div>
+
+    </div>
+
+
+    <!-- MESSAGES -->
+
+    <div class="doctor-stat-card stat-message">
+
+        <div class="doctor-stat-content">
+
+            <p class="doctor-stat-label">
+                Messages Received
+            </p>
+
+            <h2 class="doctor-stat-value">
+                @ViewBag.Messages
+            </h2>
+
+        </div>
+
+        <div class="doctor-stat-icon">
+
+            <svg width="19"
+                 height="19"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2"
+                 viewBox="0 0 24 24">
+
+                <path stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M3 8l9 6 9-6M5 5h14a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2z">
+                </path>
+
+            </svg>
+
+        </div>
+
+    </div>
+
+</div>

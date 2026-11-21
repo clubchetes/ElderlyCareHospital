@@ -1,0 +1,655 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.CleaningTask>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<style>
+
+    /* =========================================================
+       ROOT / ELDERLYCARE HOSPITAL THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f8fafc;
+        --surface: #ffffff;
+        --surface-soft: #f8fbfd;
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --primary: #4f46e5;
+        --primary-hover: #4338ca;
+        --secondary: #0ea5e9;
+        --border-color: #e2e8f0;
+    }
+
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+        overflow-x: hidden;
+    }
+
+
+    /* =========================================================
+       MAIN PAGE WRAPPER
+       ========================================================= */
+
+    .tasks-page {
+        width: 100%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 36px 40px 45px;
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .tasks-header {
+        background: var(--surface);
+        color: var(--text-main);
+        padding: 28px 34px;
+        border-radius: 18px;
+        margin-bottom: 26px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 20px rgba(15, 23, 42, 0.03);
+    }
+
+        .tasks-header h2 {
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            font-weight: 700;
+            font-size: 24px;
+            letter-spacing: -0.3px;
+            line-height: 1.3;
+        }
+
+        .tasks-header p {
+            margin: 8px 0 0;
+            color: var(--text-muted);
+            font-size: 14px;
+            line-height: 1.6;
+            max-width: 950px;
+        }
+
+
+    /* =========================================================
+       LIVE SYNC BADGE
+       ========================================================= */
+
+    .live-sync-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        padding: 7px 12px;
+        border-radius: 20px;
+        background: rgba(16, 185, 129, 0.08);
+        border: 1px solid rgba(16, 185, 129, 0.15);
+        color: #059669;
+        font-size: 11px;
+        font-weight: 600;
+        white-space: nowrap;
+        letter-spacing: 0.2px;
+    }
+
+    .live-sync-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.10);
+    }
+
+
+    /* =========================================================
+       MAIN PANEL
+       ========================================================= */
+
+    .tasks-panel {
+        background: var(--surface);
+        border-radius: 18px;
+        padding: 24px;
+        border: 1px solid var(--border-color);
+        box-shadow: 0 4px 18px rgba(15, 23, 42, 0.025);
+        box-sizing: border-box;
+    }
+
+
+    /* =========================================================
+       TOOLBAR
+       ========================================================= */
+
+    .toolbar {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        margin-bottom: 18px;
+    }
+
+
+    /* =========================================================
+       CREATE BUTTON
+       ========================================================= */
+
+    .btn-create {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 10px 18px;
+        box-sizing: border-box;
+        background: linear-gradient(135deg, #4f46e5, #6366f1);
+        color: white !important;
+        border: 1px solid transparent;
+        border-radius: 10px;
+        text-decoration: none !important;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.16);
+        transition: all 0.2s ease;
+    }
+
+        .btn-create:hover {
+            background: linear-gradient(135deg, #4338ca, #4f46e5);
+            color: white !important;
+            text-decoration: none !important;
+            transform: translateY(-2px);
+            box-shadow: 0 7px 16px rgba(79, 70, 229, 0.22);
+        }
+
+
+    /* =========================================================
+       TABLE WRAPPER
+       ========================================================= */
+
+    .tasks-table-wrapper {
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        overflow: hidden;
+        background: #ffffff;
+    }
+
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .table {
+        width: 100%;
+        margin-bottom: 0;
+        border: none;
+    }
+
+        .table thead {
+            background: #f8fafc;
+            color: var(--text-main);
+        }
+
+            .table thead tr {
+                border-bottom: 1px solid var(--border-color);
+            }
+
+        .table th {
+            border: none !important;
+            padding: 14px 16px;
+            font-weight: 700;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            white-space: nowrap;
+        }
+
+        .table td {
+            padding: 15px 16px;
+            vertical-align: middle;
+            border-top: 1px solid #edf2f7 !important;
+            border-bottom: none !important;
+            font-size: 13.5px;
+            color: var(--text-main);
+        }
+
+        .table tbody tr {
+            transition: background-color 0.15s ease;
+        }
+
+            .table tbody tr:hover {
+                background: #f8fbff;
+            }
+
+
+    /* =========================================================
+       STATUS BADGE
+       ========================================================= */
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 82px;
+        padding: 6px 12px;
+        background: rgba(79, 70, 229, 0.07);
+        border: 1px solid rgba(79, 70, 229, 0.10);
+        color: var(--primary);
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        white-space: nowrap;
+    }
+
+
+    /* =========================================================
+       ACTION LINKS
+       ========================================================= */
+
+    .action-links {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+        .action-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 34px;
+            padding: 7px 11px;
+            margin-right: 0;
+            border-radius: 8px;
+            background: #f1f5f9;
+            color: var(--primary) !important;
+            border: 1px solid #e2e8f0;
+            text-decoration: none !important;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+            .action-links a:hover {
+                background: rgba(79, 70, 229, 0.08);
+                border-color: rgba(79, 70, 229, 0.18);
+                color: var(--primary-hover) !important;
+                text-decoration: none !important;
+                transform: translateY(-1px);
+            }
+
+
+    /* =========================================================
+       BACK LINK
+       ========================================================= */
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        margin-top: 22px;
+        padding: 10px 18px;
+        box-sizing: border-box;
+        background: #475569;
+        color: white !important;
+        border-radius: 10px;
+        text-decoration: none !important;
+        font-size: 13px;
+        font-weight: 600;
+        box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #334155;
+            color: white !important;
+            text-decoration: none !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(15, 23, 42, 0.12);
+        }
+
+
+    /* =========================================================
+       LARGE TABLET
+       ========================================================= */
+
+    @@media (max-width: 1200px) {
+
+        .tasks-page {
+            padding-left: 30px;
+            padding-right: 30px;
+        }
+    }
+
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @@media (max-width: 900px) {
+
+        .tasks-page {
+            padding: 30px 24px 40px;
+        }
+
+        .tasks-header {
+            padding: 25px;
+        }
+
+        .tasks-panel {
+            padding: 20px;
+        }
+    }
+
+
+    /* =========================================================
+       MOBILE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .tasks-page {
+            padding: 95px 18px 30px;
+        }
+
+        .tasks-header {
+            padding: 22px;
+            border-radius: 15px;
+            margin-bottom: 22px;
+        }
+
+            .tasks-header h2 {
+                font-size: 20px;
+                align-items: flex-start;
+            }
+
+            .tasks-header p {
+                font-size: 13px;
+            }
+
+        .live-sync-badge {
+            font-size: 10px;
+            padding: 6px 9px;
+        }
+
+        .tasks-panel {
+            padding: 16px;
+            border-radius: 15px;
+        }
+
+        .toolbar {
+            justify-content: stretch;
+        }
+
+        .btn-create {
+            width: 100%;
+        }
+
+        .tasks-table-wrapper {
+            border-radius: 12px;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px 13px;
+            font-size: 12px;
+        }
+
+        .table th {
+            font-size: 10px;
+        }
+
+        .status-badge {
+            font-size: 10px;
+            padding: 5px 9px;
+        }
+
+        .action-links a {
+            font-size: 11px;
+            min-height: 32px;
+            padding: 6px 9px;
+        }
+
+        .back-link {
+            width: 100%;
+        }
+    }
+
+
+    /* =========================================================
+       SMALL PHONE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .tasks-page {
+            padding-left: 14px;
+            padding-right: 14px;
+        }
+
+        .tasks-header {
+            padding: 19px;
+        }
+
+            .tasks-header h2 {
+                font-size: 18px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .tasks-header p {
+                font-size: 12.5px;
+            }
+
+        .tasks-panel {
+            padding: 13px;
+        }
+
+        .table th,
+        .table td {
+            padding: 11px 10px;
+        }
+
+        .action-links {
+            gap: 5px;
+        }
+
+            .action-links a {
+                padding: 6px 8px;
+                font-size: 10px;
+            }
+    }
+</style>
+
+
+<!-- =========================================================
+     CLEANING TASKS PAGE
+     ========================================================= -->
+
+<div class="tasks-page">
+
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="tasks-header">
+
+        <h2>
+
+            <span>
+                Cleaning Tasks
+            </span>
+
+            <span class="live-sync-badge">
+
+                <span class="live-sync-dot"></span>
+
+                Live Sync Active
+
+            </span>
+
+        </h2>
+
+        <p>
+            Manage hospital cleaning assignments, monitor task status,
+            and maintain a safe and hygienic environment for elderly
+            patient care.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         MAIN PANEL
+         ===================================================== -->
+
+    <div class="tasks-panel">
+
+
+        <!-- =================================================
+             TOOLBAR
+             ================================================= -->
+
+        <div class="toolbar">
+
+            @Html.ActionLink(
+                "Create New",
+                "Create",
+                null,
+                new { @class = "btn-create" })
+
+        </div>
+
+
+        <!-- =================================================
+             TABLE
+             ================================================= -->
+
+        <div class="tasks-table-wrapper">
+
+            <div class="table-responsive">
+
+                <table class="table"
+                       id="tasksTable">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Assigned Cleaner
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(
+                                    model => model.Area)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(
+                                    model => model.Status)
+                            </th>
+
+                            <th>
+                                @Html.DisplayNameFor(
+                                    model => model.TaskDate)
+                            </th>
+
+                            <th>
+                                Actions
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody id="liveTasksBody">
+
+                        @Html.Partial(
+                            "_CleaningTaskRows",
+                            Model)
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK TO DASHBOARD
+         ===================================================== -->
+
+    <p>
+
+        @Html.ActionLink(
+            "Back to Dashboard",
+            "Dashboard",
+            "Admin",
+            null,
+            new { @class = "back-link" })
+
+    </p>
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+        function refreshCleaningTasks() {
+
+            $.ajax({
+
+                url:
+                    '@Url.Action("GetLiveTasks", "CleaningTasks")',
+
+                type: 'GET',
+
+                success:
+                    function (data) {
+
+                        $('#liveTasksBody')
+                            .html(data);
+
+                    }
+
+            });
+
+        }
+
+
+        // Silently checks for updates every 5 seconds
+        // without reloading the page
+
+        setInterval(
+            refreshCleaningTasks,
+            5000
+        );
+
+    </script>
+
+}

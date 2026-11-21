@@ -1,0 +1,34 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Patient>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+            <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+            <td>@Html.DisplayFor(modelItem => item.DateOfBirth)</td>
+            <td>@Html.DisplayFor(modelItem => item.Gender)</td>
+            <td>@Html.DisplayFor(modelItem => item.RoomNumber)</td>
+            <td>@Html.DisplayFor(modelItem => item.AdmissionDate)</td>
+            <td>@Html.DisplayFor(modelItem => item.EmergencyContact)</td>
+            <td>@Html.DisplayFor(modelItem => item.Allergies)</td>
+            <td>@Html.DisplayFor(modelItem => item.MedicalHistory)</td>
+            <td>@Html.DisplayFor(modelItem => item.FallRisk)</td>
+
+            <td class="actions">
+                @Html.ActionLink("Update Patient", "Edit", new { id = item.PatientID }, new { @class = "edit-link" })
+                @Html.ActionLink("Details", "Details", new { id = item.PatientID }, new { @class = "details-link" })
+                @Html.ActionLink("Delete", "Delete", new { id = item.PatientID }, new { @class = "delete-link" })
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="11" class="text-center text-muted" style="padding: 30px;">
+            No patient records found matching your criteria.
+        </td>
+    </tr>
+}

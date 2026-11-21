@@ -1,0 +1,584 @@
+﻿@model ElderlyCareHospital.Models.Medicine
+
+@{
+    ViewBag.Title = "Edit Medicine";
+}
+
+<style>
+    /* =========================================================
+       ELDERLYCARE PHARMACY - EDIT MEDICINE
+       ========================================================= */
+
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: #34495e;
+    }
+
+    .edit-page {
+        max-width: 850px;
+        margin: 45px auto;
+        padding: 0 20px;
+    }
+
+    /* =========================================================
+       MAIN CARD
+       ========================================================= */
+
+    .edit-card {
+        background: #ffffff;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .edit-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 30px 38px;
+    }
+
+        .edit-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+        }
+
+        .edit-header p {
+            margin: 9px 0 0;
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+    /* =========================================================
+       FORM AREA
+       ========================================================= */
+
+    .edit-form {
+        padding: 35px 40px;
+    }
+
+    .section-title {
+        color: #2f6f73;
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0 0 25px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #e5eeee;
+    }
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .control-label {
+        color: #2f6f73;
+        font-weight: 600;
+        padding-top: 10px;
+    }
+
+    .form-control {
+        height: 44px;
+        border: 1px solid #d6e3e5;
+        border-radius: 10px;
+        padding: 10px 13px;
+        font-size: 14px;
+        background: #fbfdfd;
+        box-shadow: none;
+        transition: all 0.2s ease;
+    }
+
+    textarea.form-control {
+        height: auto;
+        min-height: 105px;
+        resize: vertical;
+    }
+
+    .form-control:focus {
+        border-color: #4c8c91;
+        box-shadow: 0 0 0 3px rgba(76, 140, 145, 0.12);
+        background: #ffffff;
+        outline: none;
+    }
+
+    .form-control::placeholder {
+        color: #9aa9aa;
+    }
+
+    .text-danger {
+        display: block;
+        margin-top: 5px;
+        font-size: 12px;
+    }
+
+    /* =========================================================
+       INFORMATION BOX
+       ========================================================= */
+
+    .medicine-info {
+        background: #eef7f7;
+        border-left: 4px solid #2f6f73;
+        border-radius: 10px;
+        padding: 13px 16px;
+        margin-bottom: 28px;
+        color: #526667;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+        .medicine-info strong {
+            color: #2f6f73;
+        }
+
+    /* =========================================================
+       SUBMIT AREA
+       ========================================================= */
+
+    .submit-row {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #e5eeee;
+    }
+
+    .btn-save {
+        border: none;
+        border-radius: 11px;
+        padding: 12px 36px;
+        background: linear-gradient(135deg, #2f6f73, #3f858a);
+        color: white !important;
+        font-size: 15px;
+        font-weight: 700;
+        box-shadow: 0 7px 18px rgba(47, 111, 115, 0.20);
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+
+        .btn-save:hover {
+            background: linear-gradient(135deg, #25575a, #347378);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 23px rgba(47, 111, 115, 0.27);
+        }
+
+    /* =========================================================
+       BACK BUTTON
+       ========================================================= */
+
+    .back-container {
+        text-align: center;
+        margin-top: 22px;
+    }
+
+    .back-link {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: #2f6f73 !important;
+        background: #ffffff;
+        border: 1px solid #d6e3e5;
+        text-decoration: none !important;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #eef6f6;
+            transform: translateY(-2px);
+            text-decoration: none !important;
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .edit-page {
+            margin: 25px auto;
+            padding: 0 12px;
+        }
+
+        .edit-header {
+            padding: 25px;
+        }
+
+            .edit-header h2 {
+                font-size: 23px;
+            }
+
+        .edit-form {
+            padding: 25px 20px;
+        }
+
+        .control-label {
+            padding-top: 0;
+            margin-bottom: 7px;
+            display: block;
+        }
+
+        .col-md-3,
+        .col-md-9 {
+            width: 100%;
+        }
+
+        .btn-save {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="edit-page">
+
+    <div class="edit-card">
+
+        <!-- =====================================================
+             HEADER
+             ===================================================== -->
+
+        <div class="edit-header">
+
+            <h2>Edit Medicine</h2>
+
+            <p>
+                Update medicine information, stock levels, expiry details,
+                and supplier information to keep the pharmacy inventory
+                accurate and up to date.
+            </p>
+
+        </div>
+
+
+        <!-- =====================================================
+             FORM
+             ===================================================== -->
+
+        <div class="edit-form">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(
+                    true,
+                    "",
+                    new { @class = "text-danger" }
+                )
+
+                @Html.HiddenFor(model => model.MedicineID)
+
+
+                <h4 class="section-title">
+                    Medicine Information
+                </h4>
+
+
+                <!-- Information message -->
+
+                <div class="medicine-info">
+
+                    <strong>Pharmacy Reminder:</strong>
+                    Review all medicine details carefully before saving
+                    changes to ensure the inventory remains accurate.
+
+                </div>
+
+
+                <!-- =================================================
+                     MEDICINE NAME
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.MedicineName,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        }
+                    )
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.MedicineName,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter medicine name"
+                                }
+                            }
+                        )
+
+                        @Html.ValidationMessageFor(
+                            model => model.MedicineName,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            }
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DESCRIPTION
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Description,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        }
+                    )
+
+                    <div class="col-md-9">
+
+                        @Html.TextAreaFor(
+                            model => model.Description,
+                            new
+                            {
+                                @class = "form-control",
+                                rows = "4",
+                                placeholder = "Enter medicine description"
+                            }
+                        )
+
+                        @Html.ValidationMessageFor(
+                            model => model.Description,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            }
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     QUANTITY
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Quantity,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        }
+                    )
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.Quantity,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter current quantity"
+                                }
+                            }
+                        )
+
+                        @Html.ValidationMessageFor(
+                            model => model.Quantity,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            }
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     EXPIRY DATE
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.ExpiryDate,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        }
+                    )
+
+                    <div class="col-md-9">
+
+                        @Html.TextBoxFor(
+                            model => model.ExpiryDate,
+                            "{0:yyyy-MM-ddTHH:mm}",
+                            new
+                            {
+                                @class = "form-control",
+                                type = "datetime-local"
+                            }
+                        )
+
+                        @Html.ValidationMessageFor(
+                            model => model.ExpiryDate,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            }
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     MINIMUM STOCK
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.MinimumStock,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        }
+                    )
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.MinimumStock,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter minimum stock level"
+                                }
+                            }
+                        )
+
+                        @Html.ValidationMessageFor(
+                            model => model.MinimumStock,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            }
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SUPPLIER
+                     ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Supplier,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        }
+                    )
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.Supplier,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter supplier name"
+                                }
+                            }
+                        )
+
+                        @Html.ValidationMessageFor(
+                            model => model.Supplier,
+                            "",
+                            new
+                            {
+                                @class = "text-danger"
+                            }
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     SAVE
+                     ================================================= -->
+
+                <div class="submit-row">
+
+                    <input type="submit"
+                           value="Save Changes"
+                           class="btn-save" />
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         BACK
+         ========================================================= -->
+
+    <div class="back-container">
+
+        @Html.ActionLink(
+            "Back to Medicine List",
+            "Index",
+            null,
+            new
+            {
+                @class = "back-link"
+            }
+        )
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+}

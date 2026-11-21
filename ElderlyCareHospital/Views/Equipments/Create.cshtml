@@ -1,0 +1,642 @@
+﻿@model ElderlyCareHospital.Models.Equipment
+
+@{
+    ViewBag.Title = "Add Equipment";
+}
+
+<style>
+    /* =========================================================
+       ELDERLYCARE HOSPITAL - ADD EQUIPMENT
+       ========================================================= */
+
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .equipment-page {
+        max-width: 850px;
+        margin: 45px auto;
+        padding: 0 20px;
+    }
+
+    .equipment-card {
+        background: #ffffff;
+        border-radius: 22px;
+        box-shadow: 0 12px 35px rgba(0, 0, 0, 0.09);
+        overflow: hidden;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .equipment-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 30px 38px;
+    }
+
+        .equipment-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .equipment-header p {
+            margin: 10px 0 0;
+            font-size: 14px;
+            line-height: 1.6;
+            opacity: 0.95;
+        }
+
+    /* =========================================================
+       FORM
+       ========================================================= */
+
+    .equipment-form {
+        padding: 35px 40px;
+    }
+
+    .section-title {
+        color: #2f6f73;
+        font-size: 18px;
+        font-weight: 700;
+        margin: 0 0 25px;
+        padding-bottom: 12px;
+        border-bottom: 2px solid #e5eeee;
+    }
+
+    .form-group {
+        margin-bottom: 22px;
+    }
+
+    .control-label {
+        color: #2f6f73;
+        font-weight: 600;
+        padding-top: 10px;
+    }
+
+    .form-control {
+        height: 44px;
+        border: 1px solid #d6e3e5;
+        border-radius: 10px;
+        padding: 10px 13px;
+        font-size: 14px;
+        background: #fbfdfd;
+        box-shadow: none;
+        transition: all 0.2s ease;
+    }
+
+        .form-control:focus {
+            border-color: #4c8c91;
+            box-shadow: 0 0 0 3px rgba(76, 140, 145, 0.12);
+            background: white;
+            outline: none;
+        }
+
+        .form-control::placeholder {
+            color: #9aa9aa;
+        }
+
+    .text-danger {
+        display: block;
+        margin-top: 5px;
+        font-size: 12px;
+    }
+
+    /* =========================================================
+       INFORMATION BOX
+       ========================================================= */
+
+    .equipment-info {
+        background: #eef7f7;
+        border-left: 4px solid #2f6f73;
+        border-radius: 10px;
+        padding: 13px 16px;
+        margin-bottom: 28px;
+        color: #526667;
+        font-size: 13px;
+        line-height: 1.5;
+    }
+
+        .equipment-info strong {
+            color: #2f6f73;
+        }
+
+    /* =========================================================
+       SUBMIT
+       ========================================================= */
+
+    .submit-row {
+        text-align: center;
+        margin-top: 30px;
+        padding-top: 25px;
+        border-top: 1px solid #e5eeee;
+    }
+
+    .btn-create {
+        border: none;
+        border-radius: 11px;
+        padding: 12px 35px;
+        background: linear-gradient(135deg, #2f6f73, #3f858a);
+        color: white;
+        font-size: 15px;
+        font-weight: 700;
+        box-shadow: 0 7px 18px rgba(47, 111, 115, 0.20);
+        transition: all 0.25s ease;
+        cursor: pointer;
+    }
+
+        .btn-create:hover {
+            background: linear-gradient(135deg, #25575a, #347378);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 23px rgba(47, 111, 115, 0.27);
+        }
+
+    /* =========================================================
+       BACK LINK
+       ========================================================= */
+
+    .back-container {
+        text-align: center;
+        margin-top: 22px;
+    }
+
+    .back-link {
+        display: inline-block;
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: #2f6f73 !important;
+        background: white;
+        border: 1px solid #d6e3e5;
+        text-decoration: none !important;
+        font-weight: 600;
+        transition: all 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #eef6f6;
+            transform: translateY(-2px);
+            text-decoration: none !important;
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .equipment-page {
+            margin: 25px auto;
+            padding: 0 12px;
+        }
+
+        .equipment-header {
+            padding: 25px;
+        }
+
+            .equipment-header h2 {
+                font-size: 23px;
+            }
+
+        .equipment-form {
+            padding: 25px 20px;
+        }
+
+        .control-label {
+            padding-top: 0;
+            margin-bottom: 7px;
+            display: block;
+        }
+
+        .col-md-3,
+        .col-md-9 {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="equipment-page">
+
+    <div class="equipment-card">
+
+        <!-- =================================================
+             HEADER
+             ================================================= -->
+
+        <div class="equipment-header">
+
+            <h2>Add New Equipment</h2>
+
+            <p>
+                Add hospital equipment to the inventory.
+                Enter accurate equipment, quantity, condition,
+                maintenance, purchase, and location information
+                to keep hospital resources properly managed.
+            </p>
+
+        </div>
+
+
+        <!-- =================================================
+             FORM
+             ================================================= -->
+
+        <div class="equipment-form">
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                @Html.ValidationSummary(
+                    true,
+                    "",
+                    new { @class = "text-danger" })
+
+
+                <h4 class="section-title">
+                    Equipment Information
+                </h4>
+
+
+                <!-- Information Message -->
+
+                <div class="equipment-info">
+
+                    <strong>Equipment Reminder:</strong>
+                    Make sure the equipment name, category,
+                    quantity, minimum quantity, condition,
+                    purchase date, maintenance date, and location
+                    are correct before saving.
+                </div>
+
+
+                <!-- =================================================
+        EQUIPMENT NAME
+        ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.EquipmentName,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.EquipmentName,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter equipment name"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.EquipmentName,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                    <!-- =================================================
+            CATEGORY
+            ================================================= -->
+
+                    <div class="form-group row">
+
+                        @Html.LabelFor(
+                            model => model.Category,
+                            htmlAttributes: new
+                            {
+                                @class = "control-label col-md-3"
+                            })
+
+                        <div class="col-md-9">
+
+                            @Html.DropDownListFor(
+                                model => model.Category,
+                                new SelectList(new[]
+                                {
+                                    new { Value = "", Text = "Select equipment category" },
+
+                                    new { Value = "Patient Beds & Bedroom", Text = "Patient Beds & Bedroom" },
+                                    new { Value = "Mobility & Walking", Text = "Mobility & Walking" },
+                                    new { Value = "Patient Transfer & Lifting", Text = "Patient Transfer & Lifting" },
+                                    new { Value = "Fall Prevention & Safety", Text = "Fall Prevention & Safety" },
+                                    new { Value = "Patient Monitoring", Text = "Patient Monitoring" },
+                                    new { Value = "Respiratory Care", Text = "Respiratory Care" },
+                                    new { Value = "Emergency & Resuscitation", Text = "Emergency & Resuscitation" },
+                                    new { Value = "Wound & Pressure Care", Text = "Wound & Pressure Care" },
+                                    new { Value = "Physiotherapy & Rehabilitation", Text = "Physiotherapy & Rehabilitation" },
+                                    new { Value = "Medication & Pharmacy", Text = "Medication & Pharmacy" },
+                                    new { Value = "Feeding & Nutrition", Text = "Feeding & Nutrition" },
+                                    new { Value = "Hygiene & Bathroom", Text = "Hygiene & Bathroom" },
+                                    new { Value = "Diagnostic", Text = "Diagnostic" },
+                                    new { Value = "Infection Control", Text = "Infection Control" },
+                                    new { Value = "Patient Transportation", Text = "Patient Transportation" },
+                                    new { Value = "Medical Furniture", Text = "Medical Furniture" },
+                                    new { Value = "IV & Infusion", Text = "IV & Infusion" },
+                                    new { Value = "Continence & Urinary Care", Text = "Continence & Urinary Care" },
+                                    new { Value = "Dementia & Cognitive Care", Text = "Dementia & Cognitive Care" },
+                                    new { Value = "Mental Wellness & Recreation", Text = "Mental Wellness & Recreation" },
+                                    new { Value = "Dental & Oral Care", Text = "Dental & Oral Care" },
+                                    new { Value = "Eye & Hearing Care", Text = "Eye & Hearing Care" },
+                                    new { Value = "Laboratory", Text = "Laboratory" },
+                                    new { Value = "Laundry & Linen", Text = "Laundry & Linen" },
+                                    new { Value = "Cleaning", Text = "Cleaning" },
+                                    new { Value = "Kitchen & Dietary", Text = "Kitchen & Dietary" },
+                                    new { Value = "Security & Patient Safety", Text = "Security & Patient Safety" },
+                                    new { Value = "Nurse Station", Text = "Nurse Station" },
+                                    new { Value = "Specialized Geriatric Care", Text = "Specialized Geriatric Care" },
+                                    new { Value = "Facility & Utility", Text = "Facility & Utility" }
+
+                                }, "Value", "Text"),
+                                new
+                                {
+                                    @class = "form-control"
+                                })
+
+                            @Html.ValidationMessageFor(
+                                model => model.Category,
+                                "",
+                                new { @class = "text-danger" })
+
+                        </div>
+
+                    </div>
+
+              
+
+
+                <!-- =================================================
+        QUANTITY
+        ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Quantity,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.Quantity,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter current quantity"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.Quantity,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+        MINIMUM QUANTITY
+        ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.MinimumQuantity,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.MinimumQuantity,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter minimum quantity"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.MinimumQuantity,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+        CONDITION
+        ================================================= -->
+
+                               
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Condition,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.DropDownListFor(
+                            model => model.Condition,
+                            new List<SelectListItem>
+                            {
+                                new SelectListItem { Text = "New", Value = "New" },
+                                new SelectListItem { Text = "Good", Value = "Good" },
+                                new SelectListItem { Text = "Fair", Value = "Fair" },
+                                new SelectListItem { Text = "Poor", Value = "Poor" },
+                                new SelectListItem { Text = "Damaged / Out of Service", Value = "Damaged / Out of Service" }
+                            },
+                            "-- Select Condition --",
+                            new
+                            {
+                                @class = "form-control"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.Condition,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+        PURCHASE DATE
+        ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.PurchaseDate,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.TextBox(
+                            "PurchaseDate",
+                            DateTime.Today.ToString("yyyy-MM-dd"),
+                            new
+                            {
+                                @class = "form-control",
+                                type = "date",
+                                @readonly = "readonly"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.PurchaseDate,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+        LAST MAINTENANCE DATE
+        ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.LastMaintenanceDate,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.TextBox(
+                            "LastMaintenanceDate",
+                            DateTime.Today.ToString("yyyy-MM-dd"),
+                            new
+                            {
+                                @class = "form-control",
+                                type = "date",
+                                @readonly = "readonly"
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.LastMaintenanceDate,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- =================================================
+        LOCATION
+        ================================================= -->
+
+                <div class="form-group row">
+
+                    @Html.LabelFor(
+                        model => model.Location,
+                        htmlAttributes: new
+                        {
+                            @class = "control-label col-md-3"
+                        })
+
+                    <div class="col-md-9">
+
+                        @Html.EditorFor(
+                            model => model.Location,
+                            new
+                            {
+                                htmlAttributes = new
+                                {
+                                    @class = "form-control",
+                                    placeholder = "Enter equipment location"
+                                }
+                            })
+
+                        @Html.ValidationMessageFor(
+                            model => model.Location,
+                            "",
+                            new { @class = "text-danger" })
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+        SUBMIT
+        ================================================= -->
+
+                <div class="submit-row">
+
+                    <input type="submit"
+                           value="Add Equipment"
+                           class="btn-create" />
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+
+    <!-- =================================================
+         BACK TO LIST
+         ================================================= -->
+
+    <div class="back-container">
+
+        @Html.ActionLink(
+            "Back to Equipment List",
+            "Index",
+            null,
+            new { @class = "back-link" })
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+}

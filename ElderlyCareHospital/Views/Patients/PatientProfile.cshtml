@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "PatientProfile";
+}
+
+<h2>Patient Profile</h2>
+
+<h3>
+    @Model.Patient.FirstName
+    @Model.Patient.LastName
+</h3>
+
+<p>Room: @Model.Patient.RoomNumber</p>
+
+<p>Allergies: @Model.Patient.Allergies</p>
+
+<p>Medical History: @Model.Patient.MedicalHistory</p>

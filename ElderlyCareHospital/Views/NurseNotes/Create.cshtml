@@ -1,0 +1,764 @@
+﻿@model ElderlyCareHospital.Models.NurseNote
+
+@{
+    ViewBag.Title = "Create Nurse Note";
+}
+
+<style>
+    /* =========================================================
+       NURSE DASHBOARD THEME
+       ========================================================= */
+
+    :root {
+        --app-bg: #f4f8fb;
+        --surface: #ffffff;
+        --surface-soft: #f8fbfd;
+        --text-main: #102a43;
+        --text-secondary: #486581;
+        --text-muted: #627d98;
+        --border: #d9e2ec;
+        --border-soft: #e8eef3;
+        --accent: #2f6f73;
+        --accent-dark: #25575a;
+        --accent-soft: #eef7f7;
+        --danger: #c94c4c;
+        --shadow-sm: 0 4px 14px rgba(16, 42, 67, 0.06);
+        --shadow-md: 0 8px 24px rgba(16, 42, 67, 0.08);
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+    }
+
+    .note-page {
+        padding-top: 28px;
+        padding-bottom: 35px;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .note-header {
+        position: relative;
+        overflow: hidden;
+        background: var(--surface);
+        border: 1px solid var(--border-soft);
+        border-radius: 18px;
+        padding: 26px 30px;
+        margin-bottom: 22px;
+        box-shadow: var(--shadow-sm);
+    }
+
+        .note-header::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 5px;
+            background: var(--accent);
+        }
+
+        .note-header h2 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-main);
+            letter-spacing: -0.3px;
+        }
+
+        .note-header p {
+            margin: 9px 0 0;
+            max-width: 850px;
+            font-size: 14px;
+            line-height: 1.65;
+            color: var(--text-secondary);
+        }
+
+    .header-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        margin-left: 10px;
+        padding: 5px 10px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        vertical-align: middle;
+    }
+
+    .header-dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: #2e7d5b;
+    }
+
+    /* =========================================================
+       FORM PANEL
+       ========================================================= */
+
+    .note-panel {
+        background: var(--surface);
+        border: 1px solid var(--border-soft);
+        border-radius: 18px;
+        padding: 28px;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .form-title {
+        margin: 0 0 6px;
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .form-description {
+        margin: 0 0 25px;
+        font-size: 13px;
+        line-height: 1.6;
+        color: var(--text-muted);
+    }
+
+    .form-section {
+        border-top: 1px solid var(--border-soft);
+        padding-top: 25px;
+    }
+
+    /* =========================================================
+       FORM ROWS
+       ========================================================= */
+
+    .note-form-group {
+        margin-bottom: 21px;
+    }
+
+    .note-label {
+        display: block;
+        margin-bottom: 7px;
+        color: var(--text-main);
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .required-mark {
+        color: var(--accent);
+        margin-left: 2px;
+    }
+
+    .form-control {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 13px;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        color: var(--text-main);
+        font-size: 14px;
+        box-shadow: none;
+        transition: border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+    }
+
+        .form-control:hover {
+            border-color: #bcccdc;
+        }
+
+        .form-control:focus {
+            border-color: var(--accent);
+            background: #ffffff;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(47, 111, 115, 0.10);
+        }
+
+    textarea.form-control {
+        min-height: 150px;
+        resize: vertical;
+        line-height: 1.6;
+    }
+
+    select.form-control {
+        cursor: pointer;
+    }
+
+    /* READ ONLY DATE */
+
+    .readonly-date {
+        background: #f1f5f7 !important;
+        color: #627d98 !important;
+        cursor: not-allowed !important;
+        border-color: #d9e2ec !important;
+    }
+
+    /* =========================================================
+       FIELD HINTS
+       ========================================================= */
+
+    .field-hint {
+        margin-top: 6px;
+        color: var(--text-muted);
+        font-size: 12px;
+        line-height: 1.5;
+    }
+
+    /* =========================================================
+       VALIDATION
+       ========================================================= */
+
+    .validation-summary {
+        margin-bottom: 22px;
+        padding: 12px 15px;
+        background: #fff8f8;
+        border: 1px solid #edcccc;
+        border-left: 4px solid var(--danger);
+        border-radius: 8px;
+        color: #9b3d3d;
+        font-size: 13px;
+    }
+
+    .text-danger {
+        display: block;
+        margin-top: 6px;
+        color: var(--danger) !important;
+        font-size: 12px;
+    }
+
+    .input-validation-error {
+        border-color: var(--danger) !important;
+        background: #fffafa !important;
+    }
+
+    /* =========================================================
+       BUTTONS
+       ========================================================= */
+
+    .form-actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 10px;
+        margin-top: 28px;
+        padding-top: 22px;
+        border-top: 1px solid var(--border-soft);
+    }
+
+    .btn-save {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 10px 20px;
+        background: var(--accent);
+        border: 1px solid var(--accent);
+        border-radius: 9px;
+        color: #ffffff !important;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 3px 10px rgba(47, 111, 115, 0.14);
+        transition: all 0.18s ease;
+    }
+
+        .btn-save:hover {
+            background: var(--accent-dark);
+            border-color: var(--accent-dark);
+            color: #ffffff !important;
+            transform: translateY(-1px);
+        }
+
+    .btn-cancel {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 42px;
+        padding: 10px 17px;
+        background: #ffffff;
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        color: var(--text-secondary) !important;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none !important;
+        transition: all 0.18s ease;
+    }
+
+        .btn-cancel:hover {
+            background: var(--surface-soft);
+            border-color: #bcccdc;
+            color: var(--accent) !important;
+            text-decoration: none !important;
+        }
+
+    /* =========================================================
+       INFORMATION NOTE
+       ========================================================= */
+
+    .info-note {
+        display: flex;
+        gap: 12px;
+        margin-top: 22px;
+        padding: 14px 16px;
+        background: var(--accent-soft);
+        border: 1px solid #dceeee;
+        border-radius: 9px;
+        color: var(--text-secondary);
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .info-icon {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 27px;
+        height: 27px;
+        background: #ffffff;
+        border-radius: 7px;
+        color: var(--accent);
+        font-weight: 700;
+    }
+
+    /* =========================================================
+       BACK LINK
+       ========================================================= */
+
+    .footer-row {
+        margin-top: 20px;
+    }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 9px 15px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 9px;
+        color: var(--text-secondary) !important;
+        font-size: 13px;
+        font-weight: 600;
+        text-decoration: none !important;
+        transition: all 0.18s ease;
+    }
+
+        .back-link:hover {
+            background: var(--surface-soft);
+            border-color: #bcccdc;
+            color: var(--accent) !important;
+            text-decoration: none !important;
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .note-page {
+            padding-top: 18px;
+        }
+
+        .note-header {
+            padding: 22px;
+            border-radius: 15px;
+        }
+
+            .note-header h2 {
+                font-size: 24px;
+            }
+
+        .header-label {
+            display: flex;
+            width: fit-content;
+            margin: 10px 0 0;
+        }
+
+        .note-panel {
+            padding: 20px;
+            border-radius: 15px;
+        }
+
+        .form-actions {
+            flex-direction: column-reverse;
+            align-items: stretch;
+        }
+
+        .btn-save,
+        .btn-cancel {
+            width: 100%;
+        }
+    }
+</style>
+
+
+<div class="container note-page">
+
+    <!-- =====================================================
+         PAGE HEADER
+         ===================================================== -->
+
+    <div class="note-header">
+
+        <h2>
+            Create Nurse Note
+
+            <span class="header-label">
+                <span class="header-dot"></span>
+                Clinical Documentation
+            </span>
+        </h2>
+
+        <p>
+            Record a clear and accurate nursing note for the selected patient.
+            Document relevant observations, care information, and important updates
+            to support continuity of care.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         FORM PANEL
+         ===================================================== -->
+
+    <div class="note-panel">
+
+        <h3 class="form-title">
+            Note Information
+        </h3>
+
+        <p class="form-description">
+            Complete the information below before saving the nursing note.
+        </p>
+
+
+        @using (Html.BeginForm(null, null, FormMethod.Post, new { id = "nurseNoteForm" }))
+        {
+            @Html.AntiForgeryToken()
+
+            @Html.ValidationSummary(
+                true,
+                "",
+                new { @class = "validation-summary" })
+
+
+            <div class="form-section">
+
+                <!-- =================================================
+                     PATIENT
+                     ================================================= -->
+
+                <div class="note-form-group">
+
+                    @Html.LabelFor(
+                        model => model.PatientID,
+                        "Patient Name",
+                        new { @class = "note-label" })
+
+                    @Html.DropDownList(
+                        "PatientID",
+                        null,
+                        "-- Select Patient --",
+                        new { @class = "form-control", id = "PatientID" })
+
+                    @Html.ValidationMessageFor(
+                        model => model.PatientID,
+                        "",
+                        new { @class = "text-danger" })
+
+                    <div class="field-hint">
+                        Select the patient this nursing note relates to.
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     NOTE TEXT
+                     ================================================= -->
+
+                <div class="note-form-group">
+
+                    @Html.LabelFor(
+                        model => model.NoteText,
+                        "Nursing Note",
+                        new { @class = "note-label" })
+
+                    @Html.TextAreaFor(
+                        model => model.NoteText,
+                        new
+                        {
+                            @class = "form-control",
+                            id = "NoteText",
+                            maxlength = "2000",
+                            placeholder = "Enter your clinical observations, patient updates, care provided, or other relevant nursing information..."
+                        })
+
+                    @Html.ValidationMessageFor(
+                        model => model.NoteText,
+                        "",
+                        new { @class = "text-danger" })
+
+                    <div class="field-hint">
+                        Use clear, factual and professional language. Maximum 2000 characters.
+                    </div>
+
+                    <div id="noteTextClientError"
+                         class="text-danger"
+                         style="display:none;">
+                        Nursing Note cannot be empty or contain only spaces.
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     DATE CREATED
+                     ================================================= -->
+
+                <div class="note-form-group">
+
+                    @Html.LabelFor(
+                        model => model.DateCreated,
+                        "Date & Time",
+                        new { @class = "note-label" })
+
+                    @Html.TextBoxFor(
+                        model => model.DateCreated,
+                        "{0:yyyy-MM-ddTHH:mm}",
+                        new
+                        {
+                            @class = "form-control readonly-date",
+                            type = "datetime-local",
+                            id = "DateCreated",
+                            @readonly = "readonly",
+                            tabindex = "-1"
+                        })
+
+                    @Html.ValidationMessageFor(
+                        model => model.DateCreated,
+                        "",
+                        new { @class = "text-danger" })
+
+                    <div class="field-hint">
+                        The date and time are automatically set to the current date and time and cannot be changed.
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     ACTIONS
+                     ================================================= -->
+
+                <div class="form-actions">
+
+                    @Html.ActionLink(
+                        "Cancel",
+                        "Index",
+                        "NurseNotes",
+                        null,
+                        new { @class = "btn-cancel" })
+
+                    <button type="submit" class="btn-save">
+                        Save Nurse Note
+                    </button>
+
+                </div>
+
+            </div>
+        }
+
+
+        <!-- =====================================================
+             INFORMATION NOTE
+             ===================================================== -->
+
+        <div class="info-note">
+
+            <div class="info-icon">
+                i
+            </div>
+
+            <div>
+                <strong>Documentation reminder</strong><br />
+
+                Ensure that the information entered is accurate, relevant,
+                and appropriate for the patient's clinical record.
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         BACK TO NOTES
+         ===================================================== -->
+
+    <div class="footer-row">
+
+        @Html.ActionLink(
+            "←  Back to Nurse Notes",
+            "Index",
+            "NurseNotes",
+            null,
+            new { @class = "back-link" })
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+
+        $(document).ready(function () {
+
+            // =====================================================
+            // SET CURRENT DATE AND TIME
+            // =====================================================
+
+            function setCurrentDateTime() {
+
+                var now = new Date();
+
+                var year = now.getFullYear();
+
+                var month = String(now.getMonth() + 1).padStart(2, '0');
+
+                var day = String(now.getDate()).padStart(2, '0');
+
+                var hours = String(now.getHours()).padStart(2, '0');
+
+                var minutes = String(now.getMinutes()).padStart(2, '0');
+
+                var currentDateTime =
+                    year + "-" +
+                    month + "-" +
+                    day + "T" +
+                    hours + ":" +
+                    minutes;
+
+                $("#DateCreated").val(currentDateTime);
+            }
+
+
+            // Set current date/time when page loads
+            setCurrentDateTime();
+
+
+            // =====================================================
+            // PREVENT DATE FROM BEING EDITED
+            // =====================================================
+
+            $("#DateCreated").on("keydown paste input change", function (e) {
+
+                e.preventDefault();
+
+                setCurrentDateTime();
+
+                return false;
+
+            });
+
+
+            // =====================================================
+            // FORM VALIDATION
+            // =====================================================
+
+            $("#nurseNoteForm").on("submit", function (e) {
+
+                var valid = true;
+
+                var patientId = $("#PatientID").val();
+
+                var noteText = $("#NoteText").val();
+
+                // Patient validation
+                if (!patientId || patientId === "" || patientId === "0") {
+
+                    valid = false;
+
+                    $("#PatientID").addClass("input-validation-error");
+
+                }
+                else {
+
+                    $("#PatientID").removeClass("input-validation-error");
+
+                }
+
+
+                // Note validation
+                if (!noteText || $.trim(noteText) === "") {
+
+                    valid = false;
+
+                    $("#NoteText").addClass("input-validation-error");
+
+                    $("#noteTextClientError").show();
+
+                }
+                else {
+
+                    $("#NoteText").removeClass("input-validation-error");
+
+                    $("#noteTextClientError").hide();
+
+                }
+
+
+                // Make sure current date/time is submitted
+                setCurrentDateTime();
+
+
+                if (!valid) {
+
+                    e.preventDefault();
+
+                    return false;
+
+                }
+
+            });
+
+
+            // Remove validation styling when patient is selected
+            $("#PatientID").on("change", function () {
+
+                if ($(this).val()) {
+
+                    $(this).removeClass("input-validation-error");
+
+                }
+
+            });
+
+
+            // Remove validation styling when note has text
+            $("#NoteText").on("input", function () {
+
+                if ($.trim($(this).val()) !== "") {
+
+                    $(this).removeClass("input-validation-error");
+
+                    $("#noteTextClientError").hide();
+
+                }
+
+            });
+
+        });
+
+    </script>
+}
+

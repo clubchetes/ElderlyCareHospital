@@ -1,0 +1,726 @@
+﻿@model ElderlyCareHospital.Models.VitalSign
+
+@{
+    ViewBag.Title = "Delete Vital Sign";
+}
+
+<style>
+
+    /* =========================================================
+       ELDERLYCARE HOSPITAL - DELETE VITAL SIGN
+       ========================================================= */
+
+    :root {
+        --app-bg: #f5f8f6;
+        --surface: #ffffff;
+        --surface-soft: #f8fbf9;
+        --text-main: #23352f;
+        --text-muted: #687b74;
+        --primary: #2f6f73;
+        --primary-dark: #25575a;
+        --danger: #c75d68;
+        --danger-dark: #a94450;
+        --danger-soft: #fff1f3;
+        --border: #dce7e1;
+        --shadow: 0 12px 35px rgba(35, 53, 47, .07);
+        --radius-lg: 22px;
+        --radius-md: 16px;
+    }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+    }
+
+    *,
+    *::before,
+    *::after {
+        box-sizing: border-box;
+    }
+
+    body {
+        background: var(--app-bg);
+        font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        color: var(--text-main);
+    }
+
+    /* =========================================================
+       PAGE
+       ========================================================= */
+
+    .delete-page {
+        min-height: 100vh;
+        padding: 40px 20px 50px;
+    }
+
+    .delete-container {
+        width: 100%;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    /* =========================================================
+       HEADER
+       ========================================================= */
+
+    .delete-header {
+        position: relative;
+        overflow: hidden;
+        padding: 32px 36px;
+        margin-bottom: 25px;
+        border-radius: 22px;
+        background: linear-gradient( 135deg, #285f63 0%, #2f6f73 55%, #5f9699 100% );
+        color: white;
+        box-shadow: 0 16px 38px rgba(47, 111, 115, .15);
+    }
+
+        .delete-header::after {
+            content: "";
+            position: absolute;
+            width: 230px;
+            height: 230px;
+            right: -80px;
+            top: -120px;
+            border-radius: 50%;
+            border: 32px solid rgba(255,255,255,.07);
+        }
+
+    .header-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .header-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+        padding: 6px 12px;
+        border-radius: 999px;
+        background: rgba(255,255,255,.13);
+        border: 1px solid rgba(255,255,255,.16);
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: .6px;
+        text-transform: uppercase;
+    }
+
+        .header-label::before {
+            content: "!";
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 17px;
+            height: 17px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.18);
+            font-weight: 800;
+        }
+
+    .delete-header h2 {
+        margin: 0;
+        font-size: 29px;
+        font-weight: 800;
+        letter-spacing: -.5px;
+    }
+
+    .delete-header p {
+        margin: 10px 0 0;
+        max-width: 720px;
+        color: rgba(255,255,255,.85);
+        font-size: 14px;
+        line-height: 1.6;
+    }
+
+    /* =========================================================
+       CARD
+       ========================================================= */
+
+    .delete-card {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-lg);
+        padding: 30px;
+        box-shadow: var(--shadow);
+    }
+
+    /* =========================================================
+       WARNING
+       ========================================================= */
+
+    .warning-box {
+        display: flex;
+        align-items: flex-start;
+        gap: 14px;
+        margin-bottom: 28px;
+        padding: 17px 18px;
+        border: 1px solid #f0cdd2;
+        border-left: 4px solid var(--danger);
+        border-radius: 13px;
+        background: var(--danger-soft);
+        color: #8f4750;
+        font-size: 13px;
+        line-height: 1.6;
+    }
+
+    .warning-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        width: 30px;
+        height: 30px;
+        border-radius: 9px;
+        background: #ffffff;
+        color: var(--danger);
+        font-size: 15px;
+        font-weight: 800;
+    }
+
+    .warning-text strong {
+        display: block;
+        margin-bottom: 3px;
+        color: #873e48;
+        font-size: 14px;
+    }
+
+    /* =========================================================
+       SECTION HEADER
+       ========================================================= */
+
+    .details-header {
+        display: flex;
+        align-items: center;
+        gap: 11px;
+        margin-bottom: 20px;
+        padding-bottom: 14px;
+        border-bottom: 1px solid #e4ece8;
+    }
+
+    .details-icon {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 12px;
+        background: #eaf5f5;
+        color: var(--primary);
+        font-weight: 800;
+    }
+
+    .details-header h3 {
+        margin: 0;
+        color: var(--text-main);
+        font-size: 17px;
+        font-weight: 800;
+    }
+
+    .details-header p {
+        margin: 3px 0 0;
+        color: var(--text-muted);
+        font-size: 11px;
+    }
+
+    /* =========================================================
+       DETAILS GRID
+       ========================================================= */
+
+    .vital-details {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+        margin: 0;
+    }
+
+    .detail-item {
+        padding: 17px 18px;
+        border: 1px solid var(--border);
+        border-radius: 13px;
+        background: var(--surface-soft);
+    }
+
+    .detail-label {
+        margin-bottom: 6px;
+        color: var(--text-muted);
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: .45px;
+    }
+
+    .detail-value {
+        color: var(--text-main);
+        font-size: 15px;
+        font-weight: 700;
+        word-break: break-word;
+    }
+
+    .patient-value {
+        color: var(--primary);
+    }
+
+    .date-value {
+        color: #397461;
+    }
+
+    /* =========================================================
+       ACTIONS
+       ========================================================= */
+
+    .action-area {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        margin-top: 30px;
+        padding-top: 23px;
+        border-top: 1px solid #e4ece8;
+    }
+
+    .btn-delete {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        min-width: 170px;
+        padding: 12px 22px;
+        border: 1px solid var(--danger);
+        border-radius: 10px;
+        background: linear-gradient( 135deg, var(--danger), #d8737d );
+        color: white !important;
+        font-size: 13px;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 7px 18px rgba(199, 93, 104, .18);
+        transition: all .2s ease;
+    }
+
+        .btn-delete:hover {
+            background: linear-gradient( 135deg, var(--danger-dark), var(--danger) );
+            color: white !important;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 23px rgba(199, 93, 104, .25);
+        }
+
+        .btn-delete::before {
+            content: "🗑";
+            font-size: 13px;
+        }
+
+    .btn-cancel {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 145px;
+        padding: 12px 22px;
+        border: 1px solid #dce5e0;
+        border-radius: 10px;
+        background: #ffffff;
+        color: #687b74 !important;
+        text-decoration: none;
+        font-size: 13px;
+        font-weight: 700;
+        transition: all .2s ease;
+    }
+
+        .btn-cancel:hover {
+            background: #f8fbfa;
+            border-color: #c8dbd2;
+            color: var(--primary) !important;
+            text-decoration: none;
+            transform: translateY(-2px);
+        }
+
+    /* =========================================================
+       FOOTNOTE
+       ========================================================= */
+
+    .delete-note {
+        margin-top: 20px;
+        color: #8b9b95;
+        font-size: 11px;
+        text-align: center;
+        line-height: 1.5;
+    }
+
+    /* =========================================================
+       TABLET
+       ========================================================= */
+
+    @@media (max-width: 768px) {
+
+        .delete-page {
+            padding: 25px 15px 35px;
+        }
+
+        .delete-header {
+            padding: 25px 22px;
+        }
+
+            .delete-header h2 {
+                font-size: 24px;
+            }
+
+            .delete-header p {
+                font-size: 12px;
+            }
+
+        .delete-card {
+            padding: 20px;
+        }
+
+        .vital-details {
+            grid-template-columns: 1fr;
+        }
+
+        .action-area {
+            flex-direction: column-reverse;
+        }
+
+        .btn-delete,
+        .btn-cancel {
+            width: 100%;
+        }
+    }
+
+    /* =========================================================
+       SMALL PHONE
+       ========================================================= */
+
+    @@media (max-width: 480px) {
+
+        .delete-page {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        .delete-header {
+            padding: 22px 18px;
+            border-radius: 18px;
+        }
+
+            .delete-header h2 {
+                font-size: 21px;
+            }
+
+        .delete-card {
+            padding: 16px;
+            border-radius: 17px;
+        }
+
+        .warning-box {
+            font-size: 12px;
+        }
+
+        .detail-item {
+            padding: 15px;
+        }
+    }
+</style>
+
+<!-- =========================================================
+     MAIN PAGE
+     ========================================================= -->
+
+<div class="delete-page">
+
+  
+    <div class="delete-container">
+
+        <!-- =====================================================
+             HEADER
+             ===================================================== -->
+
+        <section class="delete-header">
+
+            <div class="header-content">
+
+                <div class="header-label">
+                    Clinical Record Management
+                </div>
+
+                <h2>
+                    Delete Vital Sign Record
+                </h2>
+
+                <p>
+                    Review the patient's vital sign information carefully
+                    before permanently removing this clinical record.
+                </p>
+
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             DELETE CARD
+             ===================================================== -->
+
+        <section class="delete-card">
+
+
+            <!-- =================================================
+                 WARNING
+                 ================================================= -->
+
+            <div class="warning-box">
+
+                <div class="warning-icon">
+                    !
+                </div>
+
+                <div class="warning-text">
+
+                    <strong>
+                        Permanent Action
+                    </strong>
+
+                    This action will permanently delete this vital sign
+                    record. Please confirm that you want to continue.
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 DETAILS HEADER
+                 ================================================= -->
+
+            <div class="details-header">
+
+                <div class="details-icon">
+                    ♥
+                </div>
+
+                <div>
+
+                    <h3>
+                        Vital Sign Details
+                    </h3>
+
+                    <p>
+                        Review the record before deletion
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 VITAL DETAILS
+                 ================================================= -->
+
+            <div class="vital-details">
+
+
+                <!-- PATIENT -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Patient
+                    </div>
+
+                    <div class="detail-value patient-value">
+
+                        @if (Model.Patient != null)
+                        {
+                            @Model.Patient.FirstName
+                            @Model.Patient.LastName
+                        }
+                        else
+                        {
+                            <span>Patient information unavailable</span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- TEMPERATURE -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Temperature
+                    </div>
+
+                    <div class="detail-value">
+
+                        @Html.DisplayFor(
+                            model => model.Temperature
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- BLOOD PRESSURE -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Blood Pressure
+                    </div>
+
+                    <div class="detail-value">
+
+                        @Html.DisplayFor(
+                            model => model.BloodPressure
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- PULSE RATE -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Pulse Rate
+                    </div>
+
+                    <div class="detail-value">
+
+                        @Html.DisplayFor(
+                            model => model.PulseRate
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- OXYGEN -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Oxygen Level
+                    </div>
+
+                    <div class="detail-value">
+
+                        @Html.DisplayFor(
+                            model => model.OxygenLevel
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- SUGAR -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Sugar Level
+                    </div>
+
+                    <div class="detail-value">
+
+                        @Html.DisplayFor(
+                            model => model.SugarLevel
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- WEIGHT -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Weight
+                    </div>
+
+                    <div class="detail-value">
+
+                        @Html.DisplayFor(
+                            model => model.Weight
+                        )
+
+                    </div>
+
+                </div>
+
+
+                <!-- DATE RECORDED -->
+
+                <div class="detail-item">
+
+                    <div class="detail-label">
+                        Date & Time Recorded
+                    </div>
+
+                    <div class="detail-value date-value">
+
+                        @Model.DateRecorded.ToString(
+                            "dd MMMM yyyy, HH:mm"
+                        )
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- =================================================
+                 ACTIONS
+                 ================================================= -->
+
+            @using (Html.BeginForm())
+            {
+                @Html.AntiForgeryToken()
+
+                <div class="action-area">
+
+                    @Html.ActionLink(
+                        "Cancel",
+                        "Index",
+                        "VitalSigns",
+                        null,
+                        new
+                        {
+                            @class = "btn-cancel"
+                        })
+
+                    <button type="submit"
+                            class="btn-delete"
+                           >
+
+                        Delete Vital Sign
+
+                    </button>
+
+                </div>
+            }
+
+
+            <div class="delete-note">
+
+                Deleting this record cannot be undone.
+                Please ensure the correct clinical record has been selected.
+
+            </div>
+
+        </section>
+
+    </div>
+  
+
+</div>

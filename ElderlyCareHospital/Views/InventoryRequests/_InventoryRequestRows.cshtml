@@ -1,0 +1,73 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.InventoryRequest>
+
+@if (Model != null && Model.Any())
+{
+    foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <strong>@item.ItemName</strong>
+            </td>
+
+            <td>@item.QuantityRequested</td>
+
+            <td>@item.RequestedBy</td>
+
+            <td>@item.RequestDate</td>
+
+            <td>
+                <span class="status-badge">
+                    @item.Status
+                </span>
+            </td>
+
+            <td class="action-links">
+                @if (User.IsInRole("Admin") || User.IsInRole("Pharmacist"))
+                {
+                    if (item.Status == "Pending")
+                    {
+                        using (Html.BeginForm(
+                            "Approve",
+                            "InventoryRequests",
+                            new { id = item.RequestID },
+                            FormMethod.Post,
+                            new { style = "display:inline;" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="btn btn-success"
+                                    >
+                                Approve
+                            </button>
+                        }
+
+                        using (Html.BeginForm(
+                            "Reject",
+                            "InventoryRequests",
+                            new { id = item.RequestID },
+                            FormMethod.Post,
+                            new { style = "display:inline;" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <button type="submit"
+                                    class="btn btn-danger"
+                                    >
+                                Reject
+                            </button>
+                        }
+                    }
+                }
+            </td>
+        </tr>
+    }
+}
+else
+{
+    <tr>
+        <td colspan="6" class="text-center py-4" style="color: #777;">
+            <strong>No Inventory Requests Found</strong>
+        </td>
+    </tr>
+}

@@ -1,0 +1,364 @@
+﻿@model IEnumerable<ElderlyCareHospital.Models.Visit>
+
+@{
+    ViewBag.Title = "Scheduled Visits";
+}
+
+<style>
+    body {
+        background: #f4f8fb;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* =========================================================
+       PAGE HEADER
+       ========================================================= */
+
+    .visits-header {
+        background: linear-gradient(135deg, #2f6f73, #4c8c91);
+        color: white;
+        padding: 28px 32px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+        box-shadow: 0 8px 20px rgba(47, 111, 115, 0.15);
+    }
+
+        .visits-header h2 {
+            margin: 0;
+            font-weight: 700;
+            font-size: 30px;
+        }
+
+        .visits-header p {
+            margin-top: 8px;
+            margin-bottom: 0;
+            opacity: 0.95;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+    /* =========================================================
+       MAIN PANEL
+       ========================================================= */
+
+    .visits-panel {
+        background: white;
+        border-radius: 18px;
+        padding: 24px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+    }
+
+    /* =========================================================
+       TABLE
+       ========================================================= */
+
+    .table {
+        margin-bottom: 0;
+        border-radius: 14px;
+        overflow: hidden;
+    }
+
+        .table thead {
+            background: #2f6f73;
+            color: white;
+        }
+
+        .table th {
+            border: none !important;
+            padding: 15px 14px;
+            font-weight: 700;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+            text-align: center;
+            vertical-align: middle;
+        }
+
+        .table td {
+            padding: 15px 14px;
+            vertical-align: middle;
+            border-color: #e8eef2;
+            font-size: 14px;
+            text-align: center;
+        }
+
+        .table tbody tr:hover {
+            background: #f8fbfc;
+        }
+
+    /* =========================================================
+       FAMILY MEMBER CELL
+       ========================================================= */
+
+    .family-cell {
+        text-align: left !important;
+        line-height: 1.6;
+    }
+
+        .family-cell strong {
+            color: #2f6f73;
+            display: inline-block;
+            min-width: 60px;
+        }
+
+    /* =========================================================
+       STATUS BADGES
+       ========================================================= */
+
+    .badge {
+        display: inline-block;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 0.2px;
+        color: white;
+    }
+
+    .badge-success {
+        background: #2e7d32;
+    }
+
+    .badge-danger {
+        background: #c62828;
+    }
+
+    .badge-warning {
+        background: #f9a825;
+    }
+
+    /* =========================================================
+       ACTION BUTTONS
+       ========================================================= */
+
+    .btn-sm {
+        display: inline-block;
+        padding: 7px 14px;
+        border-radius: 9px;
+        font-size: 12px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .btn-success {
+        background: #2e7d32;
+        color: white !important;
+        border: none;
+    }
+
+        .btn-success:hover {
+            background: #256628;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    .btn-danger {
+        background: #c62828;
+        color: white !important;
+        border: none;
+    }
+
+        .btn-danger:hover {
+            background: #a61f1f;
+            color: white !important;
+            text-decoration: none;
+            transform: translateY(-1px);
+        }
+
+    .ml-2 {
+        margin-left: 8px;
+    }
+
+    /* =========================================================
+       BACK BUTTON
+       ========================================================= */
+
+    .footer-row {
+        margin-top: 22px;
+    }
+
+    .back-link {
+        display: inline-block;
+        padding: 10px 18px;
+        background: #455a64;
+        color: white !important;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: 0.2s ease;
+    }
+
+        .back-link:hover {
+            background: #263238;
+            text-decoration: none;
+        }
+
+    /* =========================================================
+       RESPONSIVE
+       ========================================================= */
+
+    .table-responsive {
+        overflow-x: auto;
+        border-radius: 14px;
+    }
+
+    @@media (max-width: 768px) {
+
+        .visits-header {
+            padding: 24px 20px;
+        }
+
+            .visits-header h2 {
+                font-size: 25px;
+            }
+
+        .visits-panel {
+            padding: 16px;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px 10px;
+            font-size: 13px;
+        }
+    }
+</style>
+
+<div class="container mt-4">
+
+    <!-- =====================================================
+         HEADER
+         ===================================================== -->
+
+    <div class="visits-header">
+
+        <h2>
+            Scheduled Visits
+
+            <span style="
+                font-size: 13px;
+                background: rgba(255,255,255,0.2);
+                padding: 4px 12px;
+                border-radius: 20px;
+                float: right;
+                font-weight: normal;">
+                🟢 Live Sync Active
+            </span>
+        </h2>
+
+        <p>
+            Review family visit requests, monitor visit schedules,
+            parking information, and approval status for patient
+            visitation management.
+        </p>
+
+    </div>
+
+
+    <!-- =====================================================
+         VISITS PANEL
+         ===================================================== -->
+
+    <div class="visits-panel">
+
+        <div class="table-responsive">
+
+            <table class="table table-bordered">
+
+                <thead>
+                    <tr>
+
+                        <th>Family Member</th>
+
+                        <th>Visit Date</th>
+
+                        <th>Parking Slot</th>
+
+                        <th>Status</th>
+
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <th>Actions</th>
+                        }
+
+                    </tr>
+                </thead>
+
+                <tbody id="liveVisitBody">
+
+                    @Html.Partial("_VisitRows", Model)
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         DASHBOARD NAVIGATION
+         ===================================================== -->
+
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="footer-row">
+
+            @Html.ActionLink(
+                "Back to Dashboard",
+                "Dashboard",
+                "Admin",
+                null,
+                new { @class = "back-link" })
+
+        </div>
+    }
+
+    @if (User.IsInRole("FamilyMember"))
+    {
+        <div class="footer-row">
+
+            @Html.ActionLink(
+                "Back to Dashboard",
+                "Dashboard",
+                "Family",
+                null,
+                new { @class = "back-link" })
+
+        </div>
+    }
+
+</div>
+
+
+@section Scripts {
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <script>
+
+        function refreshVisits() {
+
+            $.ajax({
+                url: '@Url.Action("GetLiveVisits", "Visits")',
+                type: 'GET',
+
+                success: function (data) {
+
+                    $('#liveVisitBody').html(data);
+
+                }
+            });
+
+        }
+
+        // Polls the server every 5 seconds to automatically
+        // sync visit updates and statuses.
+        setInterval(refreshVisits, 5000);
+
+    </script>
+
+}
